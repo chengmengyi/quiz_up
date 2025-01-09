@@ -4,8 +4,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:quiz_up/qp_rou/qp_rou_name.dart';
+import 'package:quiz_up/test.dart';
+import 'package:quiz_up/utils/guide/guide_utils.dart';
 import 'package:quiz_up/utils/question/a_question_utils.dart';
+import 'package:quiz_up/utils/question/b_question_util.dart';
 import 'package:quiz_up/utils/sql/a_sql.dart';
+import 'package:quiz_up/utils/sql/b_sql.dart';
+import 'package:quiz_up/utils/value/value_utils.dart';
 
 import 'qp_rou/qp_page_list.dart';
 
@@ -31,6 +36,12 @@ _init()async{
   //a
   AQuestionUtils.instance.initQuestionList();
   ASql.instance.initQuestionAndUserInfoData();
+
+  //b
+  BQuestionUtil.instance.initQuiz();
+  BSql.instance.queryUserInfo();
+  ValueUtils.instance.initValue();
+  GuideUtils.instance.queryNewUserBean();
 }
 
 class MyApp extends StatelessWidget {
@@ -44,7 +55,8 @@ class MyApp extends StatelessWidget {
         enableLog: true,
         darkTheme: ThemeData.dark(),
         themeMode: ThemeMode.system,
-        initialRoute: QpRouName.launch,
+        // initialRoute: QpRouName.launch,
+        home: Test(),
         debugShowCheckedModeBanner: false,
         getPages: pageList,
         defaultTransition: Transition.rightToLeft,

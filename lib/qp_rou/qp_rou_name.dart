@@ -7,4 +7,8 @@ class QpRouName{
   static const String aHome="/aHome";
   static const String aQuestion="/aQuestion";
   static const String aWheel="/aWheel";
+
+  //b
+  static const String bQuiz="/bQuiz";
+  static const String bCash="/bCash";
 }

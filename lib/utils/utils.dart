@@ -21,3 +21,13 @@ String getTodayTime(){
   var dateTime = DateTime.now();
   return "${dateTime.year}-${dateTime.month}-${dateTime.day}";
 }
+
+extension Str2Dou on String{
+  double toDou(){
+    try{
+      return double.parse(this);
+    }catch(e){
+      return 0.0;
+    }
+  }
+}

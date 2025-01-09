@@ -65,6 +65,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.8"
+  decimal:
+    dependency: "direct main"
+    description:
+      name: decimal
+      sha256: da8f65df568345f2738cc8b0de74971c86d2d93ce5fc8c4ec094f6b7c5d48eb5
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
   event_bus:
     dependency: "direct main"
     description:
@@ -144,6 +152,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  http:
+    dependency: transitive
+    description:
+      name: http
+      sha256: b9c29a161230ee03d3ccf545097fccd9b87a5264228c5d348202e0f0c28f9010
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.2"
+  http_parser:
+    dependency: transitive
+    description:
+      name: http_parser
+      sha256: "178d74305e7866013777bab2c3d8726205dc5a4dd935297175b19a23a2e66571"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.2"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      sha256: "00f33b908655e606b86d2ade4710a231b802eec6f11e87e4ea3783fd72077a50"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.20.1"
   leak_tracker:
     dependency: transitive
     description:
@@ -280,6 +312,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  rational:
+    dependency: transitive
+    description:
+      name: rational
+      sha256: cb808fb6f1a839e6fc5f7d8cb3b0a10e1db48b3be102de73938c627f0b636336
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.3"
   sky_engine:
     dependency: transitive
     description: flutter

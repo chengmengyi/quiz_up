@@ -25,7 +25,8 @@ class QpLaunchCon extends GetxController with GetSingleTickerProviderStateMixin{
       })
       ..addStatusListener((status) {
         if(status==AnimationStatus.completed){
-          offNamed(routersName: QpRouName.aHome);
+          // offNamed(routersName: QpRouName.aHome);
+          offNamed(routersName: QpRouName.bQuiz);
         }
       });
   }

@@ -4,6 +4,8 @@ import 'package:quiz_up/qp_page/launch/qp_launch_pa.dart';
 import 'package:quiz_up/qp_page/qp_a/a_home/a_home_pa.dart';
 import 'package:quiz_up/qp_page/qp_a/a_question/a_question_page.dart';
 import 'package:quiz_up/qp_page/qp_a/a_wheel/a_wheel_page.dart';
+import 'package:quiz_up/qp_page/qp_b/b_cash/b_cash_page.dart';
+import 'package:quiz_up/qp_page/qp_b/b_quiz/b_quiz_page.dart';
 import 'package:quiz_up/qp_page/qp_wwwwbbbb/privacy_page.dart';
 import 'package:quiz_up/qp_page/setting/setting_page.dart';
 import 'package:quiz_up/qp_rou/qp_rou_name.dart';
@@ -39,6 +41,16 @@ final pageList=[
       page: ()=> QpWWWWWPage(),
       transition: Transition.fadeIn
   ),
+  GetPage(
+      name: QpRouName.bQuiz,
+      page: ()=> BQuizPage(),
+      transition: Transition.fadeIn
+  ),
+  GetPage(
+      name: QpRouName.bCash,
+      page: ()=> BCashPage(),
+      transition: Transition.fadeIn
+  ),
 ];
 
 
@@ -65,9 +77,10 @@ Map<String, dynamic> getArguments() {
   }
 }
 
-showDialog({required Widget widget,}){
+showDialog({required Widget widget,bool useSafeArea=true}){
   Get.dialog(
     widget,
+    useSafeArea: useSafeArea,
     // arguments: arguments,
     // barrierColor: barrierColor,
     barrierDismissible: false,
