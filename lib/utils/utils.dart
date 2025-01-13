@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 extension String2Color on String{
   Color toColor(){
@@ -30,4 +31,19 @@ extension Str2Dou on String{
       return 0.0;
     }
   }
+}
+
+showToast(String text){
+  if(text.isEmpty){
+    return;
+  }
+  Fluttertoast.showToast(
+      msg: text,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.black45,
+      textColor: Colors.white,
+      fontSize: 16
+  );
 }

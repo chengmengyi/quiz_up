@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:quiz_up/utils/cash_task/task_type.dart';
 import 'package:quiz_up/utils/local_info.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
 import 'package:quiz_up/utils/storage/storage_event.dart';
@@ -20,6 +21,20 @@ class ValueUtils{
   int getNewUserAdd()=>_valueBean?.newPrize??134;
 
   double getSignAddNum()=> _getRewardByList(_valueBean?.checkPrize??[]);
+
+  double getQuizAddNum()=> _getRewardByList(_valueBean?.quizPrize??[]);
+
+  double getBubbleAddNum()=> _getRewardByList(_valueBean?.floatPrize??[]);
+
+  List<int> getAmountList()=>_valueBean?.eqRange??[800, 1000, 1500, 2000];
+
+  TixianTask getCashTask(int index){
+    try{
+      return (_valueBean?.tixianTask??[])[index];
+    }catch(e){
+      return TixianTask(title: TaskType.quiz,data: 10);
+    }
+  }
 
   double _getRewardByList(List<QuizPrize> list){
     if(list.isEmpty){

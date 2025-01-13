@@ -5,6 +5,9 @@ import 'package:quiz_up/utils/storage/storage_name.dart';
 StorageEvent<String> valueStr = StorageEvent<String>(key: StorageName.valueStr, defaultValue: "");
 
 
+StorageEvent<bool> firstClickBubble = StorageEvent<bool>(key: StorageName.firstClickBubble, defaultValue: true);
+
+
 
 
 final GetStorage _storage=GetStorage();

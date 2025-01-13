@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:quiz_up/bean/progress_bean.dart';
 import 'package:quiz_up/qp_page/qp_a/a_question/a_question_con.dart';
 import 'package:quiz_up/qp_page/qp_b/b_quiz/b_quiz_con.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
+import 'package:quiz_up/qp_rou/qp_rou_name.dart';
 import 'package:quiz_up/qp_wid/qp_bubble/qp_bubble.dart';
 import 'package:quiz_up/qp_wid/qp_coins/qp_coins.dart';
 import 'package:quiz_up/qp_wid/qp_gra_text.dart';
@@ -13,6 +15,8 @@ import 'package:quiz_up/qp_wid/qp_level/qp_level.dart';
 import 'package:quiz_up/qp_wid/qp_lottie.dart';
 import 'package:quiz_up/qp_wid/qp_money/qp_money_widget.dart';
 import 'package:quiz_up/qp_wid/qp_text.dart';
+import 'package:quiz_up/utils/progress/progress_utils.dart';
+import 'package:quiz_up/utils/sql/b_sql.dart';
 import 'package:quiz_up/utils/utils.dart';
 
 class BQuizPage extends StatelessWidget{
@@ -39,6 +43,10 @@ class BQuizPage extends StatelessWidget{
           ),
           _rightAnswerFingerWidget(),
           _bubbleWidget(),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: _bottomCashWidget(),
+          ),
         ],
       ),
       onWillPop: ()async{
@@ -82,31 +90,83 @@ class BQuizPage extends StatelessWidget{
   );
 
   _progressWidget()=>Container(
+    width: double.infinity,
+    height: 60.w,
     margin: EdgeInsets.only(left: 16.w,right: 16.w),
-    child: Stack(
-      children: [
-        Stack(
-          alignment: Alignment.centerLeft,
-          children: [
-            QpImg(img: "launch3",width: double.infinity,height: 20.h,),
-            Container(
-              margin: EdgeInsets.only(left: 2.w,right: 2.w),
-              child: GetBuilder<BQuizCon>(
-                id: "progress",
-                builder: (_)=>ClipRect(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    widthFactor: 0.5,
-                    child: QpImg(img: "launch4",width: 280.w,height: 16.h,fit: BoxFit.fill,),
-                  ),
-                ),
-              ),
-            )
-          ],
-        )
-      ],
+    child: GetBuilder<BQuizCon>(
+      id: "progress",
+      builder: (_)=>Stack(
+        alignment: Alignment.centerLeft,
+        key: bQuizCon.progressGlobalKey,
+        children: [
+          QpImg(img: "launch3",width: double.infinity,height: 20.h,),
+          // LayoutBuilder(
+          //   builder: (context,bc){
+          //     var maxWidth = bc.maxWidth;
+          //     return Stack(
+          //       alignment: Alignment.centerLeft,
+          //       children: [
+          //         QpImg(img: "launch3",width: maxWidth,height: 20.h,),
+          //         Container(
+          //           margin: EdgeInsets.only(left: 2.w,right: 2.w),
+          //           child: ClipRect(
+          //             child: Align(
+          //               alignment: Alignment.centerLeft,
+          //               widthFactor: bQuizCon.getProgress(maxWidth),
+          //               // widthFactor: 1,
+          //               child: QpImg(img: "launch4",width: maxWidth,height: 16.h,fit: BoxFit.fill,),
+          //             ),
+          //           ),
+          //         )
+          //       ],
+          //     );
+          //   },
+          // ),
+          SizedBox(
+            width: double.infinity,
+            height: 60.w,
+            child: ListView.builder(
+              itemCount: ProgressUtils.instance.progressList.length,
+              scrollDirection: Axis.horizontal,
+              controller: bQuizCon.scrollController,
+              itemBuilder: (context,index){
+                var bean = ProgressUtils.instance.progressList[index];
+                var isCurrent = !bean.received&&(BSql.instance.bUserInfo?.answerNum??0)-1>=index;
+                switch(bean.progressType){
+                  case ProgressType.empty: return _proEmptyWidget();
+                  case ProgressType.box: return _proBoxWidget(index,bean,isCurrent);
+                  case ProgressType.wheel: return _proWheelWidget(index,bean,isCurrent);
+                }
+              },
+            ),
+          )
+        ],
+      ),
     ),
   );
+
+  _proEmptyWidget()=>Container(
+    width: 10.w,
+    height: 20.h,
+    decoration: BoxDecoration(
+
+    ),
+  );
+  
+  _proBoxWidget(index,ProgressBean bean,bool canReceive)=>Container(
+    width: 60.w,
+    height: 60.w,
+    alignment: Alignment.center,
+    child: canReceive?QpImg(img: "pro3",width: 60.w,height: 60.w,):QpImg(img: bean.received?"pro1":"pro2",width: 42.w,height: 42.w,),
+  );
+
+  _proWheelWidget(index,ProgressBean bean,bool canReceive)=>Container(
+    width: 60.w,
+    height: 60.w,
+    alignment: Alignment.center,
+    child: canReceive?QpImg(img: "pro6",width: 60.w,height: 60.w,):QpImg(img: bean.received?"pro4":"pro5",width: 42.w,height: 42.w,),
+  );
+
 
   _questionWidget()=>SizedBox(
     width: double.infinity,
@@ -312,5 +372,18 @@ class BQuizPage extends StatelessWidget{
     builder: (_)=>bQuizCon.showBubble?
     QpBubbleWidget():
     Container(),
+  );
+
+  _bottomCashWidget()=>Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      InkWell(
+        onTap: (){
+          toNamed(routersName: QpRouName.bCash);
+        },
+        child: QpImg(img: "icon_cash",width: 76.w,height: 76.h,),
+      ),
+      SizedBox(height: 16.h,),
+    ],
   );
 }

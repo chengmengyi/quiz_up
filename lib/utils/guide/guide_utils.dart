@@ -2,6 +2,7 @@ import 'package:quiz_up/bean/new_user_step_bean.dart';
 import 'package:quiz_up/bean/old_user_step_bean.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/old_user/old_user_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/old_user_double/old_user_double_dialog.dart';
+import 'package:quiz_up/qp_dialog/dialog_b/old_user_sign/old_user_sign_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/wheel/wheel_dialog.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_rou/qp_rou_name.dart';
@@ -66,6 +67,12 @@ class GuideUtils{
           widget: OldUserDoubleDialog(
             wheelAddNum: wheelAddNum==0?ValueUtils.instance.getWheelAddNum():wheelAddNum,
           ),
+        );
+        break;
+      case OldUserStep.showSignDialog:
+        showDialog(
+          useSafeArea: false,
+          widget: OldUserSignDialog(),
         );
         break;
     }

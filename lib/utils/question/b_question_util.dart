@@ -31,6 +31,8 @@ class BQuestionUtil{
     return _allQuizList[answerIndex];
   }
 
+  int getAllQuizNum()=>_allQuizList.length;
+
   List<QuestionBean> _initList(String localStr){
     List<QuestionBean> list=[];
     try{

@@ -6,6 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:quiz_up/qp_rou/qp_rou_name.dart';
 import 'package:quiz_up/test.dart';
 import 'package:quiz_up/utils/guide/guide_utils.dart';
+import 'package:quiz_up/utils/progress/progress_utils.dart';
 import 'package:quiz_up/utils/question/a_question_utils.dart';
 import 'package:quiz_up/utils/question/b_question_util.dart';
 import 'package:quiz_up/utils/sql/a_sql.dart';
@@ -42,6 +43,7 @@ _init()async{
   BSql.instance.queryUserInfo();
   ValueUtils.instance.initValue();
   GuideUtils.instance.queryNewUserBean();
+  ProgressUtils.instance.getProgressList();
 }
 
 class MyApp extends StatelessWidget {
@@ -61,7 +63,7 @@ class MyApp extends StatelessWidget {
         getPages: pageList,
         defaultTransition: Transition.rightToLeft,
         builder: (context,widget){
-          return  MediaQuery(
+          return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: widget!,
           );

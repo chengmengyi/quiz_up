@@ -12,5 +12,6 @@ class OldUserCon extends GetxController{
 
   clickClose(){
     back();
+    GuideUtils.instance.updateOldUserStep(OldUserStep.showSignDialog);
   }
 }

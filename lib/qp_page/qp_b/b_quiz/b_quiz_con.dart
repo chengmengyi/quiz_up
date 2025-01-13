@@ -2,33 +2,41 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:quiz_up/bean/progress_bean.dart';
 import 'package:quiz_up/bean/question_bean.dart';
 import 'package:quiz_up/qp_dialog/dialog_a/a_answer_fail/a_answer_fail_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_a/a_answer_right/a_answer_right_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_a/a_no_heart/a_no_heart_dialog.dart';
+import 'package:quiz_up/qp_dialog/dialog_b/answer_right/answer_right_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/new_user/new_user_dialog.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
+import 'package:quiz_up/qp_wid/qp_img.dart';
 import 'package:quiz_up/utils/event/event_code.dart';
 import 'package:quiz_up/utils/event/event_listener.dart';
 import 'package:quiz_up/utils/event/receive_event.dart';
 import 'package:quiz_up/utils/event/send_event.dart';
 import 'package:quiz_up/utils/guide/guide_step.dart';
 import 'package:quiz_up/utils/guide/guide_utils.dart';
+import 'package:quiz_up/utils/progress/progress_utils.dart';
 import 'package:quiz_up/utils/question/a_question_utils.dart';
 import 'package:quiz_up/utils/question/b_question_util.dart';
 import 'package:quiz_up/utils/sql/a_sql.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
+import 'package:quiz_up/utils/value/value_utils.dart';
 
 class BQuizCon extends GetxController implements EventListener{
-  var chooseAnswerIndex=-1,level=0,timeInt=10,showBubble=false;
+  var chooseAnswerIndex=-1,level=0,timeInt=10,showBubble=false,_proMaxAnswerNum=0,_startProgressWidth=0.0;
   QuestionBean? currentQuestionBean;
   var questionType=QuestionType.animal;
   GlobalKey aGlobalKey=GlobalKey();
   GlobalKey bGlobalKey=GlobalKey();
+  GlobalKey progressGlobalKey=GlobalKey();
   Offset? rightAnswerOffset;
   Timer? _timer;
   late ReceiveEvent receiveEvent;
+  ScrollController scrollController=ScrollController();
 
   @override
   void onInit() {
@@ -39,6 +47,7 @@ class BQuizCon extends GetxController implements EventListener{
   @override
   void onReady() {
     super.onReady();
+    _countProgressWidth();
     _getCurrentQuestion();
     GuideUtils.instance.checkUserGuide();
   }
@@ -54,8 +63,21 @@ class BQuizCon extends GetxController implements EventListener{
     await Future.delayed(Duration(milliseconds: 800));
     if(GuideUtils.instance.isNewUserFirstStep()){
       GuideUtils.instance.updateNewUserStep(NewUserStep.showNewUserDialog);
+      return;
     }
-    // var result = _checkResult();
+    var result = _checkResult();
+    if(result){
+      showDialog(
+          widget: AnswerRightDialog(
+            addNum: ValueUtils.instance.getQuizAddNum(),
+            dismiss: (){
+              _updateNextQuestion(true);
+            },
+          )
+      );
+    }else{
+      _updateNextQuestion(false);
+    }
     // if(result){
     //   showDialog(
     //       widget: AAnswerRightDialog(
@@ -80,11 +102,12 @@ class BQuizCon extends GetxController implements EventListener{
     // }
   }
 
-  _updateNextQuestion()async{
-    await ASql.instance.updateQuestionIndex(questionType);
-    await ASql.instance.updateUserInfo(UserInfoKey.answerNum, 1);
+  _updateNextQuestion(bool right)async{
+    BSql.instance.updateUserAnswerNum(right);
     chooseAnswerIndex=-1;
     _getCurrentQuestion();
+    update(["progress"]);
+    jumpProgress();
   }
 
   String getAnswerBg(index){
@@ -161,6 +184,29 @@ class BQuizCon extends GetxController implements EventListener{
     _timer=null;
   }
 
+  jumpProgress(){
+    var answerNum = BSql.instance.bUserInfo?.answerNum??0;
+    if(_proMaxAnswerNum<=0||answerNum<_proMaxAnswerNum){
+      return;
+    }
+    var startIndex=answerNum;
+    for(int index=answerNum;index<ProgressUtils.instance.progressList.length;index++){
+      var bean = ProgressUtils.instance.progressList[index];
+      if(bean.progressType!=ProgressType.empty){
+        startIndex=index;
+        break;
+      }
+    }
+    var pro = (startIndex/4).floor()*90.w+70.w-_startProgressWidth;
+    scrollController.jumpTo(pro);
+  }
+
+  // double getProgress(double maxWidth){
+  //   var answerNum = BSql.instance.bUserInfo?.answerNum??0;
+  //   if()
+  //   ProgressUtils.instance.getProgress(maxWidth);
+  // }
+
   @override
   receivedEvent(SendEvent event) {
     switch(event.code){
@@ -184,10 +230,21 @@ class BQuizCon extends GetxController implements EventListener{
     }
   }
 
+  _countProgressWidth(){
+    var renderBox = progressGlobalKey.currentContext!.findRenderObject() as RenderBox;
+    var width=renderBox.size.width;
+    if(width>0){
+      var i = ((width-70.w)/90.w).floor();
+      _proMaxAnswerNum=4*i+2;
+      _startProgressWidth=70.w+i*90.w;
+    }
+  }
+
   @override
   void onClose() {
     _endTimer();
     receiveEvent.cancel();
+    scrollController.dispose();
     super.onClose();
   }
 
@@ -195,6 +252,9 @@ class BQuizCon extends GetxController implements EventListener{
     if(!kDebugMode){
       return;
     }
-    GuideUtils.instance.checkUserGuide();
+    BSql.instance.updateUserMoney(1000);
+    // BSql.instance.updateUserAnswerNum(true);
+    // update(["progress"]);
+    // jumpProgress();
   }
 }

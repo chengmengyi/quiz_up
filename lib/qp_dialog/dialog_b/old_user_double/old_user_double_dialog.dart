@@ -131,7 +131,7 @@ class OldUserDoubleDialog extends StatelessWidget{
               SizedBox(height: 30.h,),
               InkWell(
                 onTap: (){
-
+                  oldUserCon.clickDou();
                 },
                 child: Stack(
                   alignment: Alignment.center,
@@ -150,7 +150,7 @@ class OldUserDoubleDialog extends StatelessWidget{
               SizedBox(height: 14.h,),
               InkWell(
                 onTap: (){
-
+                  oldUserCon.clickSingle();
                 },
                 child: QpText(text: "Claim", size: 16.sp, color: "#5FB1C5"),
               ),

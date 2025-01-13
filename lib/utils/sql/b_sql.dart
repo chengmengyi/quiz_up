@@ -1,12 +1,15 @@
 import 'package:decimal/decimal.dart';
 import 'package:quiz_up/bean/b_user_info.dart';
+import 'package:quiz_up/bean/cash_task_bean.dart';
 import 'package:quiz_up/bean/new_user_step_bean.dart';
 import 'package:quiz_up/bean/old_user_step_bean.dart';
+import 'package:quiz_up/utils/cash_task/task_type.dart';
 import 'package:quiz_up/utils/event/event_code.dart';
 import 'package:quiz_up/utils/event/send_event.dart';
 import 'package:quiz_up/utils/guide/guide_step.dart';
 import 'package:quiz_up/utils/sql/base_sql.dart';
 import 'package:quiz_up/utils/utils.dart';
+import 'package:quiz_up/utils/value/value_utils.dart';
 
 class BSql extends BaseSql{
   static final BSql _sql=BSql();
@@ -31,6 +34,16 @@ class BSql extends BaseSql{
     bUserInfo?.money=d.toDouble();
     await updateUserInfo();
     SendEvent(code: EventCode.updateUserMoney).send();
+  }
+
+  updateUserAnswerNum(bool right)async{
+    bUserInfo?.answerNum=(bUserInfo?.answerNum??0)+1;
+    bUserInfo?.answerIndex=(bUserInfo?.answerIndex??0)+1;
+    if(right){
+      bUserInfo?.answerRightNum=(bUserInfo?.answerRightNum??0)+1;
+    }
+    await updateUserInfo();
+    SendEvent(code: EventCode.updateUserAnswerNum).send();
   }
 
   updateUserInfo()async{
@@ -74,5 +87,36 @@ class BSql extends BaseSql{
   updateOldUserStep(OldUserStepBean? bean)async{
     var db = await initDB();
     db.update(TableName.oldUserGuideB, bean?.toJson()??{},where: '"id" = ?', whereArgs: [bean?.id]);
+  }
+
+  Future<List<int>> queryReceivedIndexList()async{
+    var db = await initDB();
+    var list = await db.query(TableName.receivedIndexB);
+    if(list.isEmpty){
+      return [];
+    }
+    List<int> result=[];
+    for (var value in list) {
+      result.add(value["receivedIndex"] as int);
+    }
+    return result;
+  }
+
+  createCashTaskData(int cashType,int cashNum,String account)async{
+    var db = await initDB();
+    var list = await db.query(TableName.cashTaskB,where: '"cashType" = ? AND "cashNum" = ?',whereArgs: [cashType,cashNum]);
+    if(list.isNotEmpty){
+      return;
+    }
+    await db.insert(TableName.cashTaskB, CashTaskBean(cashType: cashType,cashNum: cashNum,taskType: TaskType.quiz,currentPro: 0,totalPro: ValueUtils.instance.getCashTask(0).data??10,taskIndex: 0).toJson());
+  }
+
+  Future<CashTaskBean?> queryCashTask(int cashType,int cashNum)async{
+    var db = await initDB();
+    var list = await db.query(TableName.cashTaskB,where: '"cashType" = ? AND "cashNum" = ?',whereArgs: [cashType,cashNum]);
+    if(list.isEmpty){
+      return null;
+    }
+    return CashTaskBean.fromJson(list.first);
   }
 }
