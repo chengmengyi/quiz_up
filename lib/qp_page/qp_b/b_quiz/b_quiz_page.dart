@@ -95,78 +95,147 @@ class BQuizPage extends StatelessWidget{
     margin: EdgeInsets.only(left: 16.w,right: 16.w),
     child: GetBuilder<BQuizCon>(
       id: "progress",
-      builder: (_)=>Stack(
-        alignment: Alignment.centerLeft,
+      builder: (_)=>SizedBox(
+        width: double.infinity,
+        height: 60.w,
         key: bQuizCon.progressGlobalKey,
+        child: ListView.builder(
+          itemCount: ProgressUtils.instance.progressList.length,
+          scrollDirection: Axis.horizontal,
+          controller: bQuizCon.scrollController,
+          physics: NeverScrollableScrollPhysics(),
+          itemBuilder: (context,index){
+            var isEnd = index==ProgressUtils.instance.progressList.length-1;
+            var bean = ProgressUtils.instance.progressList[index];
+            var canReceive = !bean.received&&(BSql.instance.bUserInfo?.answerNum??0)-1>=index;
+            var showLeftPro = ProgressUtils.instance.showLeftPro(index);
+            var showRightPro = ProgressUtils.instance.showRightPro(index);
+            switch(bean.progressType){
+              case ProgressType.empty: return _proEmptyWidget(index,index==0,isEnd);
+              case ProgressType.box: return _proBoxWidget(index,bean,canReceive,showLeftPro,showRightPro);
+              case ProgressType.wheel: return _proWheelWidget(index,bean,canReceive,showLeftPro,showRightPro);
+            }
+          },
+        ),
+      ),
+    ),
+  );
+
+  _proEmptyWidget(index,bool isStart,bool isEnd)=>Container(
+    width: 10.w,
+    height: 60.h,
+    alignment: Alignment.center,
+    child: Container(
+      width: 10.w,
+      height: 20.h,
+      alignment: Alignment.centerLeft,
+      padding: EdgeInsets.only(left: isStart?2.w:0,right: isEnd?2.w:0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: isStart?Radius.circular(14.w):Radius.zero,
+          bottomLeft: isStart?Radius.circular(14.w):Radius.zero,
+          topRight: isEnd?Radius.circular(14.w):Radius.zero,
+          bottomRight: isEnd?Radius.circular(14.w):Radius.zero,
+        ),
+        color: "#000000".toColor().withOpacity(0.5),
+      ),
+      child:  Container(
+        width: double.infinity,
+        height: 16.h,
+        decoration: ProgressUtils.instance.emptyProHasValue(index)?
+        BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: isStart?Radius.circular(10.w):Radius.zero,
+            bottomLeft: isStart?Radius.circular(10.w):Radius.zero,
+            topRight: isEnd?Radius.circular(10.w):Radius.zero,
+            bottomRight: isEnd?Radius.circular(10.w):Radius.zero,
+          ),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: ["#F2B839".toColor(),"#DF6224".toColor()],
+          ),
+        ):
+        null,
+      ),
+    ),
+  );
+  
+  _proBoxWidget(index,ProgressBean bean,bool canReceive,showLeftPro,showRightPro)=>InkWell(
+    onTap: (){
+      ProgressUtils.instance.clickBoxOrWheel(index,canReceive);
+    },
+    child: Container(
+      width: 60.w,
+      height: 60.w,
+      alignment: Alignment.center,
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          QpImg(img: "launch3",width: double.infinity,height: 20.h,),
-          // LayoutBuilder(
-          //   builder: (context,bc){
-          //     var maxWidth = bc.maxWidth;
-          //     return Stack(
-          //       alignment: Alignment.centerLeft,
-          //       children: [
-          //         QpImg(img: "launch3",width: maxWidth,height: 20.h,),
-          //         Container(
-          //           margin: EdgeInsets.only(left: 2.w,right: 2.w),
-          //           child: ClipRect(
-          //             child: Align(
-          //               alignment: Alignment.centerLeft,
-          //               widthFactor: bQuizCon.getProgress(maxWidth),
-          //               // widthFactor: 1,
-          //               child: QpImg(img: "launch4",width: maxWidth,height: 16.h,fit: BoxFit.fill,),
-          //             ),
-          //           ),
-          //         )
-          //       ],
-          //     );
-          //   },
-          // ),
-          SizedBox(
-            width: double.infinity,
-            height: 60.w,
-            child: ListView.builder(
-              itemCount: ProgressUtils.instance.progressList.length,
-              scrollDirection: Axis.horizontal,
-              controller: bQuizCon.scrollController,
-              itemBuilder: (context,index){
-                var bean = ProgressUtils.instance.progressList[index];
-                var isCurrent = !bean.received&&(BSql.instance.bUserInfo?.answerNum??0)-1>=index;
-                switch(bean.progressType){
-                  case ProgressType.empty: return _proEmptyWidget();
-                  case ProgressType.box: return _proBoxWidget(index,bean,isCurrent);
-                  case ProgressType.wheel: return _proWheelWidget(index,bean,isCurrent);
-                }
-              },
-            ),
-          )
+          Row(
+            children: [
+              Expanded(
+                child: _proValueWidget(showLeftPro),
+              ),
+              Expanded(
+                child: _proValueWidget(showRightPro),
+              ),
+            ],
+          ),
+          canReceive?QpImg(img: "pro3",width: 60.w,height: 60.w,):QpImg(img: bean.received?"pro1":"pro2",width: 42.w,height: 42.w,),
         ],
       ),
     ),
   );
 
-  _proEmptyWidget()=>Container(
-    width: 10.w,
-    height: 20.h,
-    decoration: BoxDecoration(
-
+  _proWheelWidget(index,ProgressBean bean,bool canReceive,showLeftPro,showRightPro)=>InkWell(
+    onTap: (){
+      ProgressUtils.instance.clickBoxOrWheel(index,canReceive);
+    },
+    child: Container(
+      width: 60.w,
+      height: 60.w,
+      alignment: Alignment.center,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: _proValueWidget(showLeftPro),
+              ),
+              Expanded(
+                child: _proValueWidget(showRightPro),
+              ),
+            ],
+          ),
+          canReceive?QpImg(img: "pro6",width: 60.w,height: 60.w,):QpImg(img: bean.received?"pro4":"pro5",width: 42.w,height: 42.w,)
+        ],
+      ),
     ),
   );
-  
-  _proBoxWidget(index,ProgressBean bean,bool canReceive)=>Container(
-    width: 60.w,
-    height: 60.w,
-    alignment: Alignment.center,
-    child: canReceive?QpImg(img: "pro3",width: 60.w,height: 60.w,):QpImg(img: bean.received?"pro1":"pro2",width: 42.w,height: 42.w,),
-  );
 
-  _proWheelWidget(index,ProgressBean bean,bool canReceive)=>Container(
-    width: 60.w,
-    height: 60.w,
-    alignment: Alignment.center,
-    child: canReceive?QpImg(img: "pro6",width: 60.w,height: 60.w,):QpImg(img: bean.received?"pro4":"pro5",width: 42.w,height: 42.w,),
+  _proValueWidget(showPro)=>Container(
+    width: double.infinity,
+    height: 20.h,
+    alignment: Alignment.centerLeft,
+    decoration: BoxDecoration(
+      color: "#000000".toColor().withOpacity(0.5),
+    ),
+    child: showPro?
+    Container(
+      width: double.infinity,
+      height: 16.h,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: ["#F2B839".toColor(),"#DF6224".toColor()],
+        ),
+      ),
+    ):
+    Container(),
   );
-
 
   _questionWidget()=>SizedBox(
     width: double.infinity,

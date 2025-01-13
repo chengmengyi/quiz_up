@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:quiz_up/utils/ad/ad_utils.dart';
+import 'package:quiz_up/utils/cash_task/cash_task_utils.dart';
+import 'package:quiz_up/utils/cash_task/task_type.dart';
 import 'package:quiz_up/utils/event/event_code.dart';
 import 'package:quiz_up/utils/event/event_listener.dart';
 import 'package:quiz_up/utils/event/receive_event.dart';
@@ -32,6 +34,7 @@ class QpBubbleCon extends GetxController implements EventListener{
   }
 
   clickBubble(){
+    CashTaskUtils.instance.updateCashTask(TaskType.pop);
     if(firstClickBubble.get()){
       firstClickBubble.save(false);
       _addNumResult();

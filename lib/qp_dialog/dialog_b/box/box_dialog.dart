@@ -2,34 +2,22 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:quiz_up/qp_dialog/dialog_b/answer_right/answer_right_con.dart';
-import 'package:quiz_up/qp_dialog/dialog_b/old_user_double/old_user_double_con.dart';
+import 'package:quiz_up/qp_dialog/dialog_b/box/box_con.dart';
+import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_wid/qp_img.dart';
 import 'package:quiz_up/qp_wid/qp_text.dart';
-import 'package:quiz_up/utils/utils.dart';
 
-enum AnswerRightTyp{
-  quiz,wheel,
-}
-
-class AnswerRightDialog extends StatelessWidget{
+class BoxDialog extends StatelessWidget{
   bool init=false;
-  late AnswerRightCon answerRightCon;
+  late BoxCon boxCon;
 
-  double addNum;
-  AnswerRightTyp type;
-  Function() dismiss;
-  AnswerRightDialog({
-    required this.addNum,
-    required this.type,
-    required this.dismiss,
-});
-
+  int index;
+  BoxDialog({required this.index});
 
   @override
   Widget build(BuildContext context){
     if(!init){
-      answerRightCon=Get.put(AnswerRightCon());
+      boxCon=Get.put(BoxCon());
       init=true;
     }
     return WillPopScope(
@@ -57,7 +45,7 @@ class AnswerRightDialog extends StatelessWidget{
           right: 0,
           child: InkWell(
             onTap: (){
-              answerRightCon.clickClose(dismiss,);
+              back();
             },
             child: QpImg(img: "icon_close3",width: 38.w,height: 38.h,),
           ),
@@ -70,16 +58,39 @@ class AnswerRightDialog extends StatelessWidget{
           ),
         ),
         Align(
+          alignment: Alignment.topCenter,
+          child: Container(
+            margin: EdgeInsets.only(top: 26.h),
+            child: SizedBox(
+              width: 250.w,
+              height: 250.h,
+              child: Stack(
+                children: [
+                  QpImg(img: "guang",width: 250.w,height: 250.h,),
+                  Align(
+                    alignment: Alignment.center,
+                    child: QpImg(img: "box2",width: 134.w,height: 118.h,),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 40.h),
+                      child: QpText(text: "+\$60.0", size: 32.sp, color: "#085F75"),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+        Align(
           alignment: Alignment.bottomCenter,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              QpImg(img: "right2",width: 116.w,height: 104.h,),
-              QpText(text: "+\$$addNum", size: 32.sp, color: "#085F75"),
-              SizedBox(height: 30.h,),
               InkWell(
                 onTap: (){
-                  answerRightCon.clickDou(addNum,dismiss,type);
+                  boxCon.clickDou(index);
                 },
                 child: Stack(
                   alignment: Alignment.center,
@@ -89,20 +100,20 @@ class AnswerRightDialog extends StatelessWidget{
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         QpImg(img: "icon_video",width: 42.w,height: 42.w,),
-                        QpText(text: "Claim \$${(Decimal.parse("$addNum")*Decimal.fromInt(2)).toDouble()}", size: 20.sp, color: "#FFFFFF",fontWeight: FontWeight.bold,)
+                        QpText(text: "Claim \$${(Decimal.parse("100")*Decimal.fromInt(2)).toDouble()}", size: 20.sp, color: "#FFFFFF",fontWeight: FontWeight.bold,)
                       ],
                     )
                   ],
                 ),
               ),
-              SizedBox(height: 14.h,),
+              SizedBox(height: 18.h,),
               InkWell(
                 onTap: (){
-                  answerRightCon.clickSingle(addNum,dismiss,type);
+                  boxCon.clickSingle(index);
                 },
-                child: QpText(text: "Claim", size: 16.sp, color: "#5FB1C5"),
+                child: QpText(text: "\$20.0", size: 16.sp, color: "#5FB1C5"),
               ),
-              SizedBox(height: 30.h,),
+              SizedBox(height: 18.h,)
             ],
           ),
         )

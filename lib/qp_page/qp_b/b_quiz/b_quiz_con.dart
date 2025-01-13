@@ -13,6 +13,8 @@ import 'package:quiz_up/qp_dialog/dialog_b/answer_right/answer_right_dialog.dart
 import 'package:quiz_up/qp_dialog/dialog_b/new_user/new_user_dialog.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_wid/qp_img.dart';
+import 'package:quiz_up/utils/cash_task/cash_task_utils.dart';
+import 'package:quiz_up/utils/cash_task/task_type.dart';
 import 'package:quiz_up/utils/event/event_code.dart';
 import 'package:quiz_up/utils/event/event_listener.dart';
 import 'package:quiz_up/utils/event/receive_event.dart';
@@ -60,6 +62,7 @@ class BQuizCon extends GetxController implements EventListener{
     chooseAnswerIndex=index;
     update(["answer","finger"]);
     _endTimer();
+    CashTaskUtils.instance.updateCashTask(TaskType.quiz);
     await Future.delayed(Duration(milliseconds: 800));
     if(GuideUtils.instance.isNewUserFirstStep()){
       GuideUtils.instance.updateNewUserStep(NewUserStep.showNewUserDialog);
@@ -70,6 +73,7 @@ class BQuizCon extends GetxController implements EventListener{
       showDialog(
           widget: AnswerRightDialog(
             addNum: ValueUtils.instance.getQuizAddNum(),
+            type: AnswerRightTyp.quiz,
             dismiss: (){
               _updateNextQuestion(true);
             },
@@ -78,28 +82,6 @@ class BQuizCon extends GetxController implements EventListener{
     }else{
       _updateNextQuestion(false);
     }
-    // if(result){
-    //   showDialog(
-    //       widget: AAnswerRightDialog(
-    //         dismiss: (){
-    //           _updateNextQuestion();
-    //         },
-    //       )
-    //   );
-    // }else{
-    //   showDialog(
-    //       widget: AAnswerFailDialog(
-    //         dismiss: (again){
-    //           if(again){
-    //             chooseAnswerIndex=-1;
-    //             update(["question","answer"]);
-    //           }else{
-    //             _updateNextQuestion();
-    //           }
-    //         },
-    //       )
-    //   );
-    // }
   }
 
   _updateNextQuestion(bool right)async{
@@ -227,6 +209,9 @@ class BQuizCon extends GetxController implements EventListener{
         showBubble=true;
         update(["bubble"]);
         break;
+      case EventCode.updateBoxOrWheelPro:
+        update(["progress"]);
+        break;
     }
   }
 
@@ -252,9 +237,7 @@ class BQuizCon extends GetxController implements EventListener{
     if(!kDebugMode){
       return;
     }
-    BSql.instance.updateUserMoney(1000);
-    // BSql.instance.updateUserAnswerNum(true);
-    // update(["progress"]);
-    // jumpProgress();
+    // BSql.instance.updateUserMoney(1000);
+    CashTaskUtils.instance.updateCashTask(TaskType.quiz);
   }
 }

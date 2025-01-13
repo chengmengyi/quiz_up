@@ -1,12 +1,13 @@
 import 'package:decimal/decimal.dart';
 import 'package:get/get.dart';
+import 'package:quiz_up/qp_dialog/dialog_b/answer_right/answer_right_dialog.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/utils/ad/ad_utils.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
 
 class AnswerRightCon extends GetxController{
 
-  clickDou(double addNum,Function() dismiss){
+  clickDou(double addNum,Function() dismiss,AnswerRightTyp type){
     AdUtils.instance.showAd(
       closeAd: (){
         back();
@@ -16,7 +17,7 @@ class AnswerRightCon extends GetxController{
     );
   }
 
-  clickSingle(double addNum,Function() dismiss){
+  clickSingle(double addNum,Function() dismiss,AnswerRightTyp type){
     AdUtils.instance.showAd(
         closeAd: (){
           back();

@@ -18,4 +18,12 @@ class CashTaskUtils{
     }
     return list;
   }
+
+  updateCashTask(String taskType)async{
+    await BSql.instance.updateCashTask(taskType);
+  }
+
+  updateCashTaskReceived(CashAmountBean amountBean)async{
+    await BSql.instance.updateCashTaskReceived(amountBean);
+  }
 }

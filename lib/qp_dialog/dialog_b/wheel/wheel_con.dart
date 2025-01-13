@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
+import 'package:quiz_up/qp_dialog/dialog_b/answer_right/answer_right_dialog.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/utils/ad/ad_utils.dart';
 import 'package:quiz_up/utils/guide/guide_step.dart';
 import 'package:quiz_up/utils/guide/guide_utils.dart';
+import 'package:quiz_up/utils/progress/progress_utils.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
 import 'package:quiz_up/utils/value/value_utils.dart';
 
@@ -16,11 +18,11 @@ class WheelCon extends GetxController{
   void onReady() {
     super.onReady();
     if(autoWheel){
-      startWheel();
+      startWheel(-1);
     }
   }
   
-  startWheel(){
+  startWheel(receivedIndex){
     if(null!=_wheelTimer){
       return;
     }
@@ -33,12 +35,12 @@ class WheelCon extends GetxController{
       currentWheelAngle++;
       update(["wheel"]);
       if(currentWheelAngle>=totalAngel){
-        _stop(wheelAddNum);
+        _stop(wheelAddNum,receivedIndex);
       }
     });
   }
 
-  _stop(int wheelAddNum)async{
+  _stop(int wheelAddNum,receivedIndex)async{
     _wheelTimer?.cancel();
     await Future.delayed(Duration(milliseconds: 800));
     _wheelTimer=null;
@@ -48,6 +50,16 @@ class WheelCon extends GetxController{
         BSql.instance.updateUserMoney(wheelAddNum.toDouble());
         if(fromOldUser){
           GuideUtils.instance.updateOldUserStep(OldUserStep.showDoubleDialog,wheelAddNum: wheelAddNum);
+        }else{
+          showDialog(
+              widget: AnswerRightDialog(
+                addNum: wheelAddNum.toDouble(),
+                type: AnswerRightTyp.wheel,
+                dismiss: (){
+                  ProgressUtils.instance.receiveBoxOrWheel(receivedIndex);
+                },
+              )
+          );
         }
       },
     );

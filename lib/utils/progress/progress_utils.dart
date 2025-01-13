@@ -1,5 +1,10 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quiz_up/bean/progress_bean.dart';
+import 'package:quiz_up/qp_dialog/dialog_b/box/box_dialog.dart';
+import 'package:quiz_up/qp_dialog/dialog_b/wheel/wheel_dialog.dart';
+import 'package:quiz_up/qp_rou/qp_page_list.dart';
+import 'package:quiz_up/utils/event/event_code.dart';
+import 'package:quiz_up/utils/event/send_event.dart';
 import 'package:quiz_up/utils/question/b_question_util.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
 
@@ -25,23 +30,46 @@ class ProgressUtils{
     }
   }
 
-  updateProgressList(){
-
+  receiveBoxOrWheel(index)async{
+    _receivedIndexList.add(index);
+    await BSql.instance.updateReceivedIndex(index);
+    progressList[index].received=true;
+    SendEvent(code: EventCode.updateBoxOrWheelPro).send();
   }
 
-  double getProgress(double maxWidth){
+  bool emptyProHasValue(index){
     var answerNum = BSql.instance.bUserInfo?.answerNum??0;
-    var width=0.0;
-    for(int index=0;index<answerNum;index++){
-      var bean = progressList[index];
-      width+=(bean.progressType==ProgressType.empty?10.w:60.w);
+    return answerNum-1>=index;
+  }
+
+  bool showLeftPro(index){
+    var answerNum = BSql.instance.bUserInfo?.answerNum??0;
+    return answerNum>=index;
+  }
+
+  bool showRightPro(index){
+    var answerNum = BSql.instance.bUserInfo?.answerNum??0;
+    return answerNum>index;
+  }
+
+  clickBoxOrWheel(index,canReceive){
+    if(!canReceive){
+      return;
     }
-    var d = width/maxWidth;
-    if(d<=0){
-      return 0.0;
-    }else if(d>=1){
-      return 1.0;
+    var bean = progressList[index];
+    if(bean.received){
+      return;
     }
-    return d;
+    if(bean.progressType==ProgressType.box){
+      showDialog(
+          widget: BoxDialog(index: index,)
+      );
+    }
+    if(bean.progressType==ProgressType.wheel){
+      showDialog(
+          useSafeArea: false,
+          widget: WheelDialog(autoWheel: false,receivedIndex: index,)
+      );
+    }
   }
 }

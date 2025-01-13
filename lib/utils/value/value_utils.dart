@@ -26,6 +26,8 @@ class ValueUtils{
 
   double getBubbleAddNum()=> _getRewardByList(_valueBean?.floatPrize??[]);
 
+  double getBoxAddNum()=> _getRewardByList(_valueBean?.boxPrize??[]);
+
   List<int> getAmountList()=>_valueBean?.eqRange??[800, 1000, 1500, 2000];
 
   TixianTask getCashTask(int index){
@@ -35,6 +37,8 @@ class ValueUtils{
       return TixianTask(title: TaskType.quiz,data: 10);
     }
   }
+
+  int getTiXianTaskLength()=>(_valueBean?.tixianTask??[]).length;
 
   double _getRewardByList(List<QuizPrize> list){
     if(list.isEmpty){

@@ -5,6 +5,7 @@ import 'package:quiz_up/qp_page/qp_b/b_cash/b_cash_con.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_wid/qp_img.dart';
 import 'package:quiz_up/qp_wid/qp_text.dart';
+import 'package:quiz_up/utils/cash_task/task_status.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
 import 'package:quiz_up/utils/utils.dart';
 
@@ -51,7 +52,12 @@ class BCashPage extends StatelessWidget{
         child: QpImg(img: "icon_close1",width: 30.w,height: 30.h,),
       ),
       SizedBox(width: 10.w,),
-      QpText(text: "Withdraw", size: 16.sp, color: "#FFFFFF")
+      InkWell(
+        onTap: (){
+          bCashCon.test();
+        },
+        child: QpText(text: "Withdraw", size: 16.sp, color: "#FFFFFF"),
+      )
     ],
   );
 
@@ -85,7 +91,10 @@ class BCashPage extends StatelessWidget{
             mainAxisSize: MainAxisSize.min,
             children: [
               QpText(text: "My BALANCE:", size: 13.sp, color: "#000000"),
-              QpText(text: "\$${BSql.instance.bUserInfo?.money??0}", size: 30.sp, color: "#1E8910"),
+              GetBuilder<BCashCon>(
+                id: "money",
+                builder: (_)=>QpText(text: "\$${BSql.instance.bUserInfo?.money??0}", size: 30.sp, color: "#1E8910"),
+              ),
             ],
           ),
         )
@@ -180,13 +189,13 @@ class BCashPage extends StatelessWidget{
                     Spacer(),
                     InkWell(
                       onTap: (){
-                        bCashCon.clickCash();
+                        bCashCon.clickCash(index);
                       },
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
                           QpImg(img: null==bean.cashTaskBean?"btn4":"btn3",width: 107.w,height: 38.h,),
-                          QpText(text: null==bean.cashTaskBean?"Cash out":"Processing", size: 14.sp, color: "#FDFFFC"),
+                          QpText(text: null==bean.cashTaskBean?"Cash out":bean.cashTaskBean?.taskStatus==TaskStatus.completed?"Successful":"Processing", size: 14.sp, color: "#FDFFFC"),
                         ],
                       ),
                     )

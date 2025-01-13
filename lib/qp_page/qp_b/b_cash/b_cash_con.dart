@@ -1,25 +1,33 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:quiz_up/bean/cash_amount_bean.dart';
-import 'package:quiz_up/bean/cash_task_bean.dart';
 import 'package:quiz_up/bean/cash_type_bean.dart';
+import 'package:quiz_up/qp_dialog/dialog_b/cash_guide/cash_guide_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/input_account/input_account_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/no_money/no_money_dialog.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/utils/cash_task/cash_task_utils.dart';
+import 'package:quiz_up/utils/cash_task/task_status.dart';
 import 'package:quiz_up/utils/cash_task/task_type.dart';
+import 'package:quiz_up/utils/event/event_code.dart';
+import 'package:quiz_up/utils/event/event_listener.dart';
+import 'package:quiz_up/utils/event/receive_event.dart';
+import 'package:quiz_up/utils/event/send_event.dart';
 import 'package:quiz_up/utils/guide/guide_step.dart';
 import 'package:quiz_up/utils/guide/guide_utils.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
-import 'package:quiz_up/utils/value/value_utils.dart';
+import 'package:quiz_up/utils/utils.dart';
 
-class BCashCon extends GetxController{
-  var cashIndex=0,amountIndex=0;
+class BCashCon extends GetxController implements EventListener{
+  var cashIndex=0;
   List<CashTypeBean> cashTypeList=[];
   List<CashAmountBean> amountList=[];
+  late ReceiveEvent receiveEvent;
   
   @override
   void onInit() {
     super.onInit();
+    receiveEvent=ReceiveEvent(eventListener: this);
     _checkFromNewUser();
     _initCashTypeList();
   }
@@ -33,16 +41,30 @@ class BCashCon extends GetxController{
   clickCashType(index){
     cashIndex=index;
     update(["cash_type","money_bg"]);
+    _initAmountList();
   }
 
-  clickAmount(index){
-    amountIndex=index;
-    update(["amount"]);
-  }
-
-  clickCash(){
+  clickCash(index)async{
+    var amountBean = amountList[index];
+    if(null!=amountBean.cashTaskBean){
+      if(amountBean.cashTaskBean?.taskStatus==TaskStatus.completed){
+        showToast("Congratulations, your withdrawal approval has been submitted. Please wait for 3-5 working days to arrive in your account.");
+        await CashTaskUtils.instance.updateCashTaskReceived(amountBean);
+        _initAmountList();
+        return;
+      }
+      showDialog(
+          widget: CashGuideDialog(
+            cashAmountBean: amountBean,
+            dismiss: (){
+              back();
+            },
+          )
+      );
+      return;
+    }
     var money = BSql.instance.bUserInfo?.money??0;
-    var totalMoney = amountList[amountIndex].totalMoney;
+    var totalMoney = amountBean.totalMoney;
     if(money<totalMoney){
       showDialog(widget: NoMoneyDialog());
       return;
@@ -52,6 +74,7 @@ class BCashCon extends GetxController{
         cashNum: totalMoney,
         dismiss: (account)async{
           await CashTaskUtils.instance.createCashTask(cashIndex, totalMoney, account);
+          BSql.instance.updateUserMoney((-totalMoney).toDouble());
           _initAmountList();
         },
       )
@@ -135,5 +158,27 @@ class BCashCon extends GetxController{
       case 5: return "cash_bg_master";
       default: return "cash_bg_pay";
     }
+  }
+
+  @override
+  receivedEvent(SendEvent event) {
+    switch(event.code){
+      case EventCode.updateUserMoney:
+        update(["money"]);
+        break;
+    }
+  }
+
+  test(){
+    if(!kDebugMode){
+      return;
+    }
+
+  }
+
+  @override
+  void onClose() {
+    receiveEvent.cancel();
+    super.onClose();
   }
 }

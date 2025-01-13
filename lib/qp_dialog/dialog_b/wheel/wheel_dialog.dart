@@ -8,9 +8,10 @@ import 'package:quiz_up/qp_wid/qp_img.dart';
 import 'package:quiz_up/qp_wid/qp_text.dart';
 
 class WheelDialog extends StatelessWidget{
+  int receivedIndex=-1;
   bool init=false,autoWheel=false,fromOldUser=false;
   late WheelCon wheelCon;
-  WheelDialog({required this.autoWheel,this.fromOldUser=false,});
+  WheelDialog({required this.autoWheel,this.fromOldUser=false,this.receivedIndex=-1});
 
   @override
   Widget build(BuildContext context){
@@ -47,12 +48,7 @@ class WheelDialog extends StatelessWidget{
             onTap: (){
               wheelCon.clickClose();
             },
-            child: Container(
-              width: 40.w,
-              height: 40.w,
-              alignment: Alignment.center,
-              child: Icon(Icons.close,color: Colors.white.withOpacity(0.5),),
-            ),
+            child: QpImg(img: "icon_close3",width: 38.w,height: 38.h,),
           ),
           SizedBox(width: 20.w,)
         ],
@@ -99,7 +95,7 @@ class WheelDialog extends StatelessWidget{
         ),
         InkWell(
           onTap: (){
-            wheelCon.startWheel();
+            wheelCon.startWheel(receivedIndex);
           },
           child: Stack(
             alignment: Alignment.bottomCenter,

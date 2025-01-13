@@ -7,6 +7,7 @@ class CashTaskBean {
       this.totalPro, 
       this.account,
       this.taskIndex,
+      this.taskStatus,
   });
 
   CashTaskBean.fromJson(dynamic json) {
@@ -17,6 +18,7 @@ class CashTaskBean {
     totalPro = json['totalPro'];
     account = json['account'];
     taskIndex = json['taskIndex'];
+    taskStatus = json['taskStatus'];
   }
   int? cashType;
   int? cashNum;
@@ -25,6 +27,7 @@ class CashTaskBean {
   int? totalPro;
   String? account;
   int? taskIndex;
+  int? taskStatus;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -35,6 +38,7 @@ class CashTaskBean {
     map['totalPro'] = totalPro;
     map['account'] = account;
     map['taskIndex'] = taskIndex;
+    map['taskStatus'] = taskStatus;
     return map;
   }
 
