@@ -13,14 +13,18 @@ import 'package:quiz_up/qp_dialog/dialog_b/answer_right/answer_right_dialog.dart
 import 'package:quiz_up/qp_dialog/dialog_b/new_user/new_user_dialog.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_wid/qp_img.dart';
+import 'package:quiz_up/utils/ad/ad_utils.dart';
 import 'package:quiz_up/utils/cash_task/cash_task_utils.dart';
 import 'package:quiz_up/utils/cash_task/task_type.dart';
+import 'package:quiz_up/utils/check_user/check_user_utils.dart';
 import 'package:quiz_up/utils/event/event_code.dart';
 import 'package:quiz_up/utils/event/event_listener.dart';
 import 'package:quiz_up/utils/event/receive_event.dart';
 import 'package:quiz_up/utils/event/send_event.dart';
+import 'package:quiz_up/utils/firebase_utils.dart';
 import 'package:quiz_up/utils/guide/guide_step.dart';
 import 'package:quiz_up/utils/guide/guide_utils.dart';
+import 'package:quiz_up/utils/local_notifications/local_notifications_utils.dart';
 import 'package:quiz_up/utils/progress/progress_utils.dart';
 import 'package:quiz_up/utils/question/a_question_utils.dart';
 import 'package:quiz_up/utils/question/b_question_util.dart';
@@ -43,7 +47,9 @@ class BQuizCon extends GetxController implements EventListener{
   @override
   void onInit() {
     super.onInit();
+    CheckUserUtils.instance.bQuizShow=true;
     receiveEvent=ReceiveEvent(eventListener: this);
+    LocalNotificationsUtils.instance.setLocalNotifications();
   }
 
   @override
@@ -62,6 +68,7 @@ class BQuizCon extends GetxController implements EventListener{
     chooseAnswerIndex=index;
     update(["answer","finger"]);
     _endTimer();
+    BQuestionUtil.instance.updateTodayAnswerQuizNum();
     CashTaskUtils.instance.updateCashTask(TaskType.quiz);
     await Future.delayed(Duration(milliseconds: 800));
     if(GuideUtils.instance.isNewUserFirstStep()){
@@ -231,6 +238,7 @@ class BQuizCon extends GetxController implements EventListener{
     receiveEvent.cancel();
     scrollController.dispose();
     super.onClose();
+    CheckUserUtils.instance.bQuizShow=false;
   }
 
   test(){
@@ -238,6 +246,9 @@ class BQuizCon extends GetxController implements EventListener{
       return;
     }
     // BSql.instance.updateUserMoney(1000);
-    CashTaskUtils.instance.updateCashTask(TaskType.quiz);
+    // CashTaskUtils.instance.updateCashTask(TaskType.quiz);
+    // LocalNotificationsUtils.instance.setLocalNotifications();
+
+    CheckUserUtils.instance.initCheck();
   }
 }

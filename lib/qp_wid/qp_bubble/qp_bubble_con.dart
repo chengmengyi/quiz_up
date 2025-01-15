@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:quiz_up/utils/ad/ad_type.dart';
 import 'package:quiz_up/utils/ad/ad_utils.dart';
 import 'package:quiz_up/utils/cash_task/cash_task_utils.dart';
 import 'package:quiz_up/utils/cash_task/task_type.dart';
@@ -10,6 +11,7 @@ import 'package:quiz_up/utils/event/event_listener.dart';
 import 'package:quiz_up/utils/event/receive_event.dart';
 import 'package:quiz_up/utils/event/send_event.dart';
 import 'package:quiz_up/utils/firebase_utils.dart';
+import 'package:quiz_up/utils/point/ad_point_id.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
 import 'package:quiz_up/utils/storage/storage_event.dart';
 import 'package:quiz_up/utils/value/value_utils.dart';
@@ -41,7 +43,12 @@ class QpBubbleCon extends GetxController implements EventListener{
       return;
     }
     AdUtils.instance.showAd(
+      adType: AdType.reward,
+      adPointId: AdPointId.kwrap_bubble_rv,
       closeAd: (){
+        _addNumResult();
+      },
+      failAd: (){
         _addNumResult();
       }
     );

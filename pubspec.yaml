@@ -45,6 +45,17 @@ dependencies:
   url_launcher: 6.3.1
   decimal: 3.1.0
   fluttertoast: 8.0.9
+  in_app_review: 2.0.9
+  applovin_max: 4.2.1
+  firebase_analytics: 11.4.0
+  firebase_core: 3.10.0
+  firebase_remote_config: 5.3.0
+  connectivity_plus: 6.1.2
+  appsflyer_sdk: 6.15.2
+  flutter_tba_info: 0.0.8
+  dio: 5.7.0
+  flutter_local_notifications:
+    path: plugins/flutter_local_notifications-18.0.1
 
 dev_dependencies:
   flutter_test:

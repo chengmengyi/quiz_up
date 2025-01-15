@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -33,6 +34,16 @@ extension Str2Dou on String{
   }
 }
 
+extension Str2Int on String{
+  int toInt({int defaultInt=0}){
+    try{
+      return int.parse(this);
+    }catch(e){
+      return defaultInt;
+    }
+  }
+}
+
 showToast(String text){
   if(text.isEmpty){
     return;
@@ -46,4 +57,24 @@ showToast(String text){
       textColor: Colors.white,
       fontSize: 16
   );
+}
+
+extension LogStr on String{
+  log(){
+    if(kDebugMode){
+      print(this);
+    }
+  }
+}
+
+int getTodayNum(String s){
+  try{
+    var list = s.split("_");
+    if(list.first==getTodayTime()){
+      return list.last.toInt();
+    }
+    return 0;
+  }catch(e){
+    return 0;
+  }
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:quiz_up/utils/ad/ad_type.dart';
 import 'package:quiz_up/utils/cash_task/task_type.dart';
 import 'package:quiz_up/utils/local_info.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
@@ -29,6 +30,23 @@ class ValueUtils{
   double getBoxAddNum()=> _getRewardByList(_valueBean?.boxPrize??[]);
 
   List<int> getAmountList()=>_valueBean?.eqRange??[800, 1000, 1500, 2000];
+
+  bool checkShowAd(String adType){
+    var list = (adType==AdType.interstitial?_valueBean?.intadPoint:_valueBean?.rvadPoint)??[];
+    if(list.isEmpty){
+      return false;
+    }
+    var answerNum = BSql.instance.bUserInfo?.answerNum??0;
+    if(answerNum>=(list.last.endNumber??0)){
+      return Random().nextInt(100)<(list.last.point??0);
+    }
+    for (var value in list) {
+      if(answerNum>=(value.firstNumber??0)&&answerNum<(value.endNumber??0)){
+        return Random().nextInt(100)<(value.point??0);
+      }
+    }
+    return false;
+  }
 
   TixianTask getCashTask(int index){
     try{
@@ -79,7 +97,7 @@ class ValueUtils{
   }
 
   String _getValueStr(){
-    var s = valueStr.get();
+    var s = valueConfig.get();
     if(s.isEmpty){
       return localValueStr.base64();
     }

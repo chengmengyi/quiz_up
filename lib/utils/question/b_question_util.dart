@@ -1,8 +1,13 @@
 import 'dart:convert';
 
+import 'package:in_app_review/in_app_review.dart';
 import 'package:quiz_up/bean/question_bean.dart';
+import 'package:quiz_up/qp_dialog/dialog_b/comment/comment/comment_dialog.dart';
+import 'package:quiz_up/qp_dialog/dialog_b/comment/comment_success/comment_success_dialog.dart';
+import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/utils/local_info.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
+import 'package:quiz_up/utils/storage/storage_event.dart';
 import 'package:quiz_up/utils/utils.dart';
 
 class BQuestionUtil{
@@ -43,6 +48,34 @@ class BQuestionUtil{
       return list;
     }catch(e){
       return list;
+    }
+  }
+
+  _showSystemDialog()async{
+    var instance = InAppReview.instance;
+    var ava = await instance.isAvailable();
+    if(ava){
+      instance.requestReview();
+    }
+  }
+
+  updateTodayAnswerQuizNum(){
+    var quizNum = getTodayNum(todayAnswerQuizNum.get())+1;
+    todayAnswerQuizNum.save("${getTodayTime()}_$quizNum");
+    if(!alreadyShowComment.get()&&(quizNum==3||quizNum==5)){
+      showDialog(
+          widget: CommentDialog(
+            dismiss: (stars){
+              alreadyShowComment.save(true);
+              BSql.instance.updateUserMoney(5.0);
+              if(stars<=2){
+                showDialog(widget: CommentSuccessDialog());
+              }else{
+                _showSystemDialog();
+              }
+            },
+          )
+      );
     }
   }
 }

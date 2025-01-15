@@ -2,10 +2,17 @@ import 'package:get_storage/get_storage.dart';
 import 'package:quiz_up/utils/storage/storage_name.dart';
 
 
-StorageEvent<String> valueStr = StorageEvent<String>(key: StorageName.valueStr, defaultValue: "");
-
-
 StorageEvent<bool> firstClickBubble = StorageEvent<bool>(key: StorageName.firstClickBubble, defaultValue: true);
+StorageEvent<bool> alreadyShowComment = StorageEvent<bool>(key: StorageName.alreadyShowComment, defaultValue: false);
+StorageEvent<bool> localCheckResult = StorageEvent<bool>(key: StorageName.localCheckResult, defaultValue: false);
+
+
+StorageEvent<String> todayAnswerQuizNum = StorageEvent<String>(key: StorageName.todayAnswerQuizNum, defaultValue: "");
+StorageEvent<String> todayShowAdNum = StorageEvent<String>(key: StorageName.todayShowAdNum, defaultValue: "");
+StorageEvent<String> todayClickAdNum = StorageEvent<String>(key: StorageName.todayClickAdNum, defaultValue: "");
+StorageEvent<String> valueConfig = StorageEvent<String>(key: StorageName.valueConfig, defaultValue: "");
+StorageEvent<String> adConfig = StorageEvent<String>(key: StorageName.adConfig, defaultValue: "");
+StorageEvent<String> appsflyerResult = StorageEvent<String>(key: StorageName.appsflyerResult, defaultValue: "");
 
 
 

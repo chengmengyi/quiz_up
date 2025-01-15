@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_rou/qp_rou_name.dart';
+import 'package:quiz_up/utils/check_user/check_user_utils.dart';
 
 class QpLaunchCon extends GetxController with GetSingleTickerProviderStateMixin{
   late AnimationController animationController;
@@ -9,6 +10,7 @@ class QpLaunchCon extends GetxController with GetSingleTickerProviderStateMixin{
   @override
   void onInit() {
     super.onInit();
+    CheckUserUtils.instance.launchShow=true;
     _initAnimator();
   }
 
@@ -19,14 +21,14 @@ class QpLaunchCon extends GetxController with GetSingleTickerProviderStateMixin{
   }
 
   _initAnimator(){
-    animationController=AnimationController(duration: const Duration(seconds: 3),vsync: this)
+    animationController=AnimationController(duration: const Duration(seconds: 13),vsync: this)
       ..addListener(() {
         update(["progress"]);
       })
       ..addStatusListener((status) {
         if(status==AnimationStatus.completed){
-          // offNamed(routersName: QpRouName.aHome);
-          offNamed(routersName: QpRouName.bQuiz);
+          CheckUserUtils.instance.checkResult();
+          offNamed(routersName: CheckUserUtils.instance.isB?QpRouName.bQuiz:QpRouName.aHome);
         }
       });
   }
@@ -35,5 +37,6 @@ class QpLaunchCon extends GetxController with GetSingleTickerProviderStateMixin{
   void onClose() {
     animationController.dispose();
     super.onClose();
+    CheckUserUtils.instance.launchShow=false;
   }
 }

@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/answer_right/answer_right_dialog.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
+import 'package:quiz_up/utils/ad/ad_type.dart';
 import 'package:quiz_up/utils/ad/ad_utils.dart';
 import 'package:quiz_up/utils/guide/guide_step.dart';
 import 'package:quiz_up/utils/guide/guide_utils.dart';
+import 'package:quiz_up/utils/point/ad_point_id.dart';
 import 'package:quiz_up/utils/progress/progress_utils.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
 import 'package:quiz_up/utils/value/value_utils.dart';
@@ -45,24 +47,33 @@ class WheelCon extends GetxController{
     await Future.delayed(Duration(milliseconds: 800));
     _wheelTimer=null;
     AdUtils.instance.showAd(
+      adType: AdType.interstitial,
+      adPointId: fromOldUser?AdPointId.kwrap_olduser_wheelspin_int:AdPointId.kwrap_wheelspin_int,
       closeAd: (){
-        back();
-        BSql.instance.updateUserMoney(wheelAddNum.toDouble());
-        if(fromOldUser){
-          GuideUtils.instance.updateOldUserStep(OldUserStep.showDoubleDialog,wheelAddNum: wheelAddNum);
-        }else{
-          showDialog(
-              widget: AnswerRightDialog(
-                addNum: wheelAddNum.toDouble(),
-                type: AnswerRightTyp.wheel,
-                dismiss: (){
-                  ProgressUtils.instance.receiveBoxOrWheel(receivedIndex);
-                },
-              )
-          );
-        }
+        _watchAdFinish(wheelAddNum, receivedIndex);
       },
+      failAd: (){
+        _watchAdFinish(wheelAddNum, receivedIndex);
+      }
     );
+  }
+
+  _watchAdFinish(int wheelAddNum,receivedIndex){
+    back();
+    BSql.instance.updateUserMoney(wheelAddNum.toDouble());
+    if(fromOldUser){
+      GuideUtils.instance.updateOldUserStep(OldUserStep.showDoubleDialog,wheelAddNum: wheelAddNum);
+    }else{
+      showDialog(
+          widget: AnswerRightDialog(
+            addNum: wheelAddNum.toDouble(),
+            type: AnswerRightTyp.wheel,
+            dismiss: (){
+              ProgressUtils.instance.receiveBoxOrWheel(receivedIndex);
+            },
+          )
+      );
+    }
   }
   
   _getAngleByMoney(int money){

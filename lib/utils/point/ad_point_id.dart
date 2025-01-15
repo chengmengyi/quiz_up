@@ -1,0 +1,16 @@
+enum AdPointId{
+  kwrap_launch,
+  kwrap_olduser_wheelspin_int,
+  kwrap_olduser_wheel_rv,
+  kwrap_olduser_wheel_int,
+  kwrap_olduser_signin_rv,
+  kwrap_olduser_signin_int,
+  kwrap_quiz_rv,
+  kwrap_quiz_int,
+  kwrap_bubble_rv,
+  kwrap_box_rv,
+  kwrap_box_int,
+  kwrap_wheelspin_int,
+  kwrap_wheel_rv,
+  kwrap_wheel_int,
+}
