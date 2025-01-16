@@ -12,6 +12,8 @@ import 'package:quiz_up/utils/event/receive_event.dart';
 import 'package:quiz_up/utils/event/send_event.dart';
 import 'package:quiz_up/utils/firebase_utils.dart';
 import 'package:quiz_up/utils/point/ad_point_id.dart';
+import 'package:quiz_up/utils/point/app_point_id.dart';
+import 'package:quiz_up/utils/point/point_utils.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
 import 'package:quiz_up/utils/storage/storage_event.dart';
 import 'package:quiz_up/utils/value/value_utils.dart';
@@ -36,6 +38,7 @@ class QpBubbleCon extends GetxController implements EventListener{
   }
 
   clickBubble(){
+    PointUtils.instance.pointEvent(AppPointId.float_c);
     CashTaskUtils.instance.updateCashTask(TaskType.pop);
     if(firstClickBubble.get()){
       firstClickBubble.save(false);
@@ -117,6 +120,7 @@ class QpBubbleCon extends GetxController implements EventListener{
 
   @override
   void onClose() {
+    print("kk======onClose");
     _timer?.cancel();
     _timer=null;
     _receiveEvent.cancel();

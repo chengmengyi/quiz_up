@@ -24,6 +24,8 @@ class CheckUserUtils{
   }
 
   checkResult(){
+    isB=true;
+    return;
     if(kDebugMode){
       isB=true;
       return;

@@ -9,7 +9,10 @@ import 'package:quiz_up/utils/cash_task/task_type.dart';
 import 'package:quiz_up/utils/event/event_code.dart';
 import 'package:quiz_up/utils/event/send_event.dart';
 import 'package:quiz_up/utils/guide/guide_step.dart';
+import 'package:quiz_up/utils/point/app_point_id.dart';
+import 'package:quiz_up/utils/point/point_utils.dart';
 import 'package:quiz_up/utils/sql/base_sql.dart';
+import 'package:quiz_up/utils/storage/storage_event.dart';
 import 'package:quiz_up/utils/utils.dart';
 import 'package:quiz_up/utils/value/value_utils.dart';
 
@@ -34,8 +37,13 @@ class BSql extends BaseSql{
   updateUserMoney(double addNum)async{
     var d = Decimal.parse("$addNum")+Decimal.parse("${bUserInfo?.money??0.0}");
     bUserInfo?.money=d.toDouble();
+    var moneyLevel = lastMoneyLevel.get()+100;
+    if((bUserInfo?.money??0)>=moneyLevel){
+      PointUtils.instance.pointEvent(AppPointId.cash_money_detail,data: {"money_from":moneyLevel});
+      lastMoneyLevel.save(moneyLevel);
+    }
     await updateUserInfo();
-    SendEvent(code: EventCode.updateUserMoney).send();
+    SendEvent(code: EventCode.showMoneyLottie).send();
   }
 
   updateUserAnswerNum(bool right)async{

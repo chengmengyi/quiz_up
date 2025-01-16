@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/wheel/wheel_con.dart';
 import 'package:quiz_up/qp_wid/qp_img.dart';
 import 'package:quiz_up/qp_wid/qp_text.dart';
+import 'package:quiz_up/utils/point/app_point_id.dart';
+import 'package:quiz_up/utils/point/point_utils.dart';
 
 class WheelDialog extends StatelessWidget{
   int receivedIndex=-1;
@@ -19,6 +21,7 @@ class WheelDialog extends StatelessWidget{
       wheelCon=Get.put(WheelCon());
       wheelCon.autoWheel=autoWheel;
       wheelCon.fromOldUser=fromOldUser;
+      PointUtils.instance.pointEvent(AppPointId.wheel_pop,data: {"source_from":fromOldUser?"old":"quiz"});
       init=true;
     }
     return WillPopScope(

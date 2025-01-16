@@ -9,4 +9,8 @@ class StorageName{
   static const String adConfig="adConfig";
   static const String appsflyerResult="appsflyerResult";
   static const String localCheckResult="localCheckResult";
+  static const String installEvent="installEvent";
+  static const String lastMoneyLevel="lastMoneyLevel";
+  static const String watchAdNum="watchAdNum";
+  static const String lastAdLevel="lastAdLevel";
 }

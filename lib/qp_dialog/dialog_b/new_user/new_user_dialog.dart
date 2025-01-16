@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/new_user/new_user_con.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_wid/qp_img.dart';
+import 'package:quiz_up/qp_wid/qp_lottie.dart';
 import 'package:quiz_up/qp_wid/qp_text.dart';
 import 'package:quiz_up/utils/value/value_utils.dart';
 
@@ -39,7 +40,22 @@ class NewUserDialog extends StatelessWidget{
     );
   }
   
-  _addWidget()=>QpText(text: "+\$${ValueUtils.instance.getNewUserAdd()}", size: 32.sp, color: "#FFD322",fontWeight: FontWeight.w800,);
+  _addWidget()=>SizedBox(
+    width: 200.w,
+    height: 200.w,
+    child: Stack(
+      children: [
+        QpLottie(name: "tanchuang",width: 200.w,height: 200.w,),
+        Align(
+          child: QpImg(img: "icon_money2",width: 94.w,),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: QpText(text: "+\$${ValueUtils.instance.getNewUserAdd()}", size: 32.sp, color: "#FFD322",fontWeight: FontWeight.w800,),
+        )
+      ],
+    ),
+  );
 
   _myCashWidget()=>Row(
     mainAxisSize: MainAxisSize.min,

@@ -5,7 +5,10 @@ import 'package:get/get.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/answer_right/answer_right_con.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/old_user_double/old_user_double_con.dart';
 import 'package:quiz_up/qp_wid/qp_img.dart';
+import 'package:quiz_up/qp_wid/qp_lottie.dart';
 import 'package:quiz_up/qp_wid/qp_text.dart';
+import 'package:quiz_up/utils/point/app_point_id.dart';
+import 'package:quiz_up/utils/point/point_utils.dart';
 import 'package:quiz_up/utils/utils.dart';
 
 enum AnswerRightTyp{
@@ -30,6 +33,7 @@ class AnswerRightDialog extends StatelessWidget{
   Widget build(BuildContext context){
     if(!init){
       answerRightCon=Get.put(AnswerRightCon());
+      PointUtils.instance.pointEvent(AppPointId.coin_pop,data: {"source_from":type==AnswerRightTyp.quiz?"quiz":"wheel"});
       init=true;
     }
     return WillPopScope(
@@ -70,11 +74,20 @@ class AnswerRightDialog extends StatelessWidget{
           ),
         ),
         Align(
+          alignment: Alignment.topCenter,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              QpLottie(name: "tanchuang",width: 250.w,height: 250.w,),
+              QpImg(img: "right2",width: 116.w,height: 104.h,),
+            ],
+          ),
+        ),
+        Align(
           alignment: Alignment.bottomCenter,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              QpImg(img: "right2",width: 116.w,height: 104.h,),
               QpText(text: "+\$$addNum", size: 32.sp, color: "#085F75"),
               SizedBox(height: 30.h,),
               InkWell(

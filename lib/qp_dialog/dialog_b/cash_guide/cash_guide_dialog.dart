@@ -6,6 +6,8 @@ import 'package:quiz_up/qp_dialog/dialog_b/cash_guide/cash_guide_con.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_wid/qp_img.dart';
 import 'package:quiz_up/qp_wid/qp_text.dart';
+import 'package:quiz_up/utils/point/app_point_id.dart';
+import 'package:quiz_up/utils/point/point_utils.dart';
 import 'package:quiz_up/utils/utils.dart';
 
 class CashGuideDialog extends StatelessWidget{
@@ -24,6 +26,7 @@ class CashGuideDialog extends StatelessWidget{
   Widget build(BuildContext context){
     if(!init){
       cashGuideCon=Get.put(CashGuideCon());
+      PointUtils.instance.pointEvent(AppPointId.cash_task_pop,data: {"task_from":cashAmountBean.cashTaskBean?.taskType});
       init=true;
     }
     return WillPopScope(
@@ -85,6 +88,7 @@ class CashGuideDialog extends StatelessWidget{
         SizedBox(height: 25.h,),
         InkWell(
           onTap: (){
+            PointUtils.instance.pointEvent(AppPointId.cash_task_pop_c);
             back();
             dismiss.call();
 

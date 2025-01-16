@@ -15,6 +15,8 @@ import 'package:quiz_up/utils/event/receive_event.dart';
 import 'package:quiz_up/utils/event/send_event.dart';
 import 'package:quiz_up/utils/guide/guide_step.dart';
 import 'package:quiz_up/utils/guide/guide_utils.dart';
+import 'package:quiz_up/utils/point/app_point_id.dart';
+import 'package:quiz_up/utils/point/point_utils.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
 import 'package:quiz_up/utils/utils.dart';
 
@@ -27,6 +29,7 @@ class BCashCon extends GetxController implements EventListener{
   @override
   void onInit() {
     super.onInit();
+    PointUtils.instance.pointEvent(AppPointId.cash_page);
     receiveEvent=ReceiveEvent(eventListener: this);
     _checkFromNewUser();
     _initCashTypeList();
@@ -45,9 +48,11 @@ class BCashCon extends GetxController implements EventListener{
   }
 
   clickCash(index)async{
+    PointUtils.instance.pointEvent(AppPointId.cash_page_c);
     var amountBean = amountList[index];
     if(null!=amountBean.cashTaskBean){
       if(amountBean.cashTaskBean?.taskStatus==TaskStatus.completed){
+        PointUtils.instance.pointEvent(AppPointId.cash_suc_pop_c);
         showToast("Congratulations, your withdrawal approval has been submitted. Please wait for 3-5 working days to arrive in your account.");
         await CashTaskUtils.instance.updateCashTaskReceived(amountBean);
         _initAmountList();
@@ -57,6 +62,7 @@ class BCashCon extends GetxController implements EventListener{
           widget: CashGuideDialog(
             cashAmountBean: amountBean,
             dismiss: (){
+              PointUtils.instance.pointEvent(AppPointId.quiz_page);
               back();
             },
           )

@@ -7,6 +7,9 @@ import 'package:quiz_up/utils/ad/load_ad.dart';
 import 'package:quiz_up/utils/ad/show_ad_listener.dart';
 import 'package:quiz_up/utils/local_info.dart';
 import 'package:quiz_up/utils/point/ad_point_id.dart';
+import 'package:quiz_up/utils/point/app_point_id.dart';
+import 'package:quiz_up/utils/point/point_utils.dart';
+import 'package:quiz_up/utils/storage/storage_event.dart';
 import 'package:quiz_up/utils/utils.dart';
 import 'package:quiz_up/utils/value/value_utils.dart';
 
@@ -123,7 +126,13 @@ class AdUtils {
       adType: adType,
       listener: ShowAdListener(
         showSuccess: (ad,bean){
-          
+          var watchNum = watchAdNum.get();
+          watchAdNum.save(watchNum+1);
+          var adLevel = lastAdLevel.get()+5;
+          if((watchNum+1)>=adLevel){
+            PointUtils.instance.pointEvent(AppPointId.cash_ad_detail,data: {"ad_from":adLevel});
+            lastAdLevel.save(adLevel);
+          }
         },
         showFail: (ad){
           failAd.call();

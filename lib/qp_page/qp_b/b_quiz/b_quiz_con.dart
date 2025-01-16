@@ -6,14 +6,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:quiz_up/bean/progress_bean.dart';
 import 'package:quiz_up/bean/question_bean.dart';
-import 'package:quiz_up/qp_dialog/dialog_a/a_answer_fail/a_answer_fail_dialog.dart';
-import 'package:quiz_up/qp_dialog/dialog_a/a_answer_right/a_answer_right_dialog.dart';
-import 'package:quiz_up/qp_dialog/dialog_a/a_no_heart/a_no_heart_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/answer_right/answer_right_dialog.dart';
+import 'package:quiz_up/qp_dialog/dialog_b/box/box_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/new_user/new_user_dialog.dart';
+import 'package:quiz_up/qp_dialog/dialog_b/wheel/wheel_dialog.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
-import 'package:quiz_up/qp_wid/qp_img.dart';
-import 'package:quiz_up/utils/ad/ad_utils.dart';
 import 'package:quiz_up/utils/cash_task/cash_task_utils.dart';
 import 'package:quiz_up/utils/cash_task/task_type.dart';
 import 'package:quiz_up/utils/check_user/check_user_utils.dart';
@@ -21,32 +18,40 @@ import 'package:quiz_up/utils/event/event_code.dart';
 import 'package:quiz_up/utils/event/event_listener.dart';
 import 'package:quiz_up/utils/event/receive_event.dart';
 import 'package:quiz_up/utils/event/send_event.dart';
-import 'package:quiz_up/utils/firebase_utils.dart';
+import 'package:quiz_up/utils/guide/box_guide_overlay.dart';
 import 'package:quiz_up/utils/guide/guide_step.dart';
 import 'package:quiz_up/utils/guide/guide_utils.dart';
+import 'package:quiz_up/utils/guide/wheel_guide_overlay.dart';
 import 'package:quiz_up/utils/local_notifications/local_notifications_utils.dart';
+import 'package:quiz_up/utils/point/app_point_id.dart';
+import 'package:quiz_up/utils/point/point_utils.dart';
 import 'package:quiz_up/utils/progress/progress_utils.dart';
 import 'package:quiz_up/utils/question/a_question_utils.dart';
 import 'package:quiz_up/utils/question/b_question_util.dart';
-import 'package:quiz_up/utils/sql/a_sql.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
 import 'package:quiz_up/utils/value/value_utils.dart';
 
-class BQuizCon extends GetxController implements EventListener{
-  var chooseAnswerIndex=-1,level=0,timeInt=10,showBubble=false,_proMaxAnswerNum=0,_startProgressWidth=0.0;
+class BQuizCon extends GetxController with GetTickerProviderStateMixin implements EventListener{
+  BuildContext? context;
+  var chooseAnswerIndex=-1,level=0,timeInt=5,showBubble=false,_proMaxAnswerNum=0,_startProgressWidth=0.0,showMoneyLottie=false;
   QuestionBean? currentQuestionBean;
   var questionType=QuestionType.animal;
   GlobalKey aGlobalKey=GlobalKey();
   GlobalKey bGlobalKey=GlobalKey();
   GlobalKey progressGlobalKey=GlobalKey();
+  GlobalKey box2GlobalKey=GlobalKey();
+  GlobalKey wheel10GlobalKey=GlobalKey();
   Offset? rightAnswerOffset;
   Timer? _timer;
   late ReceiveEvent receiveEvent;
   ScrollController scrollController=ScrollController();
+  late AnimationController moneyLottieController;
 
   @override
   void onInit() {
     super.onInit();
+    _initMoneyLottieAnimator();
+    PointUtils.instance.pointEvent(AppPointId.quiz_page);
     CheckUserUtils.instance.bQuizShow=true;
     receiveEvent=ReceiveEvent(eventListener: this);
     LocalNotificationsUtils.instance.setLocalNotifications();
@@ -64,6 +69,9 @@ class BQuizCon extends GetxController implements EventListener{
     if(chooseAnswerIndex!=-1){
       return;
     }
+    if(null!=rightAnswerOffset){
+      PointUtils.instance.pointEvent(AppPointId.quiz_guide_c,data: {"source_from":GuideUtils.instance.isNewUserFirstStep()?"new":"other"});
+    }
     rightAnswerOffset=null;
     chooseAnswerIndex=index;
     update(["answer","finger"]);
@@ -72,10 +80,12 @@ class BQuizCon extends GetxController implements EventListener{
     CashTaskUtils.instance.updateCashTask(TaskType.quiz);
     await Future.delayed(Duration(milliseconds: 800));
     if(GuideUtils.instance.isNewUserFirstStep()){
+      _updateNextQuestion(true);
       GuideUtils.instance.updateNewUserStep(NewUserStep.showNewUserDialog);
       return;
     }
     var result = _checkResult();
+    PointUtils.instance.pointEvent(result?AppPointId.answer_true:AppPointId.answer_wrong);
     if(result){
       showDialog(
           widget: AnswerRightDialog(
@@ -97,6 +107,41 @@ class BQuizCon extends GetxController implements EventListener{
     _getCurrentQuestion();
     update(["progress"]);
     jumpProgress();
+    _checkShowBoxOverlay();
+  }
+
+  _checkShowBoxOverlay(){
+    if(BSql.instance.bUserInfo?.answerNum==2&&null!=context){
+      var renderBox = box2GlobalKey.currentContext!.findRenderObject() as RenderBox;
+      var offset = renderBox.localToGlobal(Offset.zero);
+      GuideUtils.instance.showGuideOver(
+        context: context!,
+        widget: BoxGuideOverlay(
+          offset: offset,
+          dismiss: (){
+            showDialog(
+              widget: BoxDialog(index: 1),
+            );
+          },
+        ),
+      );
+    }
+
+    if(BSql.instance.bUserInfo?.answerNum==10&&null!=context){
+      var renderBox = wheel10GlobalKey.currentContext!.findRenderObject() as RenderBox;
+      var offset = renderBox.localToGlobal(Offset.zero);
+      GuideUtils.instance.showGuideOver(
+        context: context!,
+        widget: WheelGuideOverlay(
+          offset: offset,
+          dismiss: (){
+            showDialog(
+              widget: WheelDialog(autoWheel: false,receivedIndex: 9,),
+            );
+          },
+        ),
+      );
+    }
   }
 
   String getAnswerBg(index){
@@ -130,13 +175,6 @@ class BQuizCon extends GetxController implements EventListener{
     _startTimer();
   }
 
-  clickClose(){
-    if(chooseAnswerIndex!=-1){
-      return;
-    }
-    back();
-  }
-
   showRightAnswerFinger(){
     if(null==currentQuestionBean||null!=rightAnswerOffset){
       return;
@@ -156,7 +194,7 @@ class BQuizCon extends GetxController implements EventListener{
 
   _startTimer(){
     _endTimer();
-    timeInt=10;
+    timeInt=5;
     update(["timer"]);
     _timer=Timer.periodic(Duration(milliseconds: 1000), (timer){
       timeInt--;
@@ -219,6 +257,11 @@ class BQuizCon extends GetxController implements EventListener{
       case EventCode.updateBoxOrWheelPro:
         update(["progress"]);
         break;
+      case EventCode.showMoneyLottie:
+        showMoneyLottie=true;
+        update(["money_lottie"]);
+        moneyLottieController..reset()..forward();
+        break;
     }
   }
 
@@ -230,6 +273,16 @@ class BQuizCon extends GetxController implements EventListener{
       _proMaxAnswerNum=4*i+2;
       _startProgressWidth=70.w+i*90.w;
     }
+  }
+
+  _initMoneyLottieAnimator(){
+    moneyLottieController=AnimationController(vsync: this,duration: const Duration(milliseconds: 600))..addStatusListener((status) {
+      if(status==AnimationStatus.completed){
+        showMoneyLottie=false;
+        update(["money_lottie"]);
+        SendEvent(code: EventCode.updateUserMoney).send();
+      }
+    });
   }
 
   @override
@@ -245,10 +298,8 @@ class BQuizCon extends GetxController implements EventListener{
     if(!kDebugMode){
       return;
     }
-    // BSql.instance.updateUserMoney(1000);
+    BSql.instance.updateUserMoney(1000);
     // CashTaskUtils.instance.updateCashTask(TaskType.quiz);
     // LocalNotificationsUtils.instance.setLocalNotifications();
-
-    CheckUserUtils.instance.initCheck();
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart' as overlay;
 import 'package:quiz_up/bean/new_user_step_bean.dart';
 import 'package:quiz_up/bean/old_user_step_bean.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/old_user/old_user_dialog.dart';
@@ -19,6 +20,7 @@ class GuideUtils{
 
   NewUserStepBean? _newUserStepBean;
   OldUserStepBean? _oldUserStepBean;
+  overlay.OverlayEntry? _overlayEntry;
 
   queryNewUserBean()async{
     _newUserStepBean = await BSql.instance.queryNewGuideInfo();
@@ -46,9 +48,9 @@ class GuideUtils{
   _checkOldUserStep({int wheelAddNum=0})async{
     _oldUserStepBean ??= await BSql.instance.queryOldGuideInfo();
     print("kk===_oldUserStepBean=====${_oldUserStepBean?.toString()}");
-    // if(_oldUserStepBean?.stepTimer==_newUserStepBean?.completedTimer){
-    //   return;
-    // }
+    if(_oldUserStepBean?.stepTimer==_newUserStepBean?.completedTimer){
+      return;
+    }
     switch(_oldUserStepBean?.oldUserStep){
       case OldUserStep.showOldUserDialog:
         showDialog(
@@ -96,4 +98,14 @@ class GuideUtils{
   }
 
   bool isNewUserFirstStep() => _newUserStepBean?.newUserStep==NewUserStep.showRightAnswerFinger;
+
+  showGuideOver({required overlay.BuildContext context,required overlay.Widget widget}){
+    _overlayEntry=overlay.OverlayEntry(builder: (c)=>widget);
+    overlay.Overlay.of(context).insert(_overlayEntry!);
+  }
+
+  hideGuideOver(){
+    _overlayEntry?.remove();
+    _overlayEntry=null;
+  }
 }

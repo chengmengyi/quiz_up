@@ -23,46 +23,44 @@ class BQuizPage extends StatelessWidget{
   BQuizCon bQuizCon=Get.put(BQuizCon());
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    body: WillPopScope(
-      child: Stack(
-        children: [
-          QpImg(img: "question_bg",width: double.infinity,height: double.infinity,),
-          SafeArea(
-            top: true,
-            bottom: true,
-            child: Column(
-              children: [
-                _topWidget(),
-                SizedBox(height: 2.h,),
-                _progressWidget(),
-                SizedBox(height: 2.h,),
-                _questionWidget(),
-              ],
+  Widget build(BuildContext context){
+    bQuizCon.context=context;
+    return Scaffold(
+      body: WillPopScope(
+        child: Stack(
+          children: [
+            QpImg(img: "question_bg",width: double.infinity,height: double.infinity,),
+            SafeArea(
+              top: true,
+              bottom: true,
+              child: Column(
+                children: [
+                  _topWidget(),
+                  SizedBox(height: 2.h,),
+                  _progressWidget(),
+                  SizedBox(height: 2.h,),
+                  _questionWidget(),
+                ],
+              ),
             ),
-          ),
-          _rightAnswerFingerWidget(),
-          _bubbleWidget(),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: _bottomCashWidget(),
-          ),
-        ],
+            _rightAnswerFingerWidget(),
+            _bubbleWidget(),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: _bottomCashWidget(),
+            ),
+            _moneyAnimatorWidget(),
+          ],
+        ),
+        onWillPop: ()async{
+          return false;
+        },
       ),
-      onWillPop: ()async{
-        return false;
-      },
-    ),
-  );
+    );
+  }
 
   _topWidget()=>Row(
     children: [
-      InkWell(
-        onTap: (){
-          back();
-        },
-        child: QpImg(img: "icon_close2",width: 60.w,height: 60.h,),
-      ),
       SizedBox(width: 10.w,),
       QpMoneyWidget(),
       _earnWidget(),
@@ -85,7 +83,7 @@ class BQuizPage extends StatelessWidget{
             fit: BoxFit.fill,
           )
       ),
-      child: QpText(text: "Earn \$10 moreto\nwithdraw \$800", size: 14.sp, color: "#351900"),
+      child: QpText(text: "Earn \$10 moreto\nwithdraw \$800", size: 10.sp, color: "#351900"),
     ),
   );
 
@@ -168,6 +166,7 @@ class BQuizPage extends StatelessWidget{
     child: Container(
       width: 60.w,
       height: 60.w,
+      key: index==1?bQuizCon.box2GlobalKey:null,
       alignment: Alignment.center,
       child: Stack(
         alignment: Alignment.center,
@@ -195,6 +194,7 @@ class BQuizPage extends StatelessWidget{
     child: Container(
       width: 60.w,
       height: 60.w,
+      key: index==9?bQuizCon.wheel10GlobalKey:null,
       alignment: Alignment.center,
       child: Stack(
         alignment: Alignment.center,
@@ -454,5 +454,17 @@ class BQuizPage extends StatelessWidget{
       ),
       SizedBox(height: 16.h,),
     ],
+  );
+
+  _moneyAnimatorWidget()=>GetBuilder<BQuizCon>(
+    id: "money_lottie",
+    builder: (_)=>Visibility(
+      visible: bQuizCon.showMoneyLottie,
+      child: QpLottie(
+        name: "money",
+        repeat: false,
+        controller: bQuizCon.moneyLottieController,
+      ),
+    ),
   );
 }

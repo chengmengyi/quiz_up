@@ -6,6 +6,8 @@ import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_wid/qp_img.dart';
 import 'package:quiz_up/qp_wid/qp_text.dart';
 import 'package:quiz_up/utils/cash_task/task_status.dart';
+import 'package:quiz_up/utils/point/app_point_id.dart';
+import 'package:quiz_up/utils/point/point_utils.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
 import 'package:quiz_up/utils/utils.dart';
 
@@ -47,6 +49,7 @@ class BCashPage extends StatelessWidget{
       SizedBox(width: 16.w,),
       InkWell(
         onTap: (){
+          PointUtils.instance.pointEvent(AppPointId.quiz_page);
           back();
         },
         child: QpImg(img: "icon_close1",width: 30.w,height: 30.h,),

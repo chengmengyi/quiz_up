@@ -27,8 +27,11 @@ class BaseDio{
   Future<DioResult> requestPost({
     required String path,
     required Map<String,dynamic> data,
+    Map<String,dynamic>? header,
 })async{
-
+    if(null!=header){
+      _dio?.options.headers=header;
+    }
     try{
       var response = await _dio?.request<String>(
         path,

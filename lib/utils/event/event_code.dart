@@ -10,4 +10,5 @@ class EventCode{
   static const int showBubble=103;
   static const int updateUserAnswerNum=104;
   static const int updateBoxOrWheelPro=105;
+  static const int showMoneyLottie=106;
 }

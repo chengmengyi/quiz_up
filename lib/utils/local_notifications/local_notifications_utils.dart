@@ -1,5 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:quiz_up/utils/local_notifications/local_notification_id.dart';
+import 'package:quiz_up/utils/point/app_point_id.dart';
+import 'package:quiz_up/utils/point/point_utils.dart';
 import 'package:quiz_up/utils/utils.dart';
 
 class LocalNotificationsUtils {
@@ -21,10 +23,10 @@ class LocalNotificationsUtils {
           NotificationResponse notificationResponse) {
         switch (notificationResponse.notificationResponseType) {
           case NotificationResponseType.selectedNotification:
-            // _clickNotification(notificationResponse);
+            _clickLocalNotification(notificationResponse.id);
             break;
           case NotificationResponseType.selectedNotificationAction:
-            // _clickNotification(notificationResponse);
+            _clickLocalNotification(notificationResponse.id);
             break;
         }
       },
@@ -90,6 +92,33 @@ class LocalNotificationsUtils {
     var options = await plugin?.checkPermissions();
     if(options?.isEnabled!=true){
 
+    }else{
+      PointUtils.instance.pointEvent(AppPointId.push_status);
+    }
+  }
+
+  checkLaunchAppFrom()async{
+    var launchDetails = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+    PointUtils.instance.pointEvent(AppPointId.launch_page,data: {"source_from":launchDetails?.didNotificationLaunchApp==true?"push":"icon"});
+    if(launchDetails?.didNotificationLaunchApp==true){
+      _clickLocalNotification(launchDetails?.notificationResponse?.id);
+    }
+  }
+
+  _clickLocalNotification(int? id){
+    switch(id){
+      case LocalNotificationId.regularId:
+        PointUtils.instance.pointEvent(AppPointId.inform_c,data: {"inform_from":"regular"});
+        break;
+      case LocalNotificationId.payId:
+        PointUtils.instance.pointEvent(AppPointId.inform_c,data: {"inform_from":"pay"});
+        break;
+      case LocalNotificationId.quizId:
+        PointUtils.instance.pointEvent(AppPointId.inform_c,data: {"inform_from":"quiz"});
+        break;
+      case LocalNotificationId.signId:
+        PointUtils.instance.pointEvent(AppPointId.inform_c,data: {"inform_from":"sign"});
+        break;
     }
   }
 }

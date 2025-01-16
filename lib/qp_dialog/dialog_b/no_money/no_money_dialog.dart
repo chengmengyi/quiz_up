@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/no_money/no_money_con.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_wid/qp_text.dart';
+import 'package:quiz_up/utils/point/app_point_id.dart';
+import 'package:quiz_up/utils/point/point_utils.dart';
 import 'package:quiz_up/utils/utils.dart';
 
 class NoMoneyDialog extends StatelessWidget{
@@ -15,6 +17,7 @@ class NoMoneyDialog extends StatelessWidget{
   Widget build(BuildContext context){
     if(!init){
       noMoneyCon=Get.put(NoMoneyCon());
+      PointUtils.instance.pointEvent(AppPointId.cash_not_pop);
       init=true;
     }
     return WillPopScope(
@@ -42,6 +45,7 @@ class NoMoneyDialog extends StatelessWidget{
                 SizedBox(height: 20.h,),
                 InkWell(
                   onTap: (){
+                    PointUtils.instance.pointEvent(AppPointId.cash_not_pop_c);
                     back();
                   },
                   child: Container(

@@ -6,13 +6,22 @@ import 'package:quiz_up/utils/ad/ad_utils.dart';
 import 'package:quiz_up/utils/guide/guide_step.dart';
 import 'package:quiz_up/utils/guide/guide_utils.dart';
 import 'package:quiz_up/utils/point/ad_point_id.dart';
+import 'package:quiz_up/utils/point/app_point_id.dart';
+import 'package:quiz_up/utils/point/point_utils.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
 import 'package:quiz_up/utils/value/value_utils.dart';
 
 class OldUserDoubleCon extends GetxController{
   var wheelAddNum=0,signAddNum=ValueUtils.instance.getSignAddNum();
-
+  
+  @override
+  void onInit() {
+    super.onInit();
+    PointUtils.instance.pointEvent(AppPointId.daily_pop,data: {"source_from":"wheel"});
+  }
+  
   clickDou(){
+    PointUtils.instance.pointEvent(AppPointId.daily_pop_c,data: {"source_from":"wheel"});
     AdUtils.instance.showAd(
       adType: AdType.reward,
       adPointId: AdPointId.kwrap_olduser_wheel_rv,
