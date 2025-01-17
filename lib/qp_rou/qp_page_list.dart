@@ -65,8 +65,8 @@ offNamed({required String routersName,Map<String, dynamic>? arguments}){
   Get.offNamed(routersName,arguments: arguments);
 }
 
-back(){
-  Get.back();
+back({Map<String, dynamic>? result}){
+  Get.back(result: result);
 }
 
 Map<String, dynamic> getArguments() {

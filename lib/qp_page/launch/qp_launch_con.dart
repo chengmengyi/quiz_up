@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_rou/qp_rou_name.dart';
+import 'package:quiz_up/utils/ad/ad_type.dart';
+import 'package:quiz_up/utils/ad/ad_utils.dart';
 import 'package:quiz_up/utils/check_user/check_user_utils.dart';
 import 'package:quiz_up/utils/local_notifications/local_notifications_utils.dart';
+import 'package:quiz_up/utils/point/ad_point_id.dart';
 
 class QpLaunchCon extends GetxController with GetSingleTickerProviderStateMixin{
   late AnimationController animationController;
@@ -30,9 +33,26 @@ class QpLaunchCon extends GetxController with GetSingleTickerProviderStateMixin{
       ..addStatusListener((status) {
         if(status==AnimationStatus.completed){
           CheckUserUtils.instance.checkResult();
-          offNamed(routersName: CheckUserUtils.instance.isB?QpRouName.bQuiz:QpRouName.aHome);
+          _checkShowAd();
         }
       });
+  }
+
+  _checkShowAd(){
+    if(CheckUserUtils.instance.isB){
+      AdUtils.instance.showAd(
+        adType: AdType.interstitial,
+        adPointId: AdPointId.kwrap_launch,
+        closeAd: (){
+          offNamed(routersName: QpRouName.bQuiz);
+        },
+        failAd: (){
+          offNamed(routersName: QpRouName.bQuiz);
+        },
+      );
+    }else{
+      offNamed(routersName: QpRouName.aHome);
+    }
   }
 
   @override

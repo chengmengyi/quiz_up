@@ -5,6 +5,8 @@ import 'package:quiz_up/qp_dialog/dialog_b/answer_right/answer_right_dialog.dart
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/utils/ad/ad_type.dart';
 import 'package:quiz_up/utils/ad/ad_utils.dart';
+import 'package:quiz_up/utils/cash_task/cash_task_utils.dart';
+import 'package:quiz_up/utils/cash_task/task_type.dart';
 import 'package:quiz_up/utils/guide/guide_step.dart';
 import 'package:quiz_up/utils/guide/guide_utils.dart';
 import 'package:quiz_up/utils/point/ad_point_id.dart';
@@ -69,6 +71,7 @@ class WheelCon extends GetxController{
             addNum: wheelAddNum.toDouble(),
             type: AnswerRightTyp.wheel,
             dismiss: (){
+              CashTaskUtils.instance.updateCashTask(TaskType.spin);
               ProgressUtils.instance.receiveBoxOrWheel(receivedIndex);
             },
           )

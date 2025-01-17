@@ -128,6 +128,7 @@ class BSql extends BaseSql{
       return;
     }
     await db.insert(TableName.cashTaskB, CashTaskBean(cashType: cashType,cashNum: cashNum,taskType: TaskType.quiz,currentPro: 0,totalPro: ValueUtils.instance.getCashTask(0).data??10,taskIndex: 0,taskStatus: TaskStatus.processing).toJson());
+    _insertCashAccount(account,cashType);
   }
 
   Future<CashTaskBean?> queryCashTask(int cashType,int cashNum)async{
@@ -172,5 +173,22 @@ class BSql extends BaseSql{
       return;
     }
     await db.delete(TableName.cashTaskB,where: '"id" = ?', whereArgs: [list.first["id"]]);
+  }
+
+  _insertCashAccount(String account,int cashType)async{
+    var db = await initDB();
+    var list = await db.query(TableName.cashAccountB,where: '"cashType" = ?',whereArgs: [cashType]);
+    if(list.isEmpty){
+      await db.insert(TableName.cashAccountB, {"cashAccount":account,"cashType":cashType});
+    }
+  }
+
+  Future<String> queryCashAccount(int cashType)async{
+    var db = await initDB();
+    var list = await db.query(TableName.cashAccountB,where: '"cashType" = ?',whereArgs: [cashType]);
+    if(list.isEmpty){
+      return "";
+    }
+    return list.first["cashAccount"] as String;
   }
 }

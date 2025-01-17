@@ -9,6 +9,7 @@ class TableName{
   static const String oldUserGuideB="oldUserGuideB";
   static const String receivedIndexB="receivedIndexB";
   static const String cashTaskB="cashTaskB";
+  static const String cashAccountB="cashAccountB";
 }
 
 abstract class BaseSql{
@@ -38,5 +39,6 @@ abstract class BaseSql{
     db.execute('CREATE TABLE ${TableName.oldUserGuideB} (id INTEGER PRIMARY KEY AUTOINCREMENT, oldUserStep TEXT, stepTimer TEXT)');
     db.execute('CREATE TABLE ${TableName.receivedIndexB} (id INTEGER PRIMARY KEY AUTOINCREMENT, receivedIndex INTEGER)');
     db.execute('CREATE TABLE ${TableName.cashTaskB} (id INTEGER PRIMARY KEY AUTOINCREMENT, cashType INTEGER, cashNum INTEGER, taskType TEXT, currentPro INTEGER, totalPro INTEGER, taskIndex INTEGER,account TEXT, taskStatus INTEGER)');
+    db.execute('CREATE TABLE ${TableName.cashAccountB} (id INTEGER PRIMARY KEY AUTOINCREMENT, cashAccount TEXT,cashType INTEGER)');
   }
 }

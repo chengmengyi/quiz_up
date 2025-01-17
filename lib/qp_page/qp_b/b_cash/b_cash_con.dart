@@ -62,8 +62,7 @@ class BCashCon extends GetxController implements EventListener{
           widget: CashGuideDialog(
             cashAmountBean: amountBean,
             dismiss: (){
-              PointUtils.instance.pointEvent(AppPointId.quiz_page);
-              back();
+              clickClose();
             },
           )
       );
@@ -73,6 +72,13 @@ class BCashCon extends GetxController implements EventListener{
     var totalMoney = amountBean.totalMoney;
     if(money<totalMoney){
       showDialog(widget: NoMoneyDialog());
+      return;
+    }
+    var account = await BSql.instance.queryCashAccount(cashIndex);
+    if(account.isNotEmpty){
+      await CashTaskUtils.instance.createCashTask(cashIndex, totalMoney, account);
+      BSql.instance.updateUserMoney((-totalMoney).toDouble());
+      _initAmountList();
       return;
     }
     showDialog(
@@ -90,7 +96,7 @@ class BCashCon extends GetxController implements EventListener{
   _checkFromNewUser(){
     var map = Get.arguments;
     if(null!=map&&map["fromNewUser"]==true){
-      GuideUtils.instance.updateNewUserStep(NewUserStep.newUserGuideCompleted);
+      // GuideUtils.instance.updateNewUserStep(NewUserStep.newUserGuideCompleted);
     }
   }
   
@@ -173,6 +179,11 @@ class BCashCon extends GetxController implements EventListener{
         update(["money"]);
         break;
     }
+  }
+
+  clickClose(){
+    PointUtils.instance.pointEvent(AppPointId.quiz_page);
+    back(result: {});
   }
 
   test(){

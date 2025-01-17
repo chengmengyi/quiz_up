@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:quiz_up/qp_rou/qp_page_list.dart';
+import 'package:quiz_up/qp_rou/qp_rou_name.dart';
 import 'package:quiz_up/qp_wid/qp_img.dart';
 import 'package:quiz_up/qp_wid/qp_money/qp_money_con.dart';
 import 'package:quiz_up/qp_wid/qp_text.dart';
@@ -44,6 +46,9 @@ class QpMoneyWidget extends StatelessWidget{
               ),
               SizedBox(width: 10.w,),
               InkWell(
+                onTap: (){
+                  toNamed(routersName: QpRouName.bCash);
+                },
                 child: Stack(
                   alignment: Alignment.center,
                   children: [

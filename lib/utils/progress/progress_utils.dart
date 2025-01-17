@@ -7,6 +7,7 @@ import 'package:quiz_up/utils/event/event_code.dart';
 import 'package:quiz_up/utils/event/send_event.dart';
 import 'package:quiz_up/utils/question/b_question_util.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
+import 'package:quiz_up/utils/utils.dart';
 
 class ProgressUtils{
   static final ProgressUtils _utils=ProgressUtils();
@@ -52,12 +53,25 @@ class ProgressUtils{
     return answerNum>index;
   }
 
-  clickBoxOrWheel(index,canReceive){
-    if(!canReceive){
-      return;
+  bool showFinger(int index){
+    var indexWhere = progressList.indexWhere((value)=>value.progressType!=ProgressType.empty&&!value.received&&(BSql.instance.bUserInfo?.answerNum??0)-1>=index);
+    if(indexWhere>=0){
+      return indexWhere==index;
     }
+    return false;
+  }
+
+  clickBoxOrWheel(index,canReceive){
     var bean = progressList[index];
-    if(bean.received){
+    if(!canReceive){
+      if(bean.received){
+        if(bean.progressType==ProgressType.box){
+          showToast("Today’s treasure chest reward has been collected");
+        }
+        if(bean.progressType==ProgressType.wheel){
+          showToast("The wheel reward has been received");
+        }
+      }
       return;
     }
     if(bean.progressType==ProgressType.box){

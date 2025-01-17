@@ -111,14 +111,21 @@ class AdUtils {
     required AdPointId adPointId,
     required Function() closeAd,
     required Function() failAd,
+    bool isLaunch=false,
   }){
-    if(!ValueUtils.instance.checkShowAd(adType)){
+    if(!isLaunch&&!ValueUtils.instance.checkShowAd(adType)){
       closeAd.call();
       return;
     }
+    PointUtils.instance.pointEvent(AppPointId.kwrap_ad_chance,data: {"ad_pos_id":adPointId.name});
     var resultBean = _getCacheResultBean(adType);
     if(null==resultBean){
-      showToast("Advertisement display failed,please try again later");
+      PointUtils.instance.pointEvent(AppPointId.kwrap_ad_impression_fail,data: {"ad_pos_id":adPointId.name,"reason":"nocache"});
+      if(isLaunch){
+        closeAd.call();
+      }else{
+        showToast("Advertisement display failed,please try again later");
+      }
       return;
     }
 
@@ -126,6 +133,8 @@ class AdUtils {
       adType: adType,
       listener: ShowAdListener(
         showSuccess: (ad,bean){
+          PointUtils.instance.adEvent(ad, bean, adPointId);
+          PointUtils.instance.pointEvent(AppPointId.kwrap_ad_impression,data: {"ad_pos_id":adPointId.name});
           var watchNum = watchAdNum.get();
           watchAdNum.save(watchNum+1);
           var adLevel = lastAdLevel.get()+5;
@@ -135,6 +144,7 @@ class AdUtils {
           }
         },
         showFail: (ad){
+          PointUtils.instance.pointEvent(AppPointId.kwrap_ad_impression_fail,data: {"ad_pos_id":adPointId.name,"reason":"showfail"});
           failAd.call();
         },
         closeAd: (){
@@ -216,4 +226,6 @@ class AdUtils {
     _oneLoadAd.updateConfigData();
     _twoLoadAd.updateConfigData();
   }
+
+  bool checkAdShowing()=>_adShowing;
 }

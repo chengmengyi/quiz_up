@@ -9,8 +9,10 @@ import 'package:quiz_up/bean/question_bean.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/answer_right/answer_right_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/box/box_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/new_user/new_user_dialog.dart';
+import 'package:quiz_up/qp_dialog/dialog_b/open_notification/open_notification_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/wheel/wheel_dialog.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
+import 'package:quiz_up/qp_rou/qp_rou_name.dart';
 import 'package:quiz_up/utils/cash_task/cash_task_utils.dart';
 import 'package:quiz_up/utils/cash_task/task_type.dart';
 import 'package:quiz_up/utils/check_user/check_user_utils.dart';
@@ -262,6 +264,16 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
         update(["money_lottie"]);
         moneyLottieController..reset()..forward();
         break;
+      case EventCode.newUserGuideToCashPage:
+        toNamed(
+            routersName: QpRouName.bCash,
+            arguments: {"fromNewUser":true},
+            backCall: (result){
+              GuideUtils.instance.updateNewUserStep(NewUserStep.newUserGuideCompleted);
+              _startTimer();
+            }
+        );
+        break;
     }
   }
 
@@ -299,7 +311,8 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
       return;
     }
     BSql.instance.updateUserMoney(1000);
-    // CashTaskUtils.instance.updateCashTask(TaskType.quiz);
+    // CashTaskUtils.instance.updateCashTask(TaskType.spin);
     // LocalNotificationsUtils.instance.setLocalNotifications();
+
   }
 }

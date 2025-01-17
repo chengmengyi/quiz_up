@@ -41,4 +41,7 @@ enum AppPointId{
   push_status,
   cash_money_detail,
   cash_ad_detail,
+  kwrap_ad_chance,
+  kwrap_ad_impression_fail,
+  kwrap_ad_impression,
 }

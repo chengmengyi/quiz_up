@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:quiz_up/utils/ad/ad_type.dart';
 import 'package:quiz_up/utils/cash_task/task_type.dart';
 import 'package:quiz_up/utils/local_info.dart';
@@ -32,6 +33,9 @@ class ValueUtils{
   List<int> getAmountList()=>_valueBean?.eqRange??[800, 1000, 1500, 2000];
 
   bool checkShowAd(String adType){
+    if(kDebugMode){
+      return false;
+    }
     var list = (adType==AdType.interstitial?_valueBean?.intadPoint:_valueBean?.rvadPoint)??[];
     if(list.isEmpty){
       return false;
@@ -72,6 +76,31 @@ class ValueUtils{
       }
     }
     return 5.0;
+  }
+
+  int getBoxMaxAddNum(){
+    var list = _valueBean?.boxPrize??[];
+    if(list.isEmpty){
+      return 5;
+    }
+    var money = BSql.instance.bUserInfo?.money??0.0;
+    if(money>=(list.last.endNumber??800)){
+      var list2 = list.last.prize??[];
+      if(list2.isEmpty){
+        return 5;
+      }
+      return list2.last;
+    }
+    for (var value in list) {
+      if(money>=(value.firstNumber??0)&&money<(value.endNumber??0)){
+        var list2 = value.prize??[];
+        if(list2.isEmpty){
+          return 5;
+        }
+        return list2.last;
+      }
+    }
+    return 5;
   }
 
   double _randomMinMax(int min,int max)=>(Random().nextDouble()*(max-min)+min).toStringAsFixed(2).toDou();

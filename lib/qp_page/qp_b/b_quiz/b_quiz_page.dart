@@ -18,6 +18,8 @@ import 'package:quiz_up/qp_wid/qp_text.dart';
 import 'package:quiz_up/utils/progress/progress_utils.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
 import 'package:quiz_up/utils/utils.dart';
+import 'package:quiz_up/utils/value/value_utils.dart';
+import 'package:shake_animation_widget/shake_animation_widget.dart';
 
 class BQuizPage extends StatelessWidget{
   BQuizCon bQuizCon=Get.put(BQuizCon());
@@ -65,7 +67,9 @@ class BQuizPage extends StatelessWidget{
       QpMoneyWidget(),
       _earnWidget(),
       InkWell(
-
+        onTap: (){
+          toNamed(routersName: QpRouName.setting);
+        },
         child: QpImg(img: "icon_set",width: 47.w,height: 47.h,),
       ),
       SizedBox(width: 10.w,),
@@ -101,7 +105,6 @@ class BQuizPage extends StatelessWidget{
           itemCount: ProgressUtils.instance.progressList.length,
           scrollDirection: Axis.horizontal,
           controller: bQuizCon.scrollController,
-          physics: NeverScrollableScrollPhysics(),
           itemBuilder: (context,index){
             var isEnd = index==ProgressUtils.instance.progressList.length-1;
             var bean = ProgressUtils.instance.progressList[index];
@@ -182,6 +185,37 @@ class BQuizPage extends StatelessWidget{
             ],
           ),
           canReceive?QpImg(img: "pro3",width: 60.w,height: 60.w,):QpImg(img: bean.received?"pro1":"pro2",width: 42.w,height: 42.w,),
+          Visibility(
+            visible: ProgressUtils.instance.showFinger(index),
+            child: SizedBox(
+              width: 60.w,
+              height: 60.w,
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: ShakeAnimationWidget(
+                      shakeAnimationType: ShakeAnimationType.RoateShake,
+                      isForward: true,
+                      shakeCount: 0,
+                      child: Container(
+                        padding: EdgeInsets.only(left: 2.w,right: 2.w),
+                        decoration: BoxDecoration(
+                          color: "#000000".toColor().withOpacity(0.3),
+                          borderRadius: BorderRadius.circular(2.w),
+                        ),
+                        child: QpText(text: "Max\$${ValueUtils.instance.getBoxMaxAddNum()}", size: 9.sp, color: "#FFFFFF"),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: QpLottie(name: "finger",width: 46.w,height: 46.w,),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     ),

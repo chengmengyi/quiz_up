@@ -89,7 +89,7 @@ class CommentDialog extends StatelessWidget{
                   alignment: Alignment.center,
                   children: [
                     QpImg(img: "btn2",width: 228.w,height: 60.h,),
-                    QpText(text: "Withdraw", size: 20.sp, color: "#FFFFFF")
+                    QpText(text: "Give 5 Stars", size: 20.sp, color: "#FFFFFF")
                   ],
                 ),
               )

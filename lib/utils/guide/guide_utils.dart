@@ -36,7 +36,7 @@ class GuideUtils{
         SendEvent(code: EventCode.newUserStepTwo).send();
         break;
       case NewUserStep.toCashPage:
-        toNamed(routersName: QpRouName.bCash,arguments: {"fromNewUser":true});
+        SendEvent(code: EventCode.newUserGuideToCashPage).send();
         break;
       case NewUserStep.newUserGuideCompleted:
         SendEvent(code: EventCode.showBubble).send();

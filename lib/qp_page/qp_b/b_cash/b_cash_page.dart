@@ -49,8 +49,7 @@ class BCashPage extends StatelessWidget{
       SizedBox(width: 16.w,),
       InkWell(
         onTap: (){
-          PointUtils.instance.pointEvent(AppPointId.quiz_page);
-          back();
+          bCashCon.clickClose();
         },
         child: QpImg(img: "icon_close1",width: 30.w,height: 30.h,),
       ),

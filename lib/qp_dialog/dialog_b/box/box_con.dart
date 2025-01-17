@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/utils/ad/ad_type.dart';
 import 'package:quiz_up/utils/ad/ad_utils.dart';
+import 'package:quiz_up/utils/cash_task/cash_task_utils.dart';
+import 'package:quiz_up/utils/cash_task/task_type.dart';
 import 'package:quiz_up/utils/point/ad_point_id.dart';
 import 'package:quiz_up/utils/point/app_point_id.dart';
 import 'package:quiz_up/utils/point/point_utils.dart';
@@ -18,6 +20,7 @@ class BoxCon extends GetxController{
     PointUtils.instance.pointEvent(AppPointId.coin_pop,data: {"source_from":"box"});
   }
   clickDou(index){
+    CashTaskUtils.instance.updateCashTask(TaskType.box);
     PointUtils.instance.pointEvent(AppPointId.coin_pop_c,data: {"source_from":"box"});
     AdUtils.instance.showAd(
       adType: AdType.reward,
@@ -34,6 +37,7 @@ class BoxCon extends GetxController{
   }
 
   clickSingle(index){
+    CashTaskUtils.instance.updateCashTask(TaskType.box);
     PointUtils.instance.pointEvent(AppPointId.coin_pop_close,data: {"source_from":"box"});
     AdUtils.instance.showAd(
       adType: AdType.interstitial,

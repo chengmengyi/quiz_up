@@ -1,4 +1,6 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:quiz_up/qp_dialog/dialog_b/open_notification/open_notification_dialog.dart';
+import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/utils/local_notifications/local_notification_id.dart';
 import 'package:quiz_up/utils/point/app_point_id.dart';
 import 'package:quiz_up/utils/point/point_utils.dart';
@@ -36,8 +38,9 @@ class LocalNotificationsUtils {
       _showSignNotification();
       _showQuizNotification();
       _showPayNotification();
+    }else{
+      _checkPermission();
     }
-    _checkPermission();
   }
 
   _showRegularNotification(){
@@ -91,7 +94,7 @@ class LocalNotificationsUtils {
     var plugin = flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
     var options = await plugin?.checkPermissions();
     if(options?.isEnabled!=true){
-
+      showDialog(widget: OpenNotificationDialog());
     }else{
       PointUtils.instance.pointEvent(AppPointId.push_status);
     }
