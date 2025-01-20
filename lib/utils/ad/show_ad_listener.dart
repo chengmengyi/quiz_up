@@ -5,7 +5,7 @@ class ShowAdListener{
   Function(MaxAd? ad,AdBean? bean) showSuccess;
   Function(MaxAd? ad) showFail;
   Function() closeAd;
-  Function(MaxAd? ad) onAdRevenuePaidCallback;
+  Function(MaxAd? ad,AdBean? bean) onAdRevenuePaidCallback;
 
   ShowAdListener({
     required this.showSuccess,

@@ -6,6 +6,7 @@ import 'package:quiz_up/utils/ad/ad_num_utils.dart';
 import 'package:quiz_up/utils/ad/ad_type.dart';
 import 'package:quiz_up/utils/ad/load_ad.dart';
 import 'package:quiz_up/utils/ad/show_ad_listener.dart';
+import 'package:quiz_up/utils/check_user/check_user_utils.dart';
 import 'package:quiz_up/utils/local_info.dart';
 import 'package:quiz_up/utils/point/ad_point_id.dart';
 import 'package:quiz_up/utils/point/app_point_id.dart';
@@ -68,7 +69,7 @@ class AdUtils {
 
         },
         onAdRevenuePaidCallback: (ad){
-          _showAdListener?.onAdRevenuePaidCallback.call(ad);
+          _showAdListener?.onAdRevenuePaidCallback.call(ad,_getAdInfoBeanById(ad.adUnitId));
         },
       )
     );
@@ -104,7 +105,7 @@ class AdUtils {
           _showAdListener?.closeAd.call();
         },
         onAdRevenuePaidCallback: (ad){
-          _showAdListener?.onAdRevenuePaidCallback.call(ad);
+          _showAdListener?.onAdRevenuePaidCallback.call(ad,_getAdInfoBeanById(ad.adUnitId));
         },
       )
     );
@@ -154,8 +155,8 @@ class AdUtils {
         closeAd: (){
           closeAd.call();
         },
-        onAdRevenuePaidCallback: (ad){
-
+        onAdRevenuePaidCallback: (ad,bean){
+          CheckUserUtils.instance.uploadAfRevenue(ad, bean?.balemcur??"", adPointId);
         },
       ),
     );

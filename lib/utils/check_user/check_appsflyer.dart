@@ -1,6 +1,8 @@
+import 'package:applovin_max/applovin_max.dart';
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:flutter_tba_info/flutter_tba_info.dart';
 import 'package:quiz_up/utils/check_user/check_user_utils.dart';
+import 'package:quiz_up/utils/point/ad_point_id.dart';
 import 'package:quiz_up/utils/point/app_point_id.dart';
 import 'package:quiz_up/utils/point/point_utils.dart';
 import 'package:quiz_up/utils/storage/storage_event.dart';
@@ -50,6 +52,21 @@ class CheckAppsflyer{
       onError: (code,msg){
         print("kk===initAppsflyer${code}==${msg}");
       }
+    );
+  }
+
+  uploadAdRevenue(MaxAd? ad,String adId,AdPointId pointId){
+    _appsflyerSdk?.logAdRevenue(
+      AdRevenueData(
+        monetizationNetwork: ad?.networkName??"",
+        mediationNetwork: AFMediationNetwork.applovinMax.name,
+        currencyIso4217Code: "USD",
+        revenue: ad?.revenue??0,
+        additionalParameters: {
+          "adRevenueUnit": adId,
+          "adRevenuePlacement": pointId.name,
+        }
+      )
     );
   }
 }

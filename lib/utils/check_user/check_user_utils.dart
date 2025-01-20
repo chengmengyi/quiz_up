@@ -1,8 +1,11 @@
+import 'package:applovin_max/applovin_max.dart';
 import 'package:flutter/foundation.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_rou/qp_rou_name.dart';
 import 'package:quiz_up/utils/check_user/check_appsflyer.dart';
 import 'package:quiz_up/utils/check_user/check_cloak.dart';
+import 'package:quiz_up/utils/firebase_utils.dart';
+import 'package:quiz_up/utils/point/ad_point_id.dart';
 import 'package:quiz_up/utils/storage/storage_event.dart';
 import 'package:quiz_up/utils/utils.dart';
 
@@ -38,7 +41,7 @@ class CheckUserUtils{
       "check user-->clock is black".log();
       return;
     }
-    if(appsflyerResult.get().isEmpty){
+    if(FirebaseUtils.instance.qu_af_on=="1"&&appsflyerResult.get().isEmpty){
       isB=false;
       "check user-->af is empty".log();
       return;
@@ -55,5 +58,9 @@ class CheckUserUtils{
         offNamed(routersName: QpRouName.bQuiz);
       }
     }
+  }
+
+  uploadAfRevenue(MaxAd? ad,String adId,AdPointId pointId){
+    _checkAppsflyer.uploadAdRevenue(ad, adId, pointId);
   }
 }

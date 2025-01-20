@@ -10,7 +10,7 @@ class FirebaseUtils{
   static final FirebaseUtils _utils=FirebaseUtils();
   static FirebaseUtils get instance=>_utils;
 
-  var _initSuccess=false,float_dis=10;
+  var _initSuccess=false,float_dis=10,qu_af_on="1";
   FirebaseRemoteConfig? _firebaseRemoteConfig;
 
   checkWorkNet(){
@@ -54,6 +54,11 @@ class FirebaseUtils{
     if(kwrap_ad_config.isNotEmpty&&adConfig.get()!=kwrap_ad_config){
       adConfig.save(kwrap_ad_config);
       AdUtils.instance.updateAdConfigData();
+    }
+
+    var afOn = _firebaseRemoteConfig?.getString("qu_af_on")??"";
+    if(afOn.isNotEmpty){
+      qu_af_on=afOn;
     }
   }
 }
