@@ -57,6 +57,7 @@ dependencies:
   app_settings: 5.1.1
   flutter_app_lifecycle: 0.0.1
   shake_animation_widget: 3.0.4
+  app_tracking_transparency: 2.0.6+1
   flutter_local_notifications:
     path: plugins/flutter_local_notifications-18.0.1
 

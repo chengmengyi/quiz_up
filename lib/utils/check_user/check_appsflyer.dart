@@ -17,7 +17,6 @@ class CheckAppsflyer{
         disableAdvertisingIdentifier: false,
         disableCollectASA: false,
         manualStart: true,
-        showDebug: true,
     ));
     await _appsflyerSdk?.initSdk(registerConversionDataCallback: true);
     var s = await FlutterTbaInfo.instance.getDistinctId();
