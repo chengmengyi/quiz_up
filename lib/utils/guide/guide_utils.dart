@@ -60,7 +60,7 @@ class GuideUtils{
       case OldUserStep.showWheelDialog:
         showDialog(
           useSafeArea: false,
-          widget: WheelDialog(autoWheel: true,fromOldUser: true,),
+          widget: WheelDialog(wheelFrom: WheelFrom.old,autoWheel: true,fromOldUser: true,),
         );
         break;
       case OldUserStep.showDoubleDialog:

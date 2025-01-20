@@ -9,11 +9,16 @@ import 'package:quiz_up/qp_wid/qp_text.dart';
 import 'package:quiz_up/utils/point/app_point_id.dart';
 import 'package:quiz_up/utils/point/point_utils.dart';
 
+enum WheelFrom{
+  old,quiz,guide,
+}
+
 class WheelDialog extends StatelessWidget{
   int receivedIndex=-1;
+  WheelFrom wheelFrom;
   bool init=false,autoWheel=false,fromOldUser=false;
   late WheelCon wheelCon;
-  WheelDialog({required this.autoWheel,this.fromOldUser=false,this.receivedIndex=-1});
+  WheelDialog({required this.wheelFrom,required this.autoWheel,this.fromOldUser=false,this.receivedIndex=-1});
 
   @override
   Widget build(BuildContext context){
@@ -21,7 +26,7 @@ class WheelDialog extends StatelessWidget{
       wheelCon=Get.put(WheelCon());
       wheelCon.autoWheel=autoWheel;
       wheelCon.fromOldUser=fromOldUser;
-      PointUtils.instance.pointEvent(AppPointId.wheel_pop,data: {"source_from":fromOldUser?"old":"quiz"});
+      PointUtils.instance.pointEvent(AppPointId.wheel_pop,data: {"source_from":wheelFrom.name});
       init=true;
     }
     return WillPopScope(

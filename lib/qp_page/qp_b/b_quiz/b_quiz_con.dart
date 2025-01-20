@@ -13,6 +13,8 @@ import 'package:quiz_up/qp_dialog/dialog_b/open_notification/open_notification_d
 import 'package:quiz_up/qp_dialog/dialog_b/wheel/wheel_dialog.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_rou/qp_rou_name.dart';
+import 'package:quiz_up/utils/ad/ad_type.dart';
+import 'package:quiz_up/utils/ad/ad_utils.dart';
 import 'package:quiz_up/utils/cash_task/cash_task_utils.dart';
 import 'package:quiz_up/utils/cash_task/task_type.dart';
 import 'package:quiz_up/utils/check_user/check_user_utils.dart';
@@ -20,17 +22,20 @@ import 'package:quiz_up/utils/event/event_code.dart';
 import 'package:quiz_up/utils/event/event_listener.dart';
 import 'package:quiz_up/utils/event/receive_event.dart';
 import 'package:quiz_up/utils/event/send_event.dart';
+import 'package:quiz_up/utils/firebase_utils.dart';
 import 'package:quiz_up/utils/guide/box_guide_overlay.dart';
 import 'package:quiz_up/utils/guide/guide_step.dart';
 import 'package:quiz_up/utils/guide/guide_utils.dart';
 import 'package:quiz_up/utils/guide/wheel_guide_overlay.dart';
 import 'package:quiz_up/utils/local_notifications/local_notifications_utils.dart';
+import 'package:quiz_up/utils/point/ad_point_id.dart';
 import 'package:quiz_up/utils/point/app_point_id.dart';
 import 'package:quiz_up/utils/point/point_utils.dart';
 import 'package:quiz_up/utils/progress/progress_utils.dart';
 import 'package:quiz_up/utils/question/a_question_utils.dart';
 import 'package:quiz_up/utils/question/b_question_util.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
+import 'package:quiz_up/utils/storage/storage_event.dart';
 import 'package:quiz_up/utils/value/value_utils.dart';
 
 class BQuizCon extends GetxController with GetTickerProviderStateMixin implements EventListener{
@@ -48,6 +53,11 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
   late ReceiveEvent receiveEvent;
   ScrollController scrollController=ScrollController();
   late AnimationController moneyLottieController;
+
+
+  var maxWidth=0.0,maxHeight=0.0,startRight=true,startDown=true,top=0.0,left=0.0;
+  Timer? _bubbleTimer;
+  double bubbleAddNum=ValueUtils.instance.getBubbleAddNum();
 
   @override
   void onInit() {
@@ -114,6 +124,7 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
 
   _checkShowBoxOverlay(){
     if(BSql.instance.bUserInfo?.answerNum==2&&null!=context){
+      PointUtils.instance.pointEvent(AppPointId.box_guide);
       var renderBox = box2GlobalKey.currentContext!.findRenderObject() as RenderBox;
       var offset = renderBox.localToGlobal(Offset.zero);
       GuideUtils.instance.showGuideOver(
@@ -121,6 +132,7 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
         widget: BoxGuideOverlay(
           offset: offset,
           dismiss: (){
+            PointUtils.instance.pointEvent(AppPointId.box_guide_c);
             showDialog(
               widget: BoxDialog(index: 1),
             );
@@ -130,6 +142,7 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
     }
 
     if(BSql.instance.bUserInfo?.answerNum==10&&null!=context){
+      PointUtils.instance.pointEvent(AppPointId.wheel_guide);
       var renderBox = wheel10GlobalKey.currentContext!.findRenderObject() as RenderBox;
       var offset = renderBox.localToGlobal(Offset.zero);
       GuideUtils.instance.showGuideOver(
@@ -137,8 +150,9 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
         widget: WheelGuideOverlay(
           offset: offset,
           dismiss: (){
+            PointUtils.instance.pointEvent(AppPointId.wheel_guide_c);
             showDialog(
-              widget: WheelDialog(autoWheel: false,receivedIndex: 9,),
+              widget: WheelDialog(wheelFrom: WheelFrom.guide,autoWheel: false,receivedIndex: 9,),
             );
           },
         ),
@@ -255,6 +269,7 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
       case EventCode.showBubble:
         showBubble=true;
         update(["bubble"]);
+        _initBubbleTimer();
         break;
       case EventCode.updateBoxOrWheelPro:
         update(["progress"]);
@@ -274,7 +289,87 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
             }
         );
         break;
+      case EventCode.updateUserMoney:
+        bubbleAddNum=ValueUtils.instance.getBubbleAddNum();
+        update(["earn","bubble"]);
+        break;
     }
+  }
+
+
+  _initBubbleTimer(){
+    if(context==null){
+      return;
+    }
+    var size = MediaQuery.of(context!).size;
+    maxWidth=size.width-74.w;
+    maxHeight=size.height-74.w;
+    _bubbleTimer=Timer.periodic(const Duration(milliseconds: 10), (timer) {
+      if(startRight){
+        left++;
+        if(startDown){
+          top++;
+          if(top>=maxHeight){
+            startDown=false;
+          }
+        }else{
+          top--;
+          if(top<=0){
+            startDown=true;
+          }
+        }
+        if(left>=maxWidth){
+          startRight=false;
+        }
+      }else{
+        left--;
+        if(startDown){
+          top++;
+          if(top>=maxHeight){
+            startDown=false;
+          }
+        }else{
+          top--;
+          if(top<=0){
+            startDown=true;
+          }
+        }
+        if(left<=0){
+          startRight=true;
+        }
+      }
+      update(["bubble"]);
+    });
+  }
+
+
+  clickBubble(){
+    PointUtils.instance.pointEvent(AppPointId.float_c);
+    CashTaskUtils.instance.updateCashTask(TaskType.pop);
+    if(firstClickBubble.get()){
+      firstClickBubble.save(false);
+      _clickBubbleResult();
+      return;
+    }
+    AdUtils.instance.showAd(
+        adType: AdType.reward,
+        adPointId: AdPointId.kwrap_bubble_rv,
+        closeAd: (){
+          _clickBubbleResult();
+        },
+        failAd: (){
+          _clickBubbleResult();
+        }
+    );
+  }
+
+  _clickBubbleResult()async{
+    showBubble=false;
+    update(["bubble"]);
+    BSql.instance.updateUserMoney(bubbleAddNum);
+    await Future.delayed(Duration(seconds: FirebaseUtils.instance.float_dis));
+    showBubble=true;
+    update(["bubble"]);
   }
 
   _countProgressWidth(){
@@ -310,7 +405,7 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
     if(!kDebugMode){
       return;
     }
-    BSql.instance.updateUserMoney(1000);
+    // BSql.instance.updateUserMoney(100);
     // CashTaskUtils.instance.updateCashTask(TaskType.spin);
     // LocalNotificationsUtils.instance.setLocalNotifications();
 

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_wid/qp_img.dart';
 import 'package:quiz_up/qp_wid/qp_text.dart';
+import 'package:quiz_up/utils/storage/storage_event.dart';
 import 'package:quiz_up/utils/utils.dart';
 
 class OpenNotificationDialog extends StatelessWidget{
@@ -24,8 +25,6 @@ class OpenNotificationDialog extends StatelessWidget{
             children: [
               SizedBox(height: 30.h,),
               QpText(text: "turn on push notifications", size: 18.sp, color: "#000000"),
-              SizedBox(height: 16.h,),
-              QpText(text: "Open the notification to receive cash", size: 12.sp, color: "#084B7B"),
               SizedBox(height: 10.h,),
               QpImg(img: "no_notification",width: 164.w,height: 132.h,),
               SizedBox(height: 10.h,),

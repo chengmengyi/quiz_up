@@ -54,10 +54,21 @@ class ProgressUtils{
   }
 
   bool showFinger(int index){
-    var indexWhere = progressList.indexWhere((value)=>value.progressType!=ProgressType.empty&&!value.received&&(BSql.instance.bUserInfo?.answerNum??0)-1>=index);
-    if(indexWhere>=0){
-      return indexWhere==index;
+    var bean = progressList[index];
+    if(bean.progressType==ProgressType.box){
+      var indexWhere = progressList.indexWhere((value)=>value.progressType==ProgressType.box&&!value.received&&(BSql.instance.bUserInfo?.answerNum??0)-1>=index);
+      if(indexWhere>=0){
+        return indexWhere==index;
+      }
     }
+    if(bean.progressType==ProgressType.wheel){
+      var indexWhere = progressList.indexWhere((value)=>value.progressType==ProgressType.wheel&&!value.received&&(BSql.instance.bUserInfo?.answerNum??0)-1>=index);
+      if(indexWhere>=0){
+        return indexWhere==index;
+      }
+    }
+
+
     return false;
   }
 
@@ -82,7 +93,7 @@ class ProgressUtils{
     if(bean.progressType==ProgressType.wheel){
       showDialog(
           useSafeArea: false,
-          widget: WheelDialog(autoWheel: false,receivedIndex: index,)
+          widget: WheelDialog(wheelFrom: WheelFrom.quiz,autoWheel: false,receivedIndex: index,)
       );
     }
   }

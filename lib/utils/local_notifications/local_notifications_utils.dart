@@ -4,6 +4,7 @@ import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/utils/local_notifications/local_notification_id.dart';
 import 'package:quiz_up/utils/point/app_point_id.dart';
 import 'package:quiz_up/utils/point/point_utils.dart';
+import 'package:quiz_up/utils/sql/b_sql.dart';
 import 'package:quiz_up/utils/utils.dart';
 
 class LocalNotificationsUtils {

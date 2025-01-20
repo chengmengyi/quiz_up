@@ -63,6 +63,7 @@ class BSql extends BaseSql{
       return;
     }
     await db.update(TableName.userInfoB, bUserInfo?.toJson()??{},where: '"id" = ?', whereArgs: [bUserInfo?.id]);
+
   }
 
   Future<NewUserStepBean> queryNewGuideInfo()async{

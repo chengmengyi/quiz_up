@@ -76,18 +76,24 @@ class BQuizPage extends StatelessWidget{
     ],
   );
 
-  _earnWidget()=>Flexible(
-    child: Container(
-      height: 62.h,
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.only(left: 18.w,right: 10.w),
-      decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("qp_img/earn_bg.webp"),
-            fit: BoxFit.fill,
-          )
+  _earnWidget()=>Expanded(
+    child: GetBuilder<BQuizCon>(
+      id: "earn",
+      builder: (_)=>Visibility(
+        visible: (BSql.instance.bUserInfo?.money??0.0)<2000,
+        child: Container(
+          height: 62.h,
+          alignment: Alignment.centerLeft,
+          padding: EdgeInsets.only(left: 18.w,right: 10.w),
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("qp_img/earn_bg.webp"),
+                fit: BoxFit.fill,
+              )
+          ),
+          child: QpText(text: "Earn \$${ValueUtils.instance.getEarnNum()} moreto\nwithdraw \$${ValueUtils.instance.getMaxCashNum()}", size: 10.sp, color: "#351900"),
+        ),
       ),
-      child: QpText(text: "Earn \$10 moreto\nwithdraw \$800", size: 10.sp, color: "#351900"),
     ),
   );
 
@@ -243,7 +249,38 @@ class BQuizPage extends StatelessWidget{
               ),
             ],
           ),
-          canReceive?QpImg(img: "pro6",width: 60.w,height: 60.w,):QpImg(img: bean.received?"pro4":"pro5",width: 42.w,height: 42.w,)
+          canReceive?QpImg(img: "pro6",width: 60.w,height: 60.w,):QpImg(img: bean.received?"pro4":"pro5",width: 42.w,height: 42.w,),
+          Visibility(
+            visible: ProgressUtils.instance.showFinger(index),
+            child: SizedBox(
+              width: 60.w,
+              height: 60.w,
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: ShakeAnimationWidget(
+                      shakeAnimationType: ShakeAnimationType.RoateShake,
+                      isForward: true,
+                      shakeCount: 0,
+                      child: Container(
+                        padding: EdgeInsets.only(left: 2.w,right: 2.w),
+                        decoration: BoxDecoration(
+                          color: "#000000".toColor().withOpacity(0.3),
+                          borderRadius: BorderRadius.circular(2.w),
+                        ),
+                        child: QpText(text: "Max\$${ValueUtils.instance.getBoxMaxAddNum()}", size: 9.sp, color: "#FFFFFF"),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: QpLottie(name: "finger",width: 46.w,height: 46.w,),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     ),
@@ -472,9 +509,45 @@ class BQuizPage extends StatelessWidget{
 
   _bubbleWidget()=>GetBuilder<BQuizCon>(
     id: "bubble",
-    builder: (_)=>bQuizCon.showBubble?
-    QpBubbleWidget():
-    Container(),
+    builder: (_)=>Visibility(
+      visible: bQuizCon.showBubble,
+      child: SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+        child: Stack(
+          children: [
+            Positioned(
+              top: bQuizCon.top,
+              left: bQuizCon.left,
+              child: InkWell(
+                onTap: (){
+                  bQuizCon.clickBubble();
+                },
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    QpImg(img: "bubble",width: 74.w,height: 74.w,),
+                    QpGraText(
+                      text: "+\$${bQuizCon.bubbleAddNum}",
+                      size: 17.sp,
+                      fontWeight: FontWeight.w800,
+                      colors: ["#FDFF5F".toColor(),"#F76B00".toColor()],
+                      shadows: [
+                        Shadow(
+                            color: "#794801".toColor(),
+                            blurRadius: 2.w,
+                            offset: Offset(0,2.w)
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    ),
   );
 
   _bottomCashWidget()=>Column(

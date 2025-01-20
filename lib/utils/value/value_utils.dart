@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:decimal/decimal.dart';
 import 'package:flutter/foundation.dart';
 import 'package:quiz_up/utils/ad/ad_type.dart';
 import 'package:quiz_up/utils/cash_task/task_type.dart';
@@ -32,10 +33,34 @@ class ValueUtils{
 
   List<int> getAmountList()=>_valueBean?.eqRange??[800, 1000, 1500, 2000];
 
-  bool checkShowAd(String adType){
-    if(kDebugMode){
-      return false;
+  int getMaxCashNum(){
+    var money = BSql.instance.bUserInfo?.money??0.0;
+    var list = getAmountList();
+    if(money>=list.last){
+      return list.last;
     }
+    for (var value in list) {
+      if(money<=value){
+        return value;
+      }
+    }
+    return 0;
+  }
+
+  double getEarnNum(){
+    var cashNum = getMaxCashNum();
+    var money = BSql.instance.bUserInfo?.money??0.0;
+    var d = (Decimal.fromInt(cashNum)-Decimal.parse("$money")).toDouble();
+    if(d<=0){
+      return 0;
+    }
+    return d;
+  }
+
+  bool checkShowAd(String adType){
+    // if(kDebugMode){
+    //   return false;
+    // }
     var list = (adType==AdType.interstitial?_valueBean?.intadPoint:_valueBean?.rvadPoint)??[];
     if(list.isEmpty){
       return false;

@@ -1,4 +1,5 @@
 import 'package:applovin_max/applovin_max.dart';
+import 'package:flutter/foundation.dart';
 import 'package:quiz_up/bean/ad_bean.dart';
 import 'package:quiz_up/bean/ad_result_bean.dart';
 import 'package:quiz_up/utils/ad/ad_num_utils.dart';
@@ -24,6 +25,9 @@ class AdUtils {
 
   initAdSetting()async{
     await AppLovinMAX.initialize(maxAdKey.base64());
+    // if(kDebugMode){
+    //   AppLovinMAX.showMediationDebugger();
+    // }
     _setMaxListener();
     _oneLoadAd=LoadAd(one: true);
     _twoLoadAd=LoadAd(one: false);

@@ -8,6 +8,7 @@ class BUserInfo {
 
 
   BUserInfo.fromJson(dynamic json) {
+    id = json['id'];
     money = json['money'];
     answerRightNum = json['answerRightNum'];
     answerNum = json['answerNum'];

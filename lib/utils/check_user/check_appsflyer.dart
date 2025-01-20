@@ -23,9 +23,6 @@ class CheckAppsflyer{
     var s = await FlutterTbaInfo.instance.getDistinctId();
     _appsflyerSdk?.setCustomerUserId(s);
     _appsflyerSdk?.onInstallConversionData((res){
-      //{status: success, payload: {is_first_launch: true,
-      // install_time: 2025-01-15 06:58:02.292, af_message: organic install,
-      // af_status: Organic}}
       "check user---> request af result-->$res".log();
       try{
         if(res["status"]=="success"){
