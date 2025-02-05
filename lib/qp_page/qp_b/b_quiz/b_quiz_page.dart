@@ -91,7 +91,65 @@ class BQuizPage extends StatelessWidget{
                 fit: BoxFit.fill,
               )
           ),
-          child: QpText(text: "Earn \$${ValueUtils.instance.getEarnNum()} moreto\nwithdraw \$${ValueUtils.instance.getMaxCashNum()}", size: 10.sp, color: "#351900"),
+          // child: QpText(text: "Earn \$${ValueUtils.instance.getEarnNum()} moreto\nwithdraw \$${ValueUtils.instance.getMaxCashNum()}", size: 10.sp, color: "#351900"),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              RichText(
+                text: TextSpan(
+                    children: [
+                      TextSpan(
+                          text: "Earn ",
+                          style: TextStyle(
+                              fontSize: 10.sp,
+                              color: "#351900".toColor(),
+                              fontFamily: "qp"
+                          )
+                      ),
+                      TextSpan(
+                          text: "\$${ValueUtils.instance.getEarnNum()}",
+                          style: TextStyle(
+                              fontSize: 10.sp,
+                              color: "#FF003D".toColor(),
+                              fontFamily: "qp"
+                          )
+                      ),
+                      TextSpan(
+                          text: "moreto",
+                          style: TextStyle(
+                              fontSize: 10.sp,
+                              color: "#351900".toColor(),
+                              fontFamily: "qp"
+                          )
+                      ),
+                    ]
+                ),
+              ),
+              RichText(
+                text: TextSpan(
+                    children: [
+                      TextSpan(
+                          text: "withdraw ",
+                          style: TextStyle(
+                              fontSize: 10.sp,
+                              color: "#351900".toColor(),
+                              fontFamily: "qp"
+                          )
+                      ),
+                      TextSpan(
+                          text: "\$${ValueUtils.instance.getMaxCashNum()}",
+                          style: TextStyle(
+                              fontSize: 10.sp,
+                              color: "#FF003D".toColor(),
+                              fontFamily: "qp"
+                          )
+                      ),
+                    ]
+                ),
+              )
+            ],
+          ),
         ),
       ),
     ),
@@ -207,7 +265,7 @@ class BQuizPage extends StatelessWidget{
                       child: Container(
                         padding: EdgeInsets.only(left: 2.w,right: 2.w),
                         decoration: BoxDecoration(
-                          color: "#000000".toColor().withOpacity(0.3),
+                          color: "#000000".toColor().withOpacity(0.5),
                           borderRadius: BorderRadius.circular(2.w),
                         ),
                         child: QpText(text: "Max\$${ValueUtils.instance.getBoxMaxAddNum()}", size: 9.sp, color: "#FFFFFF"),
@@ -222,6 +280,14 @@ class BQuizPage extends StatelessWidget{
               ),
             ),
           ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: QpGraText(
+              text: "${index+1}",
+              size: 14.sp,
+              colors: bean.received?["#F1F1F1".toColor(),"#B6B6B6".toColor()]:["#FDFF5F".toColor(),"#F76B00".toColor()],
+            ),
+          )
         ],
       ),
     ),
@@ -266,7 +332,7 @@ class BQuizPage extends StatelessWidget{
                       child: Container(
                         padding: EdgeInsets.only(left: 2.w,right: 2.w),
                         decoration: BoxDecoration(
-                          color: "#000000".toColor().withOpacity(0.3),
+                          color: "#000000".toColor().withOpacity(0.5),
                           borderRadius: BorderRadius.circular(2.w),
                         ),
                         child: QpText(text: "Max\$${ValueUtils.instance.getBoxMaxAddNum()}", size: 9.sp, color: "#FFFFFF"),
@@ -281,6 +347,14 @@ class BQuizPage extends StatelessWidget{
               ),
             ),
           ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: QpGraText(
+              text: "${index+1}",
+              size: 14.sp,
+              colors: bean.received?["#F1F1F1".toColor(),"#B6B6B6".toColor()]:["#FDFF5F".toColor(),"#F76B00".toColor()],
+            ),
+          )
         ],
       ),
     ),
@@ -432,6 +506,13 @@ class BQuizPage extends StatelessWidget{
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(width: 10.w,),
+                    GetBuilder<BQuizCon>(
+                      id: "finger",
+                      builder: (_)=>Visibility(
+                        visible: bQuizCon.showAnswerMoneyIcon(index),
+                        child: QpImg(img: "icon_money",width: 22.w,height: 22.h,),
+                      ),
+                    ),
                     Flexible(
                       child: QpGraText(
                         text: index==0?bQuizCon.currentQuestionBean?.qpFirst??"":bQuizCon.currentQuestionBean?.qpSecond??"",
@@ -553,6 +634,15 @@ class BQuizPage extends StatelessWidget{
   _bottomCashWidget()=>Column(
     mainAxisSize: MainAxisSize.min,
     children: [
+      Container(
+        margin: EdgeInsets.only(left: 50.w),
+        child: ShakeAnimationWidget(
+          shakeAnimationType: ShakeAnimationType.TopBottomShake,
+          isForward: true,
+          shakeCount: 0,
+          child: QpImg(img: "q13",width: 96.w,height: 43.h,),
+        ),
+      ),
       InkWell(
         onTap: (){
           toNamed(routersName: QpRouName.bCash);

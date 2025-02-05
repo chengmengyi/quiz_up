@@ -47,6 +47,7 @@ class NoMoneyDialog extends StatelessWidget{
                   onTap: (){
                     PointUtils.instance.pointEvent(AppPointId.cash_not_pop_c);
                     back();
+                    back();
                   },
                   child: Container(
                     width: double.infinity,

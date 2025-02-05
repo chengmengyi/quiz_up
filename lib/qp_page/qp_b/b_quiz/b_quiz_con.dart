@@ -392,6 +392,16 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
     });
   }
 
+  bool showAnswerMoneyIcon(int index){
+    if(null==rightAnswerOffset||null==currentQuestionBean){
+      return false;
+    }
+    if(index==0){
+      return currentQuestionBean?.qpResult=="qp_first";
+    }
+    return currentQuestionBean?.qpResult=="qp_second";
+  }
+
   @override
   void onClose() {
     _endTimer();

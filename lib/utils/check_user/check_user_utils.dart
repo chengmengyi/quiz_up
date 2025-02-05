@@ -27,10 +27,10 @@ class CheckUserUtils{
   }
 
   checkResult(){
-    // if(kDebugMode){
-    //   isB=true;
-    //   return;
-    // }
+    if(kDebugMode){
+      isB=true;
+      return;
+    }
     if(localCheckResult.get()){
       isB=true;
       "check user-->local is b".log();

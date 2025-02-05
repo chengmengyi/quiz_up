@@ -38,7 +38,7 @@ class QpMoneyWidget extends StatelessWidget{
               GetBuilder<QpMoneyCon>(
                 id: "money",
                 builder: (_)=>QpText(
-                  text: "${BSql.instance.bUserInfo?.money}",
+                  text: "\$${BSql.instance.bUserInfo?.money}",
                   size: 14.sp,
                   color: "#FFFFFF",
                   fontWeight: FontWeight.w800,
