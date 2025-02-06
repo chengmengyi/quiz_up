@@ -285,6 +285,7 @@ class BQuizPage extends StatelessWidget{
             child: QpGraText(
               text: "${index+1}",
               size: 14.sp,
+              fontWeight: FontWeight.bold,
               colors: bean.received?["#F1F1F1".toColor(),"#B6B6B6".toColor()]:["#FDFF5F".toColor(),"#F76B00".toColor()],
             ),
           )
@@ -352,6 +353,7 @@ class BQuizPage extends StatelessWidget{
             child: QpGraText(
               text: "${index+1}",
               size: 14.sp,
+              fontWeight: FontWeight.bold,
               colors: bean.received?["#F1F1F1".toColor(),"#B6B6B6".toColor()]:["#FDFF5F".toColor(),"#F76B00".toColor()],
             ),
           )
