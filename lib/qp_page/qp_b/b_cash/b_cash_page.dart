@@ -92,10 +92,10 @@ class BCashPage extends StatelessWidget{
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              QpText(text: "My BALANCE:", size: 13.sp, color: "#000000"),
+              QpText(text: "My BALANCE:", size: 13.sp, color: "#000000",fontWeight: FontWeight.bold,),
               GetBuilder<BCashCon>(
                 id: "money",
-                builder: (_)=>QpText(text: "\$${BSql.instance.bUserInfo?.money??0}", size: 30.sp, color: "#1E8910"),
+                builder: (_)=>QpText(text: "\$${BSql.instance.bUserInfo?.money??0}", size: 30.sp, color: "#1E8910",fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -187,7 +187,7 @@ class BCashPage extends StatelessWidget{
               children: [
                 Row(
                   children: [
-                    QpText(text: "\$${bean.totalMoney}", size: 34.sp, color: "#2AAC23"),
+                    QpText(text: "\$${bean.totalMoney}", size: 34.sp, color: "#2AAC23",fontWeight: FontWeight.bold),
                     Spacer(),
                     InkWell(
                       onTap: (){
@@ -249,7 +249,7 @@ class BCashPage extends StatelessWidget{
                 ):
                 Row(
                   children: [
-                    QpImg(img: "task_wheel",width: 56.w,height: 56.w,),
+                    QpImg(img: bCashCon.getTaskIcon(bean.cashTaskBean?.taskType??""),width: 40.w,height: 40.w,),
                     SizedBox(width: 4.w,),
                     Expanded(
                       child: Container(

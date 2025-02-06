@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
 import 'package:quiz_up/bean/cash_task_bean.dart';
 import 'package:quiz_up/utils/cash_task/task_type.dart';
-import 'package:quiz_up/utils/point/app_point_id.dart';
-import 'package:quiz_up/utils/point/point_utils.dart';
 
 class CashGuideCon extends GetxController{
 

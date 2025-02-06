@@ -160,6 +160,16 @@ class BCashCon extends GetxController implements EventListener{
     }
   }
 
+  String getTaskIcon(String taskType){
+    switch(taskType){
+      case TaskType.quiz: return "task_question";
+      case TaskType.box: return "task_box";
+      case TaskType.spin: return "task_spin";
+      case TaskType.pop: return "task_pop";
+      default: return "task_pop";
+    }
+  }
+
   String getMoneyBg(){
     switch(cashIndex){
       case 0: return "cash_bg_pay";

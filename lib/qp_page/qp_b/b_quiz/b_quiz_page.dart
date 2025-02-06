@@ -510,9 +510,10 @@ class BQuizPage extends StatelessWidget{
                       id: "finger",
                       builder: (_)=>Visibility(
                         visible: bQuizCon.showAnswerMoneyIcon(index),
-                        child: QpImg(img: "icon_money",width: 22.w,height: 22.h,),
+                        child: QpImg(img: "icon_money",width: 24.w,height: 24.h,),
                       ),
                     ),
+                    SizedBox(width: 2.w,),
                     Flexible(
                       child: QpGraText(
                         text: index==0?bQuizCon.currentQuestionBean?.qpFirst??"":bQuizCon.currentQuestionBean?.qpSecond??"",
