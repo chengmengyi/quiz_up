@@ -6,6 +6,7 @@ import 'package:quiz_up/utils/ad/ad_type.dart';
 import 'package:quiz_up/utils/ad/ad_utils.dart';
 import 'package:quiz_up/utils/local_notifications/local_notifications_utils.dart';
 import 'package:quiz_up/utils/point/ad_point_id.dart';
+import 'package:quiz_up/utils/point/point_utils.dart';
 import 'package:quiz_up/utils/storage/storage_event.dart';
 
 class AppLifecycleUtils{
@@ -33,6 +34,7 @@ class AppLifecycleUtils{
   }
 
   _checkToLaunchPage(){
+    PointUtils.instance.session();
     _pausedTimer?.cancel();
     Future.delayed(const Duration(milliseconds: 100),(){
       if(_isBack&&!AdUtils.instance.checkAdShowing()){

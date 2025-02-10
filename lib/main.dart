@@ -8,6 +8,8 @@ import 'package:quiz_up/utils/ad/ad_utils.dart';
 import 'package:quiz_up/utils/check_user/check_user_utils.dart';
 import 'package:quiz_up/utils/firebase_utils.dart';
 import 'package:quiz_up/utils/guide/guide_utils.dart';
+import 'package:quiz_up/utils/h5_utils.dart';
+import 'package:quiz_up/utils/point/point_utils.dart';
 import 'package:quiz_up/utils/progress/progress_utils.dart';
 import 'package:quiz_up/utils/question/a_question_utils.dart';
 import 'package:quiz_up/utils/question/b_question_util.dart';
@@ -37,6 +39,7 @@ _init()async{
       )
   );
   await GetStorage.init();
+  PointUtils.instance.install();
   //a
   AQuestionUtils.instance.initQuestionList();
   ASql.instance.initQuestionAndUserInfoData();
@@ -57,6 +60,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
+    H5Utils.instance.initChannel(context);
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (c,child)=>GetMaterialApp(

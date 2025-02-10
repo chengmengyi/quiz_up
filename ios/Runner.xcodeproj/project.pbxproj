@@ -16,7 +16,10 @@
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		DF05AE7837A52F95D07DF57A /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E29FE63FB6A3377D96C854AB /* Pods_Runner.framework */; };
 		E05464FB3B4F8BAD372BF455 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BD30C7F13E3D1C432E46801 /* Pods_RunnerTests.framework */; };
+		FB82C0862D59CB9D00DF1951 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB82C0852D59CB9D00DF1951 /* AdSupport.framework */; };
+		FB82C0882D59CBA500DF1951 /* AdServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB82C0872D59CBA500DF1951 /* AdServices.framework */; };
 		FBA082662D3785200019F707 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FBA082652D3785200019F707 /* GoogleService-Info.plist */; };
+		FBA6DD602D59F9AF0015EB1B /* C79FaClXmVKeLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FBA6DD5D2D59F9AF0015EB1B /* C79FaClXmVKeLib.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,7 +69,11 @@
 		C10E53242750C80FB99053B3 /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		C88C2C5EDFDE10C60E3832CD /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		E29FE63FB6A3377D96C854AB /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB82C0852D59CB9D00DF1951 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		FB82C0872D59CBA500DF1951 /* AdServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdServices.framework; path = System/Library/Frameworks/AdServices.framework; sourceTree = SDKROOT; };
 		FBA082652D3785200019F707 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FBA6DD5D2D59F9AF0015EB1B /* C79FaClXmVKeLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = C79FaClXmVKeLib.a; sourceTree = "<group>"; };
+		FBA6DD5E2D59F9AF0015EB1B /* FaCIXmVKefVqVbeL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FaCIXmVKefVqVbeL.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,7 +89,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB82C0882D59CBA500DF1951 /* AdServices.framework in Frameworks */,
+				FB82C0862D59CB9D00DF1951 /* AdSupport.framework in Frameworks */,
 				DF05AE7837A52F95D07DF57A /* Pods_Runner.framework in Frameworks */,
+				FBA6DD602D59F9AF0015EB1B /* C79FaClXmVKeLib.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,6 +156,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				FBA6DD5F2D59F9AF0015EB1B /* C79SDK */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
@@ -161,10 +172,21 @@
 		CA078428BDD413DBA2813315 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FB82C0872D59CBA500DF1951 /* AdServices.framework */,
+				FB82C0852D59CB9D00DF1951 /* AdSupport.framework */,
 				E29FE63FB6A3377D96C854AB /* Pods_Runner.framework */,
 				5BD30C7F13E3D1C432E46801 /* Pods_RunnerTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FBA6DD5F2D59F9AF0015EB1B /* C79SDK */ = {
+			isa = PBXGroup;
+			children = (
+				FBA6DD5D2D59F9AF0015EB1B /* C79FaClXmVKeLib.a */,
+				FBA6DD5E2D59F9AF0015EB1B /* FaCIXmVKefVqVbeL.h */,
+			);
+			path = C79SDK;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -501,6 +523,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Runner/C79SDK",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.quizup.findpro.rightanswers;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -691,6 +717,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Runner/C79SDK",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.quizup.findpro.rightanswers;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -720,6 +750,10 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Runner/C79SDK",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.quizup.findpro.rightanswers;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -56,10 +56,11 @@ class CheckAppsflyer{
   }
 
   uploadAdRevenue(MaxAd? ad,String adId,AdPointId pointId){
+    print("kk======${null==_appsflyerSdk}===${ad?.networkName}===${AFMediationNetwork.applovinMax.value}===+${AFMediationNetwork.applovinMax.name}");
     _appsflyerSdk?.logAdRevenue(
       AdRevenueData(
         monetizationNetwork: ad?.networkName??"",
-        mediationNetwork: AFMediationNetwork.applovinMax.name,
+        mediationNetwork: AFMediationNetwork.applovinMax.value,
         currencyIso4217Code: "USD",
         revenue: ad?.revenue??0,
         additionalParameters: {

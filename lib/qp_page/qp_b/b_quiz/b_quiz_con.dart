@@ -27,6 +27,7 @@ import 'package:quiz_up/utils/guide/box_guide_overlay.dart';
 import 'package:quiz_up/utils/guide/guide_step.dart';
 import 'package:quiz_up/utils/guide/guide_utils.dart';
 import 'package:quiz_up/utils/guide/wheel_guide_overlay.dart';
+import 'package:quiz_up/utils/h5_utils.dart';
 import 'package:quiz_up/utils/local_notifications/local_notifications_utils.dart';
 import 'package:quiz_up/utils/point/ad_point_id.dart';
 import 'package:quiz_up/utils/point/app_point_id.dart';
@@ -67,6 +68,8 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
     CheckUserUtils.instance.bQuizShow=true;
     receiveEvent=ReceiveEvent(eventListener: this);
     LocalNotificationsUtils.instance.setLocalNotifications();
+    H5Utils.instance.pageB1();
+    H5Utils.instance.pageB2();
   }
 
   @override

@@ -8,6 +8,7 @@ import 'package:quiz_up/utils/event/event_code.dart';
 import 'package:quiz_up/utils/event/event_listener.dart';
 import 'package:quiz_up/utils/event/receive_event.dart';
 import 'package:quiz_up/utils/event/send_event.dart';
+import 'package:quiz_up/utils/h5_utils.dart';
 import 'package:quiz_up/utils/overlay_utils.dart';
 import 'package:quiz_up/utils/sql/a_sql.dart';
 
@@ -24,6 +25,7 @@ class AHomeCon extends GetxController implements EventListener{
   @override
   void onInit() {
     super.onInit();
+    H5Utils.instance.pageA();
     receiveEvent=ReceiveEvent(eventListener: this);
   }
 

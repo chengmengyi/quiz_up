@@ -46,6 +46,7 @@ class QpLaunchCon extends GetxController with GetSingleTickerProviderStateMixin{
       AdUtils.instance.showAd(
         adType: AdType.interstitial,
         adPointId: AdPointId.kwrap_launch,
+        isLaunch: true,
         closeAd: (){
           offNamed(routersName: QpRouName.bQuiz);
         },

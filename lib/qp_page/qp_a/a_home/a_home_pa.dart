@@ -8,6 +8,7 @@ import 'package:quiz_up/qp_wid/qp_heart/qp_heart.dart';
 import 'package:quiz_up/qp_wid/qp_img.dart';
 import 'package:quiz_up/qp_wid/qp_level/qp_level.dart';
 import 'package:quiz_up/qp_wid/qp_text.dart';
+import 'package:quiz_up/utils/h5_utils.dart';
 import 'a_home_con.dart';
 
 class AHomePa extends StatelessWidget{
@@ -32,6 +33,16 @@ class AHomePa extends StatelessWidget{
             ],
           ),
         ),
+        Positioned(
+          top: 150.h,
+          left: 8.w,
+          child: InkWell(
+            onTap: (){
+              H5Utils.instance.clickH5();
+            },
+            child: QpImg(img: "home_h5",width: 62.w,height: 62.w,),
+          ),
+        )
       ],
     ),
   );

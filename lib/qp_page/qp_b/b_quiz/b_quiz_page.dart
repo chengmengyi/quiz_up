@@ -15,6 +15,7 @@ import 'package:quiz_up/qp_wid/qp_level/qp_level.dart';
 import 'package:quiz_up/qp_wid/qp_lottie.dart';
 import 'package:quiz_up/qp_wid/qp_money/qp_money_widget.dart';
 import 'package:quiz_up/qp_wid/qp_text.dart';
+import 'package:quiz_up/utils/h5_utils.dart';
 import 'package:quiz_up/utils/progress/progress_utils.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
 import 'package:quiz_up/utils/utils.dart';
@@ -440,6 +441,16 @@ class BQuizPage extends StatelessWidget{
               bQuizCon.showRightAnswerFinger();
             },
             child: QpImg(img: "q12",width: 42.w,height: 42.h,),
+          ),
+        ),
+        Positioned(
+          top: 50.h,
+          left: 8.w,
+          child: InkWell(
+            onTap: (){
+              H5Utils.instance.clickH5();
+            },
+            child: QpImg(img: "home_h5",width: 62.w,height: 62.w,),
           ),
         )
       ],
