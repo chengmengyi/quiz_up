@@ -4,8 +4,6 @@ PODS:
   - Ads-Global/BUAdSDK (6.4.1.1)
   - app_settings (5.1.1):
     - Flutter
-  - app_tracking_transparency (0.0.1):
-    - Flutter
   - applovin_max (4.2.1):
     - AppLovinSDK (= 13.0.1)
     - Flutter
@@ -272,7 +270,6 @@ PODS:
 
 DEPENDENCIES:
   - app_settings (from `.symlinks/plugins/app_settings/ios`)
-  - app_tracking_transparency (from `.symlinks/plugins/app_tracking_transparency/ios`)
   - applovin_max (from `.symlinks/plugins/applovin_max/ios`)
   - AppLovinMediationBidMachineAdapter
   - AppLovinMediationBigoAdsAdapter
@@ -356,8 +353,6 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   app_settings:
     :path: ".symlinks/plugins/app_settings/ios"
-  app_tracking_transparency:
-    :path: ".symlinks/plugins/app_tracking_transparency/ios"
   applovin_max:
     :path: ".symlinks/plugins/applovin_max/ios"
   appsflyer_sdk:
@@ -394,7 +389,6 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Ads-Global: 39da92478a242d4bdb6a2addaef9746beb68e137
   app_settings: 3507c575c2b18a462c99948f61d5de21d4420999
-  app_tracking_transparency: 3d84f147f67ca82d3c15355c36b1fa6b66ca7c92
   applovin_max: cee1150e05e836e6f978ec67d67e802f633dd889
   AppLovinMediationBidMachineAdapter: 21f38fe78fd3847acc77cdbe17463c30e766407a
   AppLovinMediationBigoAdsAdapter: 9250d5fb076255188d9550529f07b4994bdc76e0

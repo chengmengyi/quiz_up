@@ -7,7 +7,6 @@ import 'package:quiz_up/utils/ad/ad_utils.dart';
 import 'package:quiz_up/utils/check_user/check_user_utils.dart';
 import 'package:quiz_up/utils/local_notifications/local_notifications_utils.dart';
 import 'package:quiz_up/utils/point/ad_point_id.dart';
-import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 
 class QpLaunchCon extends GetxController with GetSingleTickerProviderStateMixin{
   late AnimationController animationController;
@@ -27,8 +26,6 @@ class QpLaunchCon extends GetxController with GetSingleTickerProviderStateMixin{
   }
 
   _initAnimator()async{
-    AppTrackingTransparency.requestTrackingAuthorization();
-
     animationController=AnimationController(duration: const Duration(seconds: 13),vsync: this)
       ..addListener(() {
         update(["progress"]);

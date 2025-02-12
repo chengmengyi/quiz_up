@@ -43,20 +43,26 @@ class CheckAppsflyer{
       }
     });
 
-    "check user---> start request af".log();
     PointUtils.instance.pointEvent(AppPointId.adjust_req);
+    _startAf();
+  }
+
+  _startAf(){
+    "check user---> start request af".log();
     _appsflyerSdk?.startSDK(
-      onSuccess: (){
-        print("kk===initAppsflyer=onSuccess");
-      },
-      onError: (code,msg){
-        print("kk===initAppsflyer${code}==${msg}");
-      }
+        onSuccess: (){
+          print("kk===initAppsflyer=onSuccess");
+        },
+        onError: (code,msg){
+          print("kk===initAppsflyer${code}==${msg}");
+          Future.delayed(Duration(milliseconds: 1000),(){
+            _startAf();
+          });
+        }
     );
   }
 
   uploadAdRevenue(MaxAd? ad,String adId,AdPointId pointId){
-    print("kk======${null==_appsflyerSdk}===${ad?.networkName}===${AFMediationNetwork.applovinMax.value}===+${AFMediationNetwork.applovinMax.name}");
     _appsflyerSdk?.logAdRevenue(
       AdRevenueData(
         monetizationNetwork: ad?.networkName??"",
