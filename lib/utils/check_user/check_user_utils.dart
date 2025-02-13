@@ -63,4 +63,6 @@ class CheckUserUtils{
   uploadAfRevenue(MaxAd? ad,String adId,AdPointId pointId){
     _checkAppsflyer.uploadAdRevenue(ad, adId, pointId);
   }
+
+  bool cloakIsWhite()=>_checkCloak.isWhite;
 }

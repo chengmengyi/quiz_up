@@ -51,10 +51,10 @@ class CheckAppsflyer{
     "check user---> start request af".log();
     _appsflyerSdk?.startSDK(
         onSuccess: (){
-          print("kk===initAppsflyer=onSuccess");
+          "check user---> initAppsflyer success".log();
         },
         onError: (code,msg){
-          print("kk===initAppsflyer${code}==${msg}");
+          "check user---> initAppsflyer fail--->$code---->$msg".log();
           Future.delayed(Duration(milliseconds: 1000),(){
             _startAf();
           });
