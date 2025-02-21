@@ -10,7 +10,7 @@ class FirebaseUtils{
   static final FirebaseUtils _utils=FirebaseUtils();
   static FirebaseUtils get instance=>_utils;
 
-  var _initSuccess=false,float_dis=10,qu_af_on="1";
+  var float_dis=10,qu_af_on="1",afd_ad="";
   FirebaseRemoteConfig? _firebaseRemoteConfig;
 
   checkWorkNet(){
@@ -31,16 +31,12 @@ class FirebaseUtils{
         minimumFetchInterval: Duration(seconds: 1),
       ));
       await _firebaseRemoteConfig?.fetchAndActivate();
-      _initSuccess=true;
+      getString();
     }catch(e){
-      _initSuccess=false;
     }
   }
 
   getString(){
-    if(!_initSuccess){
-      return;
-    }
     var floatTime = _firebaseRemoteConfig?.getString("float_dis")??"";
     if(floatTime.isNotEmpty){
       float_dis=floatTime.toInt(defaultInt: 10);
@@ -59,6 +55,12 @@ class FirebaseUtils{
     var afOn = _firebaseRemoteConfig?.getString("qu_af_on")??"";
     if(afOn.isNotEmpty){
       qu_af_on=afOn;
+    }
+
+    var afd = _firebaseRemoteConfig?.getString("afd_ad")??"";
+    "quiz up ad--->afd====$afd".log();
+    if(afd.isNotEmpty){
+      afd_ad=afd;
     }
   }
 }

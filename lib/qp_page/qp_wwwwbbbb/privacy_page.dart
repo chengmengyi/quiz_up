@@ -41,12 +41,12 @@ class QpWWWWWPage extends StatelessWidget{
       SizedBox(width: 16.w,),
       InkWell(
         onTap: (){
-          back();
+          back(result: {});
         },
         child: QpImg(img: "icon_close1",width: 30.w,height: 30.h,),
       ),
       SizedBox(width: 10.w,),
-      QpText(text: "Setting", size: 16.sp, color: "#FFFFFF",fontWeight: FontWeight.bold,)
+      // QpText(text: "Setting", size: 16.sp, color: "#FFFFFF",fontWeight: FontWeight.bold,)
     ],
   );
 }

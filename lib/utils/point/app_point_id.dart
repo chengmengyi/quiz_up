@@ -44,4 +44,6 @@ enum AppPointId{
   kwrap_ad_chance,
   kwrap_ad_impression_fail,
   kwrap_ad_impression,
+  cash_confirm_pop,
+  cash_confirm_pop_c
 }

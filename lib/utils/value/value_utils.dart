@@ -58,9 +58,9 @@ class ValueUtils{
   }
 
   bool checkShowAd(String adType){
-    if(kDebugMode){
-      return true;
-    }
+    // if(kDebugMode){
+    //   return true;
+    // }
     var list = (adType==AdType.interstitial?_valueBean?.intadPoint:_valueBean?.rvadPoint)??[];
     if(list.isEmpty){
       return false;

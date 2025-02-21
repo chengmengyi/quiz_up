@@ -11,6 +11,7 @@ import 'package:quiz_up/qp_dialog/dialog_b/box/box_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/new_user/new_user_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/open_notification/open_notification_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/wheel/wheel_dialog.dart';
+import 'package:quiz_up/qp_dialog/loading_dialog.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_rou/qp_rou_name.dart';
 import 'package:quiz_up/utils/ad/ad_type.dart';
@@ -421,6 +422,5 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
     // BSql.instance.updateUserMoney(100);
     // CashTaskUtils.instance.updateCashTask(TaskType.spin);
     // LocalNotificationsUtils.instance.setLocalNotifications();
-
   }
 }

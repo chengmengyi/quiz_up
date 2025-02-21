@@ -77,12 +77,12 @@ Map<String, dynamic> getArguments() {
   }
 }
 
-showDialog({required Widget widget,bool useSafeArea=true}){
+showDialog({required Widget widget,bool useSafeArea=true,Color? barrierColor}){
   Get.dialog(
     widget,
     useSafeArea: useSafeArea,
     // arguments: arguments,
-    // barrierColor: barrierColor,
+    barrierColor: barrierColor,
     barrierDismissible: false,
   );
 }

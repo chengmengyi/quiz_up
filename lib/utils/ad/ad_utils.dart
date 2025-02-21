@@ -1,12 +1,19 @@
+import 'dart:convert';
+import 'dart:math';
+import 'package:flutter/material.dart' as color;
 import 'package:applovin_max/applovin_max.dart';
 import 'package:flutter/foundation.dart';
 import 'package:quiz_up/bean/ad_bean.dart';
 import 'package:quiz_up/bean/ad_result_bean.dart';
+import 'package:quiz_up/qp_dialog/loading_dialog.dart';
+import 'package:quiz_up/qp_rou/qp_page_list.dart';
+import 'package:quiz_up/qp_rou/qp_rou_name.dart';
 import 'package:quiz_up/utils/ad/ad_num_utils.dart';
 import 'package:quiz_up/utils/ad/ad_type.dart';
 import 'package:quiz_up/utils/ad/load_ad.dart';
 import 'package:quiz_up/utils/ad/show_ad_listener.dart';
 import 'package:quiz_up/utils/check_user/check_user_utils.dart';
+import 'package:quiz_up/utils/firebase_utils.dart';
 import 'package:quiz_up/utils/local_info.dart';
 import 'package:quiz_up/utils/point/ad_point_id.dart';
 import 'package:quiz_up/utils/point/app_point_id.dart';
@@ -118,22 +125,58 @@ class AdUtils {
     required Function() failAd,
     bool isLaunch=false,
   }){
-    if(!isLaunch&&!ValueUtils.instance.checkShowAd(adType)){
+    var checkShowAd = ValueUtils.instance.checkShowAd(adType);
+    if(!isLaunch&&!checkShowAd){
       closeAd.call();
       return;
     }
     PointUtils.instance.pointEvent(AppPointId.kwrap_ad_chance,data: {"ad_pos_id":adPointId.name});
+    var linkAddress = _showH5Ad();
+    if(!isLaunch&&adType==AdType.interstitial&&linkAddress.isNotEmpty){
+      PointUtils.instance.pointEvent(AppPointId.kwrap_ad_impression,data: {"ad_pos_id":adPointId.name});
+      PointUtils.instance.adEvent(null, null, adPointId);
+      toNamed(
+        routersName: QpRouName.web,
+        arguments: {"url":linkAddress},
+        backCall: (map){
+          closeAd.call();
+        }
+      );
+      return;
+    }
     var resultBean = _getCacheResultBean(adType);
     if(null==resultBean){
+      _loadAd(AdType.reward);
+      _loadAd(AdType.interstitial);
       PointUtils.instance.pointEvent(AppPointId.kwrap_ad_impression_fail,data: {"ad_pos_id":adPointId.name,"reason":"nocache"});
       if(isLaunch){
         closeAd.call();
       }else{
-        showToast("Advertisement display failed,please try again later");
+        showDialog(
+          barrierColor: color.Colors.transparent,
+          widget: LoadingDialog(
+            dismiss: (){
+              if(null==_getCacheResultBean(adType)){
+                showToast("Advertisement display failed,please try again later");
+              }else{
+                _hasCacheShowAd(adType: adType, adPointId: adPointId, closeAd: closeAd, failAd: failAd);
+              }
+            },
+          ),
+        );
       }
       return;
     }
 
+    _hasCacheShowAd(adType: adType, adPointId: adPointId, closeAd: closeAd, failAd: failAd);
+  }
+
+  _hasCacheShowAd({
+    required String adType,
+    required AdPointId adPointId,
+    required Function() closeAd,
+    required Function() failAd,
+  }){
     _startShowAd(
       adType: adType,
       listener: ShowAdListener(
@@ -233,4 +276,24 @@ class AdUtils {
   }
 
   bool checkAdShowing()=>_adShowing;
+
+  String _showH5Ad(){
+    if(FirebaseUtils.instance.afd_ad.isEmpty){
+      return "";
+    }
+    try{
+      var json = jsonDecode(FirebaseUtils.instance.afd_ad);
+      var linkAddress = json["link_adress"] as String;
+      var point = json["ad_point"] as int;
+      if(linkAddress.isEmpty){
+        return "";
+      }
+      if(Random().nextInt(100)<point){
+        return linkAddress;
+      }
+      return "";
+    }catch(e){
+      return "";
+    }
+  }
 }

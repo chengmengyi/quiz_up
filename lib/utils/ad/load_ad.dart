@@ -127,5 +127,8 @@ class LoadAd extends BaseAd{
     _rvList.clear();
     _intList.addAll(getAdList(AdType.interstitial, one));
     _rvList.addAll(getAdList(AdType.reward, one));
+    "quiz up ad--->one:$one--->updateConfigData".log();
+    loadAd(AdType.reward);
+    loadAd(AdType.interstitial);
   }
 }
