@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -648,6 +649,8 @@ class BQuizPage extends StatelessWidget{
   _bottomCashWidget()=>Column(
     mainAxisSize: MainAxisSize.min,
     children: [
+      kDebugMode?
+      Container():
       Container(
         margin: EdgeInsets.only(left: 50.w),
         child: ShakeAnimationWidget(

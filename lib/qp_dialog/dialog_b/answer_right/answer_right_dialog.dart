@@ -56,16 +56,16 @@ class AnswerRightDialog extends StatelessWidget{
     child: Stack(
       children: [
         QpImg(img: "right1",width: double.infinity,height: 394.h,),
-        Positioned(
-          top: 14.h,
-          right: 0,
-          child: InkWell(
-            onTap: (){
-              answerRightCon.clickClose(dismiss,);
-            },
-            child: QpImg(img: "icon_close3",width: 38.w,height: 38.h,),
-          ),
-        ),
+        // Positioned(
+        //   top: 14.h,
+        //   right: 0,
+        //   child: InkWell(
+        //     onTap: (){
+        //       answerRightCon.clickClose(dismiss,);
+        //     },
+        //     child: QpImg(img: "icon_close3",width: 38.w,height: 38.h,),
+        //   ),
+        // ),
         Align(
           alignment: Alignment.topCenter,
           child: Container(

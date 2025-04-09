@@ -9,6 +9,7 @@ class TableName{
   static const String oldUserGuideB="oldUserGuideB";
   static const String receivedIndexB="receivedIndexB";
   static const String cashTaskB="cashTaskB";
+  static const String newCashTaskB="newCashTaskB";
   static const String cashAccountB="cashAccountB";
 }
 
@@ -17,16 +18,19 @@ abstract class BaseSql{
   Future<Database> initDB()async{
     var db = await openDatabase(
         "qp.db",
-        version: 2,
+        version: 3,
         onCreate: (db,version)async{
           db.execute('CREATE TABLE ${TableName.questionInfoA} (id INTEGER PRIMARY KEY AUTOINCREMENT, mathIndex INTEGER, historyIndex INTEGER, natureIndex INTEGER, scienceIndex INTEGER, animalIndex INTEGER, dailyIndex INTEGER)');
           db.execute('CREATE TABLE ${TableName.userInfoA} (id INTEGER PRIMARY KEY AUTOINCREMENT, coin INTEGER, heart INTEGER, answerNum INTEGER, lastHeartTimer TEXT)');
 
           _createVersion2DB(db);
+          _createVersion3DB(db);
         },
         onUpgrade: (db,oldVersion,newVersion){
           if(newVersion==2){
             _createVersion2DB(db);
+          }else if(newVersion==3){
+            _createVersion3DB(db);
           }
         }
     );
@@ -40,5 +44,9 @@ abstract class BaseSql{
     db.execute('CREATE TABLE ${TableName.receivedIndexB} (id INTEGER PRIMARY KEY AUTOINCREMENT, receivedIndex INTEGER)');
     db.execute('CREATE TABLE ${TableName.cashTaskB} (id INTEGER PRIMARY KEY AUTOINCREMENT, cashType INTEGER, cashNum INTEGER, taskType TEXT, currentPro INTEGER, totalPro INTEGER, taskIndex INTEGER,account TEXT, taskStatus INTEGER)');
     db.execute('CREATE TABLE ${TableName.cashAccountB} (id INTEGER PRIMARY KEY AUTOINCREMENT, cashAccount TEXT,cashType INTEGER)');
+  }
+
+  _createVersion3DB(Database db) {
+    db.execute('CREATE TABLE ${TableName.newCashTaskB} (id INTEGER PRIMARY KEY AUTOINCREMENT, cashType INTEGER, cashNum INTEGER, taskType TEXT, currentPro INTEGER, totalPro INTEGER, taskIndex INTEGER,account TEXT, taskStatus INTEGER)');
   }
 }
