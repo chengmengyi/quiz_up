@@ -53,18 +53,18 @@ class GuideUtils{
     }
     switch(_oldUserStepBean?.oldUserStep){
       case OldUserStep.showOldUserDialog:
-        showDialog(
+        QpRouters.showDialog(
           widget: OldUserDialog()
         );
         break;
       case OldUserStep.showWheelDialog:
-        showDialog(
+        QpRouters.showDialog(
           useSafeArea: false,
           widget: WheelDialog(wheelFrom: WheelFrom.old,autoWheel: true,fromOldUser: true,),
         );
         break;
       case OldUserStep.showDoubleDialog:
-        showDialog(
+        QpRouters.showDialog(
           useSafeArea: false,
           widget: OldUserDoubleDialog(
             wheelAddNum: wheelAddNum==0?ValueUtils.instance.getWheelAddNum():wheelAddNum,
@@ -72,7 +72,7 @@ class GuideUtils{
         );
         break;
       case OldUserStep.showSignDialog:
-        showDialog(
+        QpRouters.showDialog(
           useSafeArea: false,
           widget: OldUserSignDialog(),
         );

@@ -7,6 +7,6 @@ class ANoHeartCon extends GetxController{
   clickSpend()async{
     await ASql.instance.updateUserInfo(UserInfoKey.coin, -50);
     await ASql.instance.updateUserInfo(UserInfoKey.heart, 3);
-    back();
+    QpRouters.back();
   }
 }

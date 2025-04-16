@@ -86,12 +86,12 @@ class ProgressUtils{
       return;
     }
     if(bean.progressType==ProgressType.box){
-      showDialog(
+      QpRouters.showDialog(
           widget: BoxDialog(index: index,)
       );
     }
     if(bean.progressType==ProgressType.wheel){
-      showDialog(
+      QpRouters.showDialog(
           useSafeArea: false,
           widget: WheelDialog(wheelFrom: WheelFrom.quiz,autoWheel: false,receivedIndex: index,)
       );

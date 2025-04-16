@@ -46,8 +46,8 @@ class NoMoneyDialog extends StatelessWidget{
                 InkWell(
                   onTap: (){
                     PointUtils.instance.pointEvent(AppPointId.cash_not_pop_c);
-                    back();
-                    back();
+                    QpRouters.back();
+                    QpRouters.back();
                   },
                   child: Container(
                     width: double.infinity,

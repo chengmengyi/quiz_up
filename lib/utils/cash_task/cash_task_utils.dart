@@ -18,7 +18,7 @@ class CashTaskUtils{
     if(list.isNotEmpty){
       return;
     }
-    showDialog(
+    QpRouters.showDialog(
       widget: InputAccountDialog(
         cashNum: amountList.first,
         dismiss: (account)async{

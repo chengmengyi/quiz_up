@@ -22,7 +22,7 @@ class AnswerRightCon extends GetxController{
       adType: AdType.reward,
       adPointId: type==AnswerRightTyp.quiz?AdPointId.kwrap_quiz_rv:AdPointId.kwrap_wheel_rv,
       closeAd: (){
-        back();
+        QpRouters.back();
         BSql.instance.updateUserMoney((Decimal.parse("$addNum")*Decimal.fromInt(2)).toDouble());
         dismiss.call();
       },
@@ -50,13 +50,13 @@ class AnswerRightCon extends GetxController{
   }
 
   _clickSingleResult(double addNum,Function() dismiss){
-    back();
+    QpRouters.back();
     BSql.instance.updateUserMoney(addNum);
     dismiss.call();
   }
 
   clickClose(Function() dismiss){
-    back();
+    QpRouters.back();
     dismiss.call();
   }
 }

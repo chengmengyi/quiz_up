@@ -41,7 +41,7 @@ class AWheelCon extends GetxController{
     update(["type"]);
     await Future.delayed(Duration(milliseconds: 800));
     _wheelTimer=null;
-    toNamed(routersName: QpRouName.aQuestion,arguments: {"type":type});
+    QpRouters.toNamed(routersName: QpRouName.aQuestion,arguments: {"type":type});
     // toNamed(routersName: QpRouName.aQuestion,arguments: {"type":QuestionType.history});
   }
 
@@ -71,11 +71,11 @@ class AWheelCon extends GetxController{
     if(null!=_wheelTimer){
       return;
     }
-    back();
+    QpRouters.back();
   }
 
   _initTypeList(){
-    var index = getArguments()["index"];
+    var index = QpRouters.getArguments()["index"];
     switch(index){
       case 0:
         typeList.add(QuestionType.math);

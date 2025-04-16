@@ -26,7 +26,7 @@ class BoxCon extends GetxController{
       adType: AdType.reward,
       adPointId: AdPointId.kwrap_box_rv,
       closeAd: (){
-        back();
+        QpRouters.back();
         BSql.instance.updateUserMoney((Decimal.parse("$addNum")*Decimal.fromInt(2)).toDouble());
         ProgressUtils.instance.receiveBoxOrWheel(index);
       },
@@ -52,7 +52,7 @@ class BoxCon extends GetxController{
   }
 
   _clickSingleResult(index){
-    back();
+    QpRouters.back();
     BSql.instance.updateUserMoney(addNum);
     ProgressUtils.instance.receiveBoxOrWheel(index);
   }

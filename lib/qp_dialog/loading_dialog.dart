@@ -11,7 +11,7 @@ class LoadingDialog extends StatelessWidget{
   Widget build(BuildContext context) {
     if(!init){
       Future.delayed(Duration(milliseconds: 5000),(){
-        back();
+        QpRouters.back();
         dismiss.call();
       });
       init=true;

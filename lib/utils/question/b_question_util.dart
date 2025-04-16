@@ -63,13 +63,13 @@ class BQuestionUtil{
     var quizNum = getTodayNum(todayAnswerQuizNum.get())+1;
     todayAnswerQuizNum.save("${getTodayTime()}_$quizNum");
     if(!alreadyShowComment.get()&&(quizNum==3||quizNum==5)){
-      showDialog(
+      QpRouters.showDialog(
           widget: CommentDialog(
             dismiss: (stars){
               alreadyShowComment.save(true);
               BSql.instance.updateUserMoney(5.0);
               if(stars<=2){
-                showDialog(widget: CommentSuccessDialog());
+                QpRouters.showDialog(widget: CommentSuccessDialog());
               }else{
                 _showSystemDialog();
               }

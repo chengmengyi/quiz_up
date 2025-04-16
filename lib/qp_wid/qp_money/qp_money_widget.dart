@@ -47,7 +47,7 @@ class QpMoneyWidget extends StatelessWidget{
               SizedBox(width: 10.w,),
               InkWell(
                 onTap: (){
-                  toNamed(routersName: QpRouName.bCash);
+                  QpRouters.toNamed(routersName: QpRouName.bCash);
                 },
                 child: Stack(
                   alignment: Alignment.center,

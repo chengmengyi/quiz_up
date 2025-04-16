@@ -10,12 +10,12 @@ class AAnswerFailCon extends GetxController{
   }
 
   clickAgain(Function(bool again) dismiss){
-    back();
+    QpRouters.back();
     dismiss.call(true);
   }
 
   clickContinue(Function(bool again) dismiss){
-    back();
+    QpRouters.back();
     dismiss.call(false);
   }
 }

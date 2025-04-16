@@ -55,7 +55,7 @@ class CheckUserUtils{
     if(!launchShow&&!bQuizShow){
       checkResult();
       if(isB){
-        offNamed(routersName: QpRouName.bQuiz);
+        QpRouters.offNamed(routersName: QpRouName.bQuiz);
       }
     }
   }

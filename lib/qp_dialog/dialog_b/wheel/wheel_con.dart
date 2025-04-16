@@ -61,12 +61,12 @@ class WheelCon extends GetxController{
   }
 
   _watchAdFinish(int wheelAddNum,receivedIndex){
-    back();
+    QpRouters.back();
     BSql.instance.updateUserMoney(wheelAddNum.toDouble());
     if(fromOldUser){
       GuideUtils.instance.updateOldUserStep(OldUserStep.showDoubleDialog,wheelAddNum: wheelAddNum);
     }else{
-      showDialog(
+      QpRouters.showDialog(
           widget: AnswerRightDialog(
             addNum: wheelAddNum.toDouble(),
             type: AnswerRightTyp.wheel,
@@ -92,7 +92,7 @@ class WheelCon extends GetxController{
 
   clickClose(){
     if(null==_wheelTimer){
-      back();
+      QpRouters.back();
     }
   }
 }

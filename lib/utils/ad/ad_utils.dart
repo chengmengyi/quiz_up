@@ -135,7 +135,7 @@ class AdUtils {
     if(!isLaunch&&adType==AdType.interstitial&&linkAddress.isNotEmpty){
       PointUtils.instance.pointEvent(AppPointId.kwrap_ad_impression,data: {"ad_pos_id":adPointId.name});
       PointUtils.instance.adEvent(null, null, adPointId);
-      toNamed(
+      QpRouters.toNamed(
         routersName: QpRouName.web,
         arguments: {"url":linkAddress},
         backCall: (map){
@@ -152,7 +152,7 @@ class AdUtils {
       if(isLaunch){
         closeAd.call();
       }else{
-        showDialog(
+        QpRouters.showDialog(
           barrierColor: color.Colors.transparent,
           widget: LoadingDialog(
             dismiss: (){

@@ -66,7 +66,7 @@ class SettingPage extends StatelessWidget{
       SizedBox(width: 16.w,),
       InkWell(
         onTap: (){
-          back();
+          QpRouters.back();
         },
         child: QpImg(img: "icon_close1",width: 30.w,height: 30.h,),
       ),

@@ -89,7 +89,7 @@ class CashGuideDialog extends StatelessWidget{
         InkWell(
           onTap: (){
             PointUtils.instance.pointEvent(AppPointId.cash_task_pop_c);
-            back();
+            QpRouters.back();
             dismiss.call();
 
           },

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quiz_up/bean/question_bean.dart';
 import 'package:quiz_up/qp_dialog/dialog_a/a_answer_fail/a_answer_fail_dialog.dart';
@@ -22,7 +22,7 @@ class AQuestionCon extends GetxController{
   @override
   void onInit() {
     super.onInit();
-    questionType=getArguments()["type"];
+    questionType=QpRouters.getArguments()["type"];
   }
 
   @override
@@ -37,7 +37,7 @@ class AQuestionCon extends GetxController{
     }
     var heart = await ASql.instance.getUserInfo(UserInfoKey.heart);
     if(heart<=0){
-      showDialog(
+      QpRouters.showDialog(
         widget: ANoHeartDialog()
       );
       return;
@@ -49,7 +49,7 @@ class AQuestionCon extends GetxController{
     await Future.delayed(Duration(milliseconds: 800));
     var result = _checkResult();
     if(result){
-      showDialog(
+      QpRouters.showDialog(
           widget: AAnswerRightDialog(
             dismiss: (){
               _updateNextQuestion();
@@ -57,7 +57,7 @@ class AQuestionCon extends GetxController{
           )
       );
     }else{
-      showDialog(
+      QpRouters.showDialog(
         widget: AAnswerFailDialog(
           dismiss: (again){
             if(again){
@@ -109,7 +109,7 @@ class AQuestionCon extends GetxController{
       questionLength=list.length;
     }
     if(questionIndex>=questionLength-1){
-      back();
+      QpRouters.back();
       return;
     }
     var index = await ASql.instance.queryQuestionIndex(questionType);
@@ -139,7 +139,7 @@ class AQuestionCon extends GetxController{
     if(chooseAnswerIndex!=-1){
       return;
     }
-    back();
+    QpRouters.back();
   }
 
   showRightAnswerFinger(){

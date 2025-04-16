@@ -45,14 +45,14 @@ class QpLaunchCon extends GetxController with GetSingleTickerProviderStateMixin{
         adPointId: AdPointId.kwrap_launch,
         isLaunch: true,
         closeAd: (){
-          offNamed(routersName: QpRouName.bQuiz);
+          QpRouters.offNamed(routersName: QpRouName.bQuiz);
         },
         failAd: (){
-          offNamed(routersName: QpRouName.bQuiz);
+          QpRouters.offNamed(routersName: QpRouName.bQuiz);
         },
       );
     }else{
-      offNamed(routersName: QpRouName.aHome);
+      QpRouters.offNamed(routersName: QpRouName.aHome);
     }
   }
 

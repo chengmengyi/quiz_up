@@ -2,14 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:quiz_up/bean/cash_amount_bean.dart';
 import 'package:quiz_up/bean/cash_type_bean.dart';
-import 'package:quiz_up/qp_dialog/dialog_b/cash_guide/cash_guide_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/cash_rank/cash_rank_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/cash_two_step/cash_two_step_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/input_account/input_account_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/no_money/no_money_dialog.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/utils/cash_task/cash_task_utils.dart';
-import 'package:quiz_up/utils/cash_task/task_status.dart';
 import 'package:quiz_up/utils/cash_task/task_type.dart';
 import 'package:quiz_up/utils/event/event_code.dart';
 import 'package:quiz_up/utils/event/event_listener.dart';
@@ -19,7 +17,6 @@ import 'package:quiz_up/utils/point/app_point_id.dart';
 import 'package:quiz_up/utils/point/point_utils.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
 import 'package:quiz_up/utils/storage/storage_event.dart';
-import 'package:quiz_up/utils/utils.dart';
 
 class BCashCon extends GetxController implements EventListener{
   var cashIndex=0;
@@ -56,10 +53,10 @@ class BCashCon extends GetxController implements EventListener{
     if(null!=amountBean.cashTaskBean){
       switch(amountBean.cashTaskBean?.taskStep){
         case NewTaskStep.quiz15:
-          showDialog(widget: CashTwoStepDialog(cashNum: amountBean.totalMoney, cashType: cashIndex));
+          QpRouters.showDialog(widget: CashTwoStepDialog(cashNum: amountBean.totalMoney, cashType: cashIndex));
           break;
         case NewTaskStep.rank:
-          showDialog(widget: CashRankDialog(cashNum: amountBean.totalMoney, cashType: cashIndex));
+          QpRouters.showDialog(widget: CashRankDialog(cashNum: amountBean.totalMoney, cashType: cashIndex));
           break;
       }
       // if(amountBean.cashTaskBean?.taskStatus==TaskStatus.completed){
@@ -82,7 +79,7 @@ class BCashCon extends GetxController implements EventListener{
     var money = BSql.instance.bUserInfo?.money??0;
     var totalMoney = amountBean.totalMoney;
     if(money<totalMoney){
-      showDialog(widget: NoMoneyDialog());
+      QpRouters.showDialog(widget: NoMoneyDialog());
       return;
     }
     var account = await BSql.instance.queryCashAccount(cashIndex);
@@ -92,7 +89,7 @@ class BCashCon extends GetxController implements EventListener{
       _initAmountList();
       return;
     }
-    showDialog(
+    QpRouters.showDialog(
       widget: InputAccountDialog(
         cashNum: totalMoney,
         dismiss: (account)async{
@@ -205,7 +202,7 @@ class BCashCon extends GetxController implements EventListener{
 
   clickClose(){
     PointUtils.instance.pointEvent(AppPointId.quiz_page);
-    back(result: {});
+    QpRouters.back(result: {});
   }
 
   test(){

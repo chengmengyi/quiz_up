@@ -8,7 +8,7 @@ class QpWWWWWCon extends GetxController{
   @override
   void onInit() {
     super.onInit();
-    var url = getArguments()["url"];
+    var url = QpRouters.getArguments()["url"];
     webViewController=WebViewController()..loadRequest(Uri.parse(url));
   }
 }

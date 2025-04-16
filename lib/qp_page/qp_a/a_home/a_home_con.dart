@@ -46,7 +46,7 @@ class AHomeCon extends GetxController implements EventListener{
       );
       return;
     }
-    toNamed(routersName: QpRouName.aWheel,arguments: {"index":index});
+    QpRouters.toNamed(routersName: QpRouName.aWheel,arguments: {"index":index});
   }
 
   @override

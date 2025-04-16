@@ -59,7 +59,7 @@ class AHomePa extends StatelessWidget{
       Spacer(),
       InkWell(
         onTap: (){
-          toNamed(routersName: QpRouName.setting);
+          QpRouters.toNamed(routersName: QpRouName.setting);
         },
         child: QpImg(img: "icon_set",width: 48.w,height: 48.h,),
       ),

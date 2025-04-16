@@ -27,7 +27,7 @@ class OldUserSignCon extends GetxController{
       adType: AdType.reward,
       adPointId: AdPointId.kwrap_olduser_signin_rv,
       closeAd: (){
-        back();
+        QpRouters.back();
         var money=Decimal.parse("$signAddNum")*Decimal.fromInt(2);
         BSql.instance.updateUserMoney(money.toDouble());
         GuideUtils.instance.updateOldUserStep(OldUserStep.completed);
@@ -52,13 +52,13 @@ class OldUserSignCon extends GetxController{
   }
 
   _clickSingleResult(){
-    back();
+    QpRouters.back();
     BSql.instance.updateUserMoney(signAddNum);
     GuideUtils.instance.updateOldUserStep(OldUserStep.completed);
   }
 
   clickClose(){
-    back();
+    QpRouters.back();
     GuideUtils.instance.updateOldUserStep(OldUserStep.completed);
   }
 }

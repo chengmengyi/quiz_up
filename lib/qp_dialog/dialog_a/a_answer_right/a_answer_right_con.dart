@@ -15,7 +15,7 @@ class AAnswerRightCon extends GetxController{
 
   clickReward(Function() dismiss){
     ASql.instance.updateUserInfo(UserInfoKey.coin,addReward);
-    back();
+    QpRouters.back();
     dismiss.call();
   }
 }

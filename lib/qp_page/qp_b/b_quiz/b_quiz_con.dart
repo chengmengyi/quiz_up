@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as ma;
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:quiz_up/bean/progress_bean.dart';
@@ -105,7 +105,7 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
     var result = _checkResult();
     PointUtils.instance.pointEvent(result?AppPointId.answer_true:AppPointId.answer_wrong);
     if(result){
-      showDialog(
+      QpRouters.showDialog(
           widget: AnswerRightDialog(
             addNum: ValueUtils.instance.getQuizAddNum(),
             type: AnswerRightTyp.quiz,
@@ -139,7 +139,7 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
           offset: offset,
           dismiss: (){
             PointUtils.instance.pointEvent(AppPointId.box_guide_c);
-            showDialog(
+            QpRouters.showDialog(
               widget: BoxDialog(index: 1),
             );
           },
@@ -157,7 +157,7 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
           offset: offset,
           dismiss: (){
             PointUtils.instance.pointEvent(AppPointId.wheel_guide_c);
-            showDialog(
+            QpRouters.showDialog(
               widget: WheelDialog(wheelFrom: WheelFrom.guide,autoWheel: false,receivedIndex: 9,),
             );
           },
@@ -264,7 +264,7 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
         break;
       case EventCode.newUserStepTwo:
         _endTimer();
-        showDialog(
+        QpRouters.showDialog(
           widget: NewUserDialog(
             dismiss: (){
               GuideUtils.instance.updateNewUserStep(NewUserStep.toCashPage);
@@ -286,7 +286,7 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
         moneyLottieController..reset()..forward();
         break;
       case EventCode.newUserGuideToCashPage:
-        toNamed(
+        QpRouters.toNamed(
             routersName: QpRouName.bCash,
             arguments: {"fromNewUser":true},
             backCall: (result){

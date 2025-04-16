@@ -6,6 +6,7 @@ import 'package:quiz_up/qp_page/qp_a/a_question/a_question_page.dart';
 import 'package:quiz_up/qp_page/qp_a/a_wheel/a_wheel_page.dart';
 import 'package:quiz_up/qp_page/qp_b/b_cash/b_cash_page.dart';
 import 'package:quiz_up/qp_page/qp_b/b_quiz/b_quiz_page.dart';
+import 'package:quiz_up/qp_page/qp_b/test.dart';
 import 'package:quiz_up/qp_page/qp_wwwwbbbb/privacy_page.dart';
 import 'package:quiz_up/qp_page/setting/setting_page.dart';
 import 'package:quiz_up/qp_rou/qp_rou_name.dart';
@@ -51,42 +52,86 @@ final pageList=[
       page: ()=> BCashPage(),
       transition: Transition.fadeIn
   ),
+  GetPage(
+      name: "/test",
+      page: ()=> Test(),
+      transition: Transition.fadeIn
+  ),
 ];
 
+class QpRouters{
 
-toNamed({required String routersName,Map<String, dynamic>? arguments,Function(Map<String,dynamic>)? backCall})async{
-  var result=await Get.toNamed(routersName,arguments: arguments);
-  if(null!=result&&null!=backCall){
-    backCall.call(result);
+  static toNamed({required String routersName,Map<String, dynamic>? arguments,Function(Map<String,dynamic>)? backCall})async{
+    var result=await Get.toNamed(routersName,arguments: arguments);
+    if(null!=result&&null!=backCall){
+      backCall.call(result);
+    }
+  }
+
+  static offNamed({required String routersName,Map<String, dynamic>? arguments}){
+    Get.offNamed(routersName,arguments: arguments);
+  }
+
+  static offAllUntilHome(){
+    Get.until((route)=>route.settings.name==QpRouName.bQuiz);
+  }
+
+  static back({Map<String, dynamic>? result}){
+    Get.back(result: result);
+  }
+
+  static Map<String, dynamic> getArguments() {
+    try {
+      return Get.arguments as Map<String, dynamic>;
+    } catch (e) {
+      return {};
+    }
+  }
+
+  static showDialog({required Widget widget,bool useSafeArea=true,Color? barrierColor}){
+    Get.dialog(
+      widget,
+      useSafeArea: useSafeArea,
+      // arguments: arguments,
+      barrierColor: barrierColor,
+      barrierDismissible: false,
+    );
   }
 }
 
-offNamed({required String routersName,Map<String, dynamic>? arguments}){
-  Get.offNamed(routersName,arguments: arguments);
-}
-
-offAllUntilHome(){
-  Get.until((route)=>route.settings.name==QpRouName.bQuiz);
-}
-
-back({Map<String, dynamic>? result}){
-  Get.back(result: result);
-}
-
-Map<String, dynamic> getArguments() {
-  try {
-    return Get.arguments as Map<String, dynamic>;
-  } catch (e) {
-    return {};
-  }
-}
-
-showDialog({required Widget widget,bool useSafeArea=true,Color? barrierColor}){
-  Get.dialog(
-    widget,
-    useSafeArea: useSafeArea,
-    // arguments: arguments,
-    barrierColor: barrierColor,
-    barrierDismissible: false,
-  );
-}
+// toNamed({required String routersName,Map<String, dynamic>? arguments,Function(Map<String,dynamic>)? backCall})async{
+//   var result=await Get.toNamed(routersName,arguments: arguments);
+//   if(null!=result&&null!=backCall){
+//     backCall.call(result);
+//   }
+// }
+//
+// offNamed({required String routersName,Map<String, dynamic>? arguments}){
+//   Get.offNamed(routersName,arguments: arguments);
+// }
+//
+// offAllUntilHome(){
+//   Get.until((route)=>route.settings.name==QpRouName.bQuiz);
+// }
+//
+// back({Map<String, dynamic>? result}){
+//   Get.back(result: result);
+// }
+//
+// Map<String, dynamic> getArguments() {
+//   try {
+//     return Get.arguments as Map<String, dynamic>;
+//   } catch (e) {
+//     return {};
+//   }
+// }
+//
+// showDialog({required Widget widget,bool useSafeArea=true,Color? barrierColor}){
+//   Get.dialog(
+//     widget,
+//     useSafeArea: useSafeArea,
+//     // arguments: arguments,
+//     barrierColor: barrierColor,
+//     barrierDismissible: false,
+//   );
+// }

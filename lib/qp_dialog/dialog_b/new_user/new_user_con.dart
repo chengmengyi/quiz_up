@@ -16,7 +16,7 @@ class NewUserCon extends GetxController{
   clickCash(Function() dismiss){
     PointUtils.instance.pointEvent(AppPointId.quiz_guide_cash_pop_c);
     BSql.instance.updateUserMoney(ValueUtils.instance.getNewUserAdd().toDouble());
-    back();
+    QpRouters.back();
     dismiss.call();
   }
 }

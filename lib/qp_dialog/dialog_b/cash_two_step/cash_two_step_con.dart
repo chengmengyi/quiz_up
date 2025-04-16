@@ -20,7 +20,7 @@ class CashTwoStepCon extends GetxController{
   }
 
   clickBtn(){
-    offAllUntilHome();
+    QpRouters.offAllUntilHome();
   }
 
   String getProStr()=>"${cashTaskBean?.currentPro??0}/${cashTaskBean?.totalPro??15}";

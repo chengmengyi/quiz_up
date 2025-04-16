@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/cash_two_step/cash_two_step_dialog.dart';
-import 'package:quiz_up/qp_rou/qp_page_list.dart' as routers;
+import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/utils/cash_task/cash_task_utils.dart';
 import 'package:quiz_up/utils/event/event_code.dart';
 import 'package:quiz_up/utils/event/send_event.dart';
@@ -39,8 +39,8 @@ class InputAccountCon extends GetxController{
     await CashTaskUtils.instance.createCashTask(chooseIndex, cashNum, s);
     BSql.instance.updateUserMoney((-cashNum).toDouble());
     SendEvent(code: EventCode.updateCashList).send();
-    routers.back();
-    routers.showDialog(
+    QpRouters.back();
+    QpRouters.showDialog(
       widget: CashTwoStepDialog(
         cashNum: cashNum,
         cashType: chooseIndex,

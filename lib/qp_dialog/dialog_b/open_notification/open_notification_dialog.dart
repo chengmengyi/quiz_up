@@ -30,7 +30,7 @@ class OpenNotificationDialog extends StatelessWidget{
               SizedBox(height: 10.h,),
               InkWell(
                 onTap: (){
-                  back();
+                  QpRouters.back();
                   AppSettings.openAppSettings(type: AppSettingsType.notification);
                 },
                 child: Container(

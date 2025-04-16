@@ -29,7 +29,7 @@ class CommentSuccessDialog extends StatelessWidget{
           right: 25.w,
           child: InkWell(
             onTap: (){
-              back();
+              QpRouters.back();
             },
             child: QpImg(img: "icon_close3",width: 38.w,height: 38.h,),
           ),
@@ -44,7 +44,7 @@ class CommentSuccessDialog extends StatelessWidget{
               SizedBox(height: 8.h,),
               InkWell(
                 onTap: (){
-                  back();
+                  QpRouters.back();
                 },
                 child: Stack(
                   alignment: Alignment.center,

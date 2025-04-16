@@ -14,12 +14,12 @@ class OldUserCon extends GetxController{
 
   clickSpin(){
     PointUtils.instance.pointEvent(AppPointId.old_user_pop_c);
-    back();
+    QpRouters.back();
     GuideUtils.instance.updateOldUserStep(OldUserStep.showWheelDialog);
   }
 
   clickClose(){
-    back();
+    QpRouters.back();
     GuideUtils.instance.updateOldUserStep(OldUserStep.showSignDialog);
   }
 }

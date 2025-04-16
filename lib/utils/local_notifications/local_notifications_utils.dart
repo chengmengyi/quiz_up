@@ -95,7 +95,7 @@ class LocalNotificationsUtils {
     var plugin = flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
     var options = await plugin?.checkPermissions();
     if(options?.isEnabled!=true){
-      showDialog(widget: OpenNotificationDialog());
+      QpRouters.showDialog(widget: OpenNotificationDialog());
     }else{
       PointUtils.instance.pointEvent(AppPointId.push_status);
     }

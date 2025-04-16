@@ -26,7 +26,7 @@ class OldUserDoubleCon extends GetxController{
       adType: AdType.reward,
       adPointId: AdPointId.kwrap_olduser_wheel_rv,
       closeAd: (){
-        back();
+        QpRouters.back();
         var money=(Decimal.parse("$wheelAddNum")+Decimal.parse("$signAddNum"))*Decimal.fromInt(2);
         BSql.instance.updateUserMoney(money.toDouble());
         GuideUtils.instance.updateOldUserStep(OldUserStep.completed);
@@ -51,14 +51,14 @@ class OldUserDoubleCon extends GetxController{
   }
 
   _clickSingleResult(){
-    back();
+    QpRouters.back();
     var money=Decimal.parse("$wheelAddNum")+Decimal.parse("$signAddNum");
     BSql.instance.updateUserMoney(money.toDouble());
     GuideUtils.instance.updateOldUserStep(OldUserStep.completed);
   }
 
   clickClose(){
-    back();
+    QpRouters.back();
     GuideUtils.instance.updateOldUserStep(OldUserStep.completed);
   }
 }

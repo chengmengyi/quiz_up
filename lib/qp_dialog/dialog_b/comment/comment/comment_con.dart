@@ -8,7 +8,7 @@ class CommentCon extends GetxController{
     if(!canClick){
       return;
     }
-    back();
+    QpRouters.back();
   }
 
   clickStar(index,Function(int stars) dismiss)async{
@@ -19,7 +19,7 @@ class CommentCon extends GetxController{
     chooseIndex=index;
     update(["list"]);
     await Future.delayed(Duration(milliseconds: 800));
-    back();
+    QpRouters.back();
     dismiss.call(index);
   }
 }

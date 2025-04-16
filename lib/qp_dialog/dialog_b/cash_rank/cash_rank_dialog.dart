@@ -52,7 +52,7 @@ class CashRankDialog extends StatelessWidget{
           right: 0,
           child: InkWell(
             onTap: (){
-              back();
+              QpRouters.back();
             },
             child: QpImg(img: "icon_close3",width: 38.w,height: 38.h,),
           ),

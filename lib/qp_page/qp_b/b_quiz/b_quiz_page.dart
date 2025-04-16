@@ -65,7 +65,7 @@ class BQuizPage extends StatelessWidget{
       _earnWidget(),
       InkWell(
         onTap: (){
-          toNamed(routersName: QpRouName.setting);
+          QpRouters.toNamed(routersName: QpRouName.setting);
         },
         child: QpImg(img: "icon_set",width: 47.w,height: 47.h,),
       ),
@@ -657,7 +657,7 @@ class BQuizPage extends StatelessWidget{
       ),
       InkWell(
         onTap: (){
-          toNamed(routersName: QpRouName.bCash);
+          QpRouters.toNamed(routersName: QpRouName.bCash);
         },
         child: QpImg(img: "icon_cash",width: 76.w,height: 76.h,),
       ),

@@ -8,10 +8,10 @@ class SettingCon extends GetxController{
   clickItem(text)async{
     switch(text){
       case "Privacy Policy":
-        toNamed(routersName: QpRouName.web,arguments: {"url":privacy});
+        QpRouters.toNamed(routersName: QpRouName.web,arguments: {"url":privacy});
         break;
       case "Term Of User":
-        toNamed(routersName: QpRouName.web,arguments: {"url":term});
+        QpRouters.toNamed(routersName: QpRouName.web,arguments: {"url":term});
         break;
       case "Contact Us":
         var uri = Uri(scheme: "mailto",path: email);
