@@ -21,6 +21,7 @@ class InputAccountCon extends GetxController{
     super.onInit();
     PointUtils.instance.pointEvent(AppPointId.cash_confirm_pop);
   }
+
   clickCashType(index){
     if(chooseIndex==index){
       return;
@@ -36,7 +37,10 @@ class InputAccountCon extends GetxController{
       showToast("Please input your account");
     }
 
-    await CashTaskUtils.instance.createCashTask(chooseIndex, cashNum, s);
+    var success = await CashTaskUtils.instance.createCashTask(chooseIndex, cashNum, s);
+    if(!success){
+      return;
+    }
     BSql.instance.updateUserMoney((-cashNum).toDouble());
     SendEvent(code: EventCode.updateCashList).send();
     QpRouters.back();

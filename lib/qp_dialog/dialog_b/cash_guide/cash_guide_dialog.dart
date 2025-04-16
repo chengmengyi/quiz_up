@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:quiz_up/bean/cash_amount_bean.dart';
+import 'package:quiz_up/bean/new_cash_task_bean.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/cash_guide/cash_guide_con.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_wid/qp_img.dart';
@@ -14,11 +15,11 @@ class CashGuideDialog extends StatelessWidget{
   bool init=false;
   late CashGuideCon cashGuideCon;
 
-  CashAmountBean cashAmountBean;
-  Function() dismiss;
+  int cashNum;
+  int cashType;
   CashGuideDialog({
-    required this.cashAmountBean,
-    required this.dismiss,
+    required this.cashNum,
+    required this.cashType,
   });
 
 
@@ -26,7 +27,8 @@ class CashGuideDialog extends StatelessWidget{
   Widget build(BuildContext context){
     if(!init){
       cashGuideCon=Get.put(CashGuideCon());
-      // PointUtils.instance.pointEvent(AppPointId.cash_task_pop,data: {"task_from":cashAmountBean.cashTaskBean?.taskType});
+      cashGuideCon.cashNum=cashNum;
+      cashGuideCon.cashType=cashType;
       init=true;
     }
     return WillPopScope(
@@ -57,8 +59,8 @@ class CashGuideDialog extends StatelessWidget{
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        QpText(text: "just one step away\nfrom cash withdrawal", size: 16.sp, color: "#000000",textAlign: TextAlign.center,),
-        QpText(text: "\$${cashAmountBean.totalMoney??0}", size: 20.sp, color: "#009220"),
+        QpText(text: "Just one step away\nfrom cash withdrawal", size: 16.sp, color: "#000000",textAlign: TextAlign.center,fontWeight: FontWeight.bold,),
+        QpText(text: "\$$cashNum", size: 20.sp, color: "#009220",fontWeight: FontWeight.bold),
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -69,29 +71,30 @@ class CashGuideDialog extends StatelessWidget{
               colors: ["#CCECFF".toColor(),"#E7F6FF".toColor()]
             )
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 8.h,),
-              QpImg(img: cashGuideCon.getTaskIcon(cashAmountBean.cashTaskBean),width: 84.w,height: 84.w,),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  QpText(text: cashGuideCon.getTaskLeftStr(cashAmountBean.cashTaskBean), size: 14.sp, color: "#084B7B"),
-                  QpText(text: "${(cashAmountBean.cashTaskBean?.currentPro??0)}/${(cashAmountBean.cashTaskBean?.totalPro??0)}", size: 14.sp, color: "#FB3600")
-                ],
-              ),
-              SizedBox(height: 8.h,),
-            ],
+          child: GetBuilder<CashGuideCon>(
+            id: "content",
+            builder: (_)=>Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 8.h,),
+                QpImg(img: cashGuideCon.getTaskIcon(),width: 84.w,height: 84.w,),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    QpText(text: cashGuideCon.getTaskLeftStr(), size: 14.sp, color: "#084B7B"),
+                    QpText(text: cashGuideCon.getProStr(), size: 14.sp, color: "#FB3600")
+                  ],
+                ),
+                SizedBox(height: 8.h,),
+              ],
+            ),
           ),
         ),
         SizedBox(height: 25.h,),
         InkWell(
           onTap: (){
             PointUtils.instance.pointEvent(AppPointId.cash_task_pop_c);
-            QpRouters.back();
-            dismiss.call();
-
+            QpRouters.offAllUntilHome();
           },
           child: Container(
             width: double.infinity,

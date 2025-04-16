@@ -77,6 +77,26 @@ class ValueUtils{
     return false;
   }
 
+  bool checkShowRewardNextIntAd(){
+    if(kDebugMode){
+      return false;
+    }
+    var list = _valueBean?.intPopAd??[];
+    if(list.isEmpty){
+      return false;
+    }
+    var answerNum = BSql.instance.bUserInfo?.answerNum??0;
+    if(answerNum>=(list.last.endNumber??0)){
+      return Random().nextInt(100)<(list.last.point??0);
+    }
+    for (var value in list) {
+      if(answerNum>=(value.firstNumber??0)&&answerNum<(value.endNumber??0)){
+        return Random().nextInt(100)<(value.point??0);
+      }
+    }
+    return false;
+  }
+
   TixianTask getCashTask(int index){
     try{
       return (_valueBean?.tixianTask??[])[index];
@@ -150,7 +170,14 @@ class ValueUtils{
     }
   }
 
+  QueueAll? getQueueAll()=>_valueBean?.queueAll;
+
+  QueueCurrent? getQueueCurrent()=>_valueBean?.queueCurrent;
+
   String _getValueStr(){
+    if(kDebugMode){
+      return localValueStr.base64();
+    }
     var s = valueConfig.get();
     if(s.isEmpty){
       return localValueStr.base64();

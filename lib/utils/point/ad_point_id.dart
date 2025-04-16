@@ -13,4 +13,6 @@ enum AdPointId{
   kwrap_wheelspin_int,
   kwrap_wheel_rv,
   kwrap_wheel_int,
+  kwrap_task_rv,
+  kwrap_reward_next_int,
 }

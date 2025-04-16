@@ -1,23 +1,35 @@
 class ValueBean {
   ValueBean({
-      this.eqRange, 
-      this.newPrize, 
-      this.intadPoint, 
-      this.rvadPoint, 
-      this.quizPrize, 
-      this.floatPrize, 
-      this.boxPrize, 
-      this.wheel, 
-      this.tixianTask, 
-      this.checkPrize,});
+    this.eqRange,
+    this.newPrize,
+    this.intadPoint,
+    this.intPopAd,
+    this.rvadPoint,
+    this.quizPrize,
+    this.floatPrize,
+    this.boxPrize,
+    this.wheel,
+    this.tixianTask,
+    this.checkPrize,
+    this.queueAll,
+    this.queueCurrent,
+  });
 
   ValueBean.fromJson(dynamic json) {
     eqRange = json['eq_range'] != null ? json['eq_range'].cast<int>() : [];
     newPrize = json['new_prize'];
+    queueAll = json['queue_all'] != null ? QueueAll.fromJson(json['queue_all']) : null;
+    queueCurrent = json['queue_current'] != null ? QueueCurrent.fromJson(json['queue_current']) : null;
     if (json['intad_point'] != null) {
       intadPoint = [];
       json['intad_point'].forEach((v) {
         intadPoint?.add(IntadPoint.fromJson(v));
+      });
+    }
+    if (json['int_pop_ad'] != null) {
+      intPopAd = [];
+      json['int_pop_ad'].forEach((v) {
+        intPopAd?.add(IntadPoint.fromJson(v));
       });
     }
     if (json['rvad_point'] != null) {
@@ -61,6 +73,7 @@ class ValueBean {
   List<int>? eqRange;
   int? newPrize;
   List<IntadPoint>? intadPoint;
+  List<IntadPoint>? intPopAd;
   List<IntadPoint>? rvadPoint;
   List<QuizPrize>? quizPrize;
   List<QuizPrize>? floatPrize;
@@ -68,14 +81,27 @@ class ValueBean {
   Wheel? wheel;
   List<TixianTask>? tixianTask;
   List<QuizPrize>? checkPrize;
+  QueueAll? queueAll;
+  QueueCurrent? queueCurrent;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['eq_range'] = eqRange;
     map['new_prize'] = newPrize;
+    if (queueAll != null) {
+      map['queue_all'] = queueAll?.toJson();
+    }
+    if (queueCurrent != null) {
+      map['queue_current'] = queueCurrent?.toJson();
+    }
     if (intadPoint != null) {
       map['intad_point'] = intadPoint?.map((v) => v.toJson()).toList();
     }
+
+    if (intPopAd != null) {
+      map['int_pop_ad'] = intPopAd?.map((v) => v.toJson()).toList();
+    }
+
     if (rvadPoint != null) {
       map['rvad_point'] = rvadPoint?.map((v) => v.toJson()).toList();
     }
@@ -97,6 +123,49 @@ class ValueBean {
     if (checkPrize != null) {
       map['check_prize'] = checkPrize?.map((v) => v.toJson()).toList();
     }
+    return map;
+  }
+
+}
+
+
+class QueueCurrent {
+  QueueCurrent({
+    this.intCurrent,
+    this.intCurrentDelete,});
+
+  QueueCurrent.fromJson(dynamic json) {
+    intCurrent = json['int_current'];
+    intCurrentDelete = json['int_current_delete'] != null ? json['int_current_delete'].cast<int>() : [];
+  }
+  int? intCurrent;
+  List<int>? intCurrentDelete;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['int_current'] = intCurrent;
+    map['int_current_delete'] = intCurrentDelete;
+    return map;
+  }
+
+}
+
+class QueueAll {
+  QueueAll({
+    this.intAll,
+    this.intAllDelete,});
+
+  QueueAll.fromJson(dynamic json) {
+    intAll = json['int_all'];
+    intAllDelete = json['int_all_delete'] != null ? json['int_all_delete'].cast<int>() : [];
+  }
+  int? intAll;
+  List<int>? intAllDelete;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['int_all'] = intAll;
+    map['int_all_delete'] = intAllDelete;
     return map;
   }
 

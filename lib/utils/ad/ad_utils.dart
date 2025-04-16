@@ -171,6 +171,45 @@ class AdUtils {
     _hasCacheShowAd(adType: adType, adPointId: adPointId, closeAd: closeAd, failAd: failAd);
   }
 
+  showTaskAd({required Function() closeAd,}){
+    var adType=AdType.reward;
+    var adPointId=AdPointId.kwrap_task_rv;
+    var resultBean = _getCacheResultBean(adType);
+    if(null==resultBean){
+      _loadAd(AdType.reward);
+      _loadAd(AdType.interstitial);
+      QpRouters.showDialog(
+        barrierColor: color.Colors.transparent,
+        widget: LoadingDialog(
+          dismiss: (){
+            if(null==_getCacheResultBean(adType)){
+              showToast("Advertisement display failed,please try again later");
+            }else{
+              _hasCacheShowAd(adType: adType, adPointId: adPointId, closeAd: closeAd, failAd: (){});
+            }
+          },
+        ),
+      );
+      return;
+    }
+
+    _hasCacheShowAd(adType: adType, adPointId: adPointId, closeAd: closeAd, failAd: (){});
+  }
+
+  showRewardNextIntAd({required Function() closeAd,}){
+    var adType=AdType.interstitial;
+    var adPointId=AdPointId.kwrap_reward_next_int;
+    var resultBean = _getCacheResultBean(adType);
+    if(null==resultBean){
+      _loadAd(AdType.reward);
+      _loadAd(AdType.interstitial);
+      closeAd.call();
+      return;
+    }
+
+    _hasCacheShowAd(adType: adType, adPointId: adPointId, closeAd: closeAd, failAd: (){closeAd.call();});
+  }
+
   _hasCacheShowAd({
     required String adType,
     required AdPointId adPointId,

@@ -91,93 +91,104 @@ class CashRankDialog extends StatelessWidget{
   );
 
   _rankWidget()=>Expanded(
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        RichText(
-          text: TextSpan(
-              children: [
-                TextSpan(
-                    text: "288",
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: "#FF3333".toColor(),
-                      fontWeight: FontWeight.bold,
-                    )
-                ),
-                TextSpan(
-                    text: " in queue,Your Current rank:",
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: "#000000".toColor(),
-                      fontWeight: FontWeight.bold,
-                    )
-                ),
-                TextSpan(
-                    text: "22",
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: "#FF3333".toColor(),
-                      fontWeight: FontWeight.bold,
-                    )
-                ),
-              ]
-          ),
-        ),
-        Expanded(
-          child: Container(
-            margin: EdgeInsets.only(left: 22.w,right: 22.w,top: 10.h,bottom: 10.h),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(18.w),
-              child: Stack(
+    child: GetBuilder<CashRankCon>(
+      id: "rank",
+      builder: (_)=>Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          RichText(
+            text: TextSpan(
                 children: [
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18.w),
-                        border: Border.all(
-                          width: 1.w,
-                          color: "#33ACE7".toColor(),
-                        )
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        height: 38.h,
-                        color: "#C6EEFF".toColor(),
-                        child: Row(
-                          children: [
-                            _rankTitleItemWidget("Rank"),
-                            _rankTitleItemWidget("Account"),
-                            _rankTitleItemWidget("Amount"),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: 100,
-                          itemBuilder: (context,index){
-                            return Container(
-                              width: double.infinity,
-                              height: 38.h,
-                              decoration: BoxDecoration(
-                                color: index%2==0?"#E1F6FF".toColor():"#C6EEFF".toColor(),
-                              ),
-                            );
-                          },
-                        ),
+                  TextSpan(
+                      text: "${cashRankCon.newCashTaskBean?.totalPro??0}",
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: "#FF3333".toColor(),
+                        fontWeight: FontWeight.bold,
                       )
-                    ],
                   ),
+                  TextSpan(
+                      text: " in queue,Your Current rank:",
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: "#000000".toColor(),
+                        fontWeight: FontWeight.bold,
+                      )
+                  ),
+                  TextSpan(
+                      text: "${cashRankCon.newCashTaskBean?.currentPro??0}",
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: "#FF3333".toColor(),
+                        fontWeight: FontWeight.bold,
+                      )
+                  ),
+                ]
+            ),
+          ),
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(left: 22.w,right: 22.w,top: 10.h,bottom: 10.h),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(18.w),
+                child: Stack(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(18.w),
+                          border: Border.all(
+                            width: 1.w,
+                            color: "#33ACE7".toColor(),
+                          )
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          height: 38.h,
+                          color: "#C6EEFF".toColor(),
+                          child: Row(
+                            children: [
+                              _rankTitleItemWidget("Rank"),
+                              _rankTitleItemWidget("Account"),
+                              _rankTitleItemWidget("Amount"),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: cashRankCon.rankList.length,
+                            itemBuilder: (context,index){
+                              var bean = cashRankCon.rankList[index];
+                              return Container(
+                                width: double.infinity,
+                                height: 38.h,
+                                decoration: BoxDecoration(
+                                  color: index%2==0?"#E1F6FF".toColor():"#C6EEFF".toColor(),
+                                ),
+                                child: Row(
+                                  children: [
+                                    _rankItemWidget(bean.id,index),
+                                    _rankItemWidget(cashRankCon.hideAccount(bean.account),index),
+                                    _rankItemWidget(bean.amount,index),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      ],
+                    ),
 
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     ),
   );
 
@@ -189,9 +200,20 @@ class CashRankDialog extends StatelessWidget{
     ),
   );
 
+  _rankItemWidget(String title,index){
+    var isMe = index==(cashRankCon.newCashTaskBean?.currentPro??0)-1;
+    return Expanded(
+      child: Container(
+        height: 38.h,
+        alignment: Alignment.center,
+        child: QpText(text: title, size: 12.sp, color: isMe?"#FF3333":"#254A99",fontWeight: FontWeight.bold,),
+      ),
+    );
+  }
+
   _btnWidget()=>InkWell(
     onTap: (){
-
+      cashRankCon.clickBtn();
     },
     child: Stack(
       alignment: Alignment.center,
@@ -200,8 +222,11 @@ class CashRankDialog extends StatelessWidget{
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            QpImg(img: "icon_video",width: 42.w,height: 42.w,),
-            QpText(text: "Skip Wait", size: 20.sp, color: "#FFFFFF",fontWeight: FontWeight.bold,)
+            Visibility(
+              visible: (cashRankCon.newCashTaskBean?.currentPro??0)>1,
+              child: QpImg(img: "icon_video",width: 42.w,height: 42.w,),
+            ),
+            QpText(text: (cashRankCon.newCashTaskBean?.currentPro??0)<=1?"Cash Out":"Skip Wait", size: 20.sp, color: "#FFFFFF",fontWeight: FontWeight.bold,)
           ],
         )
       ],

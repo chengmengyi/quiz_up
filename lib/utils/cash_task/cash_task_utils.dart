@@ -14,8 +14,8 @@ class CashTaskUtils{
     if((BSql.instance.bUserInfo?.money??0)<amountList.first){
       return;
     }
-    var list = await BSql.instance.queryCashTaskByType(selectedCashType.get());
-    if(list.isNotEmpty){
+    var has = await BSql.instance.queryHasCashTask();
+    if(has){
       return;
     }
     QpRouters.showDialog(
@@ -28,8 +28,8 @@ class CashTaskUtils{
     );
   }
 
-  createCashTask(int cashType,int cashNum,String account)async{
-    await BSql.instance.createCashTaskData(cashType, cashNum, account);
+  Future<bool> createCashTask(int cashType,int cashNum,String account)async{
+    return await BSql.instance.createCashTaskData(cashType, cashNum, account);
   }
 
   Future<List<CashAmountBean>> getAmountList(int cashType)async{
@@ -42,10 +42,6 @@ class CashTaskUtils{
   }
 
   updateCashTask(String taskType)async{
-    await BSql.instance.updateCashTask(taskType);
-  }
-
-  updateCashTaskReceived(CashAmountBean amountBean)async{
-    await BSql.instance.updateCashTaskReceived(amountBean);
+    await BSql.instance.updateNewCashQuizOrTask(taskType);
   }
 }

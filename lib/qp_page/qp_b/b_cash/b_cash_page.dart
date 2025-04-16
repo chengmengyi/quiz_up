@@ -250,7 +250,7 @@ class BCashPage extends StatelessWidget{
                 ):
                 Row(
                   children: [
-                    QpImg(img: bCashCon.getTaskIcon(""),width: 40.w,height: 40.w,),
+                    QpImg(img: bCashCon.getTaskIcon(bean.cashTaskBean),width: 40.w,height: 40.w,),
                     SizedBox(width: 4.w,),
                     Expanded(
                       child: Container(
@@ -267,9 +267,9 @@ class BCashPage extends StatelessWidget{
                         ),
                         child: Row(
                           children: [
-                            QpText(text: "${bCashCon.getCashTaskProLeftStr("")} ", size: 14.sp, color: "#623700"),
+                            QpText(text: "${bCashCon.getCashTaskProLeftStr(bean.cashTaskBean)} ", size: 14.sp, color: "#623700"),
                             QpText(text: "${bean.cashTaskBean?.currentPro??0}/${bean.cashTaskBean?.totalPro??0}", size: 14.sp, color: "#FF1A00"),
-                            QpText(text: " ${bCashCon.getCashTaskProRightStr("")}", size: 14.sp, color: "#623700"),
+                            QpText(text: " ${bCashCon.getCashTaskProRightStr(bean.cashTaskBean)}", size: 14.sp, color: "#623700"),
                           ],
                         ),
                       ),

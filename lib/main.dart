@@ -3,9 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:quiz_up/qp_page/qp_b/test.dart';
 import 'package:quiz_up/qp_rou/qp_rou_name.dart';
-import 'package:quiz_up/utils/ad/ad_utils.dart';
 import 'package:quiz_up/utils/check_user/check_user_utils.dart';
 import 'package:quiz_up/utils/firebase_utils.dart';
 import 'package:quiz_up/utils/guide/guide_utils.dart';
@@ -16,7 +14,6 @@ import 'package:quiz_up/utils/question/a_question_utils.dart';
 import 'package:quiz_up/utils/question/b_question_util.dart';
 import 'package:quiz_up/utils/sql/a_sql.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
-import 'package:quiz_up/utils/storage/storage_event.dart';
 import 'package:quiz_up/utils/value/value_utils.dart';
 
 import 'qp_rou/qp_page_list.dart';

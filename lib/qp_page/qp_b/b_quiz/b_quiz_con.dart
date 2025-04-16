@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' as ma;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -10,10 +9,7 @@ import 'package:quiz_up/bean/question_bean.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/answer_right/answer_right_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/box/box_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/new_user/new_user_dialog.dart';
-import 'package:quiz_up/qp_dialog/dialog_b/open_notification/open_notification_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/wheel/wheel_dialog.dart';
-import 'package:quiz_up/qp_dialog/loading_dialog.dart';
-import 'package:quiz_up/qp_page/qp_b/test.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_rou/qp_rou_name.dart';
 import 'package:quiz_up/utils/ad/ad_type.dart';
@@ -30,7 +26,6 @@ import 'package:quiz_up/utils/guide/box_guide_overlay.dart';
 import 'package:quiz_up/utils/guide/guide_step.dart';
 import 'package:quiz_up/utils/guide/guide_utils.dart';
 import 'package:quiz_up/utils/guide/wheel_guide_overlay.dart';
-import 'package:quiz_up/utils/h5_utils.dart';
 import 'package:quiz_up/utils/local_notifications/local_notifications_utils.dart';
 import 'package:quiz_up/utils/point/ad_point_id.dart';
 import 'package:quiz_up/utils/point/app_point_id.dart';
@@ -71,8 +66,8 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
     CheckUserUtils.instance.bQuizShow=true;
     receiveEvent=ReceiveEvent(eventListener: this);
     LocalNotificationsUtils.instance.setLocalNotifications();
-    H5Utils.instance.pageB1();
-    H5Utils.instance.pageB2();
+    // H5Utils.instance.pageB1();
+    // H5Utils.instance.pageB2();
   }
 
   @override
@@ -425,8 +420,7 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
     // CashTaskUtils.instance.updateCashTask(TaskType.spin);
     // LocalNotificationsUtils.instance.setLocalNotifications();
 
-    // BSql.instance.updateNewCashQuizOrTask(TaskType.quiz);
+    BSql.instance.updateNewCashQuizOrTask(TaskType.quiz);
 
-    Navigator.push(context!, ma.MaterialPageRoute(builder: (_)=>Test()));
   }
 }

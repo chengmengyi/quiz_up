@@ -22,14 +22,26 @@ class AnswerRightCon extends GetxController{
       adType: AdType.reward,
       adPointId: type==AnswerRightTyp.quiz?AdPointId.kwrap_quiz_rv:AdPointId.kwrap_wheel_rv,
       closeAd: (){
-        QpRouters.back();
-        BSql.instance.updateUserMoney((Decimal.parse("$addNum")*Decimal.fromInt(2)).toDouble());
-        dismiss.call();
+        if(type==AnswerRightTyp.quiz){
+          AdUtils.instance.showRewardNextIntAd(
+            closeAd: (){
+              _closeDialog(addNum,dismiss);
+            },
+          );
+        }else{
+          _closeDialog(addNum,dismiss);
+        }
       },
       failAd: (){
 
       }
     );
+  }
+
+  _closeDialog(double addNum, Function() dismiss,){
+    QpRouters.back();
+    BSql.instance.updateUserMoney((Decimal.parse("$addNum")*Decimal.fromInt(2)).toDouble());
+    dismiss.call();
   }
 
   clickSingle(double addNum,Function() dismiss,AnswerRightTyp type){
