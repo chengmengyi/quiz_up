@@ -2,8 +2,10 @@ import 'package:decimal/decimal.dart';
 import 'package:quiz_up/bean/b_user_info.dart';
 import 'package:quiz_up/bean/cash_amount_bean.dart';
 import 'package:quiz_up/bean/cash_task_bean.dart';
+import 'package:quiz_up/bean/new_cash_task_bean.dart';
 import 'package:quiz_up/bean/new_user_step_bean.dart';
 import 'package:quiz_up/bean/old_user_step_bean.dart';
+import 'package:quiz_up/utils/cash_task/cash_task_utils.dart';
 import 'package:quiz_up/utils/cash_task/task_status.dart';
 import 'package:quiz_up/utils/cash_task/task_type.dart';
 import 'package:quiz_up/utils/event/event_code.dart';
@@ -41,6 +43,9 @@ class BSql extends BaseSql{
     if((bUserInfo?.money??0)>=moneyLevel){
       PointUtils.instance.pointEvent(AppPointId.cash_money_detail,data: {"money_from":moneyLevel});
       lastMoneyLevel.save(moneyLevel);
+    }
+    if((bUserInfo?.money??0)>0){
+      CashTaskUtils.instance.checkShowAccountDialog();
     }
     await updateUserInfo();
     SendEvent(code: EventCode.showMoneyLottie).send();
@@ -124,22 +129,45 @@ class BSql extends BaseSql{
 
   createCashTaskData(int cashType,int cashNum,String account)async{
     var db = await initDB();
-    var list = await db.query(TableName.cashTaskB,where: '"cashType" = ? AND "cashNum" = ?',whereArgs: [cashType,cashNum]);
+    var list = await db.query(TableName.newCashTaskB,where: '"cashType" = ? AND "cashNum" = ?',whereArgs: [cashType,cashNum]);
     if(list.isNotEmpty){
       return;
     }
-    await db.insert(TableName.cashTaskB, CashTaskBean(cashType: cashType,cashNum: cashNum,taskType: TaskType.quiz,currentPro: 0,totalPro: ValueUtils.instance.getCashTask(0).data??10,taskIndex: 0,taskStatus: TaskStatus.processing).toJson());
+    await db.insert(TableName.newCashTaskB, NewCashTaskBean(cashType: cashType,cashNum: cashNum,taskStep: NewTaskStep.quiz15,currentPro: 0,totalPro: ValueUtils.instance.getCashTask(0).data??10,taskIndex: 0,).toJson());
     _insertCashAccount(account,cashType);
   }
 
-  Future<CashTaskBean?> queryCashTask(int cashType,int cashNum)async{
+  Future<NewCashTaskBean?> queryCashTaskDataByCashStep(int cashType,int cashNum,String taskStep)async{
     var db = await initDB();
-    var list = await db.query(TableName.cashTaskB,where: '"cashType" = ? AND "cashNum" = ? ',whereArgs: [cashType,cashNum]);
+    var list = await db.query(TableName.newCashTaskB,where: '"cashType" = ? AND "cashNum" = ? AND "taskStep" = ?',whereArgs: [cashType,cashNum,taskStep]);
     if(list.isEmpty){
       return null;
     }
-    return CashTaskBean.fromJson(list.first);
+    return NewCashTaskBean.fromJson(list.first);
   }
+
+  Future<NewCashTaskBean?> queryCashTaskByTypeAndMoney(int cashType,int cashNum)async{
+    var db = await initDB();
+    var list = await db.query(TableName.newCashTaskB,where: '"cashType" = ? AND "cashNum" = ? ',whereArgs: [cashType,cashNum]);
+    if(list.isEmpty){
+      return null;
+    }
+    return NewCashTaskBean.fromJson(list.first);
+  }
+
+  Future<List<CashTaskBean>> queryCashTaskByType(int cashType)async{
+    var db = await initDB();
+    var list = await db.query(TableName.cashTaskB,where: '"cashType" = ?',whereArgs: [cashType]);
+    if(list.isEmpty){
+      return [];
+    }
+    List<CashTaskBean> result=[];
+    for (var value in list) {
+      result.add(CashTaskBean.fromJson(value));
+    }
+    return result;
+  }
+
 
   updateCashTask(String taskType)async{
     var db = await initDB();
@@ -164,6 +192,52 @@ class BSql extends BaseSql{
         }
       }
       await db.update(TableName.cashTaskB, bean.toJson(),where: '"id" = ?', whereArgs: [value["id"]]);
+    }
+  }
+
+  updateNewCashQuizOrTask(String taskType)async{
+    var db = await initDB();
+    var list = await db.query(TableName.newCashTaskB);
+    if(list.isEmpty){
+      return;
+    }
+    for (var value in list) {
+      var bean = NewCashTaskBean.fromJson(value);
+      print("kk====updateNewCashQuizOrTask====taskType:$taskType===${value}");
+      if(taskType==TaskType.quiz&&bean.taskStep==NewTaskStep.quiz15){
+        print("kk====updateNewCashQuizOrTask====NewTaskStep.quiz15");
+        var nextPro = (bean.currentPro??0)+1;
+        if(nextPro>=(bean.totalPro??0)){
+          bean.currentPro=0;
+          bean.taskStep=NewTaskStep.rank;
+        }else{
+          bean.currentPro=nextPro;
+        }
+        print("kk====updateNewCashQuizOrTask====new cash datA===>${bean.toJson()}");
+        await db.update(TableName.newCashTaskB, bean.toJson(),where: '"id" = ?', whereArgs: [value["id"]]);
+      }else if(bean.taskStep==NewTaskStep.task){
+        var tixianTask = ValueUtils.instance.getCashTask(bean.taskIndex??0);
+        if(tixianTask.title==taskType){
+          print("kk====updateNewCashQuizOrTask====tixianTask.title==taskType");
+          var nextPro = (bean.currentPro??0)+1;
+          if(nextPro>=(bean.totalPro??0)){
+            var newTaskIndex = (bean.taskIndex??0)+1;
+            //已完成
+            if(newTaskIndex>=ValueUtils.instance.getTiXianTaskLength()){
+              bean.taskStep=NewTaskStep.complete;
+            }else{
+              var cashTask = ValueUtils.instance.getCashTask(newTaskIndex);
+              bean.totalPro=cashTask.data;
+              bean.currentPro=0;
+              bean.taskIndex=newTaskIndex;
+            }
+          }else{
+            bean.currentPro=nextPro;
+          }
+          print("kk====updateNewCashQuizOrTask====new cash datA===>${bean.toJson()}");
+          await db.update(TableName.newCashTaskB, bean.toJson(),where: '"id" = ?', whereArgs: [value["id"]]);
+        }
+      }
     }
   }
 

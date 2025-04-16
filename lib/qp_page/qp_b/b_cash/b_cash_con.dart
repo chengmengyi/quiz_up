@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:quiz_up/bean/cash_amount_bean.dart';
 import 'package:quiz_up/bean/cash_type_bean.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/cash_guide/cash_guide_dialog.dart';
+import 'package:quiz_up/qp_dialog/dialog_b/cash_rank/cash_rank_dialog.dart';
+import 'package:quiz_up/qp_dialog/dialog_b/cash_two_step/cash_two_step_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/input_account/input_account_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/no_money/no_money_dialog.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
@@ -13,11 +15,10 @@ import 'package:quiz_up/utils/event/event_code.dart';
 import 'package:quiz_up/utils/event/event_listener.dart';
 import 'package:quiz_up/utils/event/receive_event.dart';
 import 'package:quiz_up/utils/event/send_event.dart';
-import 'package:quiz_up/utils/guide/guide_step.dart';
-import 'package:quiz_up/utils/guide/guide_utils.dart';
 import 'package:quiz_up/utils/point/app_point_id.dart';
 import 'package:quiz_up/utils/point/point_utils.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
+import 'package:quiz_up/utils/storage/storage_event.dart';
 import 'package:quiz_up/utils/utils.dart';
 
 class BCashCon extends GetxController implements EventListener{
@@ -43,6 +44,7 @@ class BCashCon extends GetxController implements EventListener{
 
   clickCashType(index){
     cashIndex=index;
+    selectedCashType.save(index);
     update(["cash_type","money_bg"]);
     _initAmountList();
   }
@@ -50,22 +52,31 @@ class BCashCon extends GetxController implements EventListener{
   clickCash(index)async{
     PointUtils.instance.pointEvent(AppPointId.cash_page_c);
     var amountBean = amountList[index];
+
     if(null!=amountBean.cashTaskBean){
-      if(amountBean.cashTaskBean?.taskStatus==TaskStatus.completed){
-        PointUtils.instance.pointEvent(AppPointId.cash_suc_pop_c);
-        showToast("Congratulations, your withdrawal approval has been submitted. Please wait for 3-5 working days to arrive in your account.");
-        await CashTaskUtils.instance.updateCashTaskReceived(amountBean);
-        _initAmountList();
-        return;
+      switch(amountBean.cashTaskBean?.taskStep){
+        case NewTaskStep.quiz15:
+          showDialog(widget: CashTwoStepDialog(cashNum: amountBean.totalMoney, cashType: cashIndex));
+          break;
+        case NewTaskStep.rank:
+          showDialog(widget: CashRankDialog(cashNum: amountBean.totalMoney, cashType: cashIndex));
+          break;
       }
-      showDialog(
-          widget: CashGuideDialog(
-            cashAmountBean: amountBean,
-            dismiss: (){
-              clickClose();
-            },
-          )
-      );
+      // if(amountBean.cashTaskBean?.taskStatus==TaskStatus.completed){
+      //   PointUtils.instance.pointEvent(AppPointId.cash_suc_pop_c);
+      //   showToast("Congratulations, your withdrawal approval has been submitted. Please wait for 3-5 working days to arrive in your account.");
+      //   await CashTaskUtils.instance.updateCashTaskReceived(amountBean);
+      //   _initAmountList();
+      //   return;
+      // }
+      // showDialog(
+      //     widget: CashGuideDialog(
+      //       cashAmountBean: amountBean,
+      //       dismiss: (){
+      //         clickClose();
+      //       },
+      //     )
+      // );
       return;
     }
     var money = BSql.instance.bUserInfo?.money??0;
@@ -85,9 +96,7 @@ class BCashCon extends GetxController implements EventListener{
       widget: InputAccountDialog(
         cashNum: totalMoney,
         dismiss: (account)async{
-          await CashTaskUtils.instance.createCashTask(cashIndex, totalMoney, account);
-          BSql.instance.updateUserMoney((-totalMoney).toDouble());
-          _initAmountList();
+
         },
       )
     );
@@ -187,6 +196,9 @@ class BCashCon extends GetxController implements EventListener{
     switch(event.code){
       case EventCode.updateUserMoney:
         update(["money"]);
+        break;
+      case EventCode.updateCashList:
+        _initAmountList();
         break;
     }
   }

@@ -14,4 +14,5 @@ class StorageName{
   static const String watchAdNum="watchAdNum";
   static const String lastAdLevel="lastAdLevel";
   static const String checkToOpenNotification="checkToOpenNotification";
+  static const String selectedCashType="selectedCashType";
 }

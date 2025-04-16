@@ -26,7 +26,7 @@ class CashGuideDialog extends StatelessWidget{
   Widget build(BuildContext context){
     if(!init){
       cashGuideCon=Get.put(CashGuideCon());
-      PointUtils.instance.pointEvent(AppPointId.cash_task_pop,data: {"task_from":cashAmountBean.cashTaskBean?.taskType});
+      // PointUtils.instance.pointEvent(AppPointId.cash_task_pop,data: {"task_from":cashAmountBean.cashTaskBean?.taskType});
       init=true;
     }
     return WillPopScope(

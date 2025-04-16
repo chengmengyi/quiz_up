@@ -26,8 +26,8 @@ class AdUtils {
   static final AdUtils _utils=AdUtils();
   static AdUtils get instance=>_utils;
 
-  late LoadAd _oneLoadAd;
-  late LoadAd _twoLoadAd;
+  LoadAd? _oneLoadAd;
+  LoadAd? _twoLoadAd;
   var _adShowing=false;
   ShowAdListener? _showAdListener;
 
@@ -45,12 +45,12 @@ class AdUtils {
     AppLovinMAX.setRewardedAdListener(
       RewardedAdListener(
         onAdLoadedCallback: (ad){
-          _oneLoadAd.loadAdSuccess(ad);
-          _twoLoadAd.loadAdSuccess(ad);
+          _oneLoadAd?.loadAdSuccess(ad);
+          _twoLoadAd?.loadAdSuccess(ad);
         },
         onAdLoadFailedCallback: (ad,error){
-          _oneLoadAd.loadAdFail(ad);
-          _twoLoadAd.loadAdFail(ad);
+          _oneLoadAd?.loadAdFail(ad);
+          _twoLoadAd?.loadAdFail(ad);
         },
         onAdDisplayedCallback: (ad){
           _adShowing=true;
@@ -84,12 +84,12 @@ class AdUtils {
     AppLovinMAX.setInterstitialListener(
       InterstitialListener(
         onAdLoadedCallback: (ad){
-          _oneLoadAd.loadAdSuccess(ad);
-          _twoLoadAd.loadAdSuccess(ad);
+          _oneLoadAd?.loadAdSuccess(ad);
+          _twoLoadAd?.loadAdSuccess(ad);
         },
         onAdLoadFailedCallback: (ad,error){
-          _oneLoadAd.loadAdFail(ad);
-          _twoLoadAd.loadAdFail(ad);
+          _oneLoadAd?.loadAdFail(ad);
+          _twoLoadAd?.loadAdFail(ad);
         },
         onAdDisplayedCallback: (ad){
           _adShowing=true;
@@ -243,21 +243,21 @@ class AdUtils {
   }
 
   _loadAd(String adType){
-    _oneLoadAd.loadAd(adType);
-    _twoLoadAd.loadAd(adType);
+    _oneLoadAd?.loadAd(adType);
+    _twoLoadAd?.loadAd(adType);
   }
 
   _deleteAdCache(String id){
-    _oneLoadAd.deleteCache(id);
-    _twoLoadAd.deleteCache(id);
+    _oneLoadAd?.deleteCache(id);
+    _twoLoadAd?.deleteCache(id);
   }
   
   AdResultBean? _getCacheResultBean(String adType){
-    var oneResult = _oneLoadAd.getCacheAd(adType);
+    var oneResult = _oneLoadAd?.getCacheAd(adType);
     if(null!=oneResult){
       return oneResult;
     }
-    var twoResult = _twoLoadAd.getCacheAd(adType);
+    var twoResult = _twoLoadAd?.getCacheAd(adType);
     if(null!=twoResult){
       return twoResult;
     }
@@ -265,14 +265,14 @@ class AdUtils {
   }
 
   AdBean? _getAdInfoBeanById(String id){
-    var adBean = _oneLoadAd.getAdInfoBeanById(id);
-    adBean ??= _twoLoadAd.getAdInfoBeanById(id);
+    var adBean = _oneLoadAd?.getAdInfoBeanById(id);
+    adBean ??= _twoLoadAd?.getAdInfoBeanById(id);
     return adBean;
   }
 
   updateAdConfigData(){
-    _oneLoadAd.updateConfigData();
-    _twoLoadAd.updateConfigData();
+    _oneLoadAd?.updateConfigData();
+    _twoLoadAd?.updateConfigData();
   }
 
   bool checkAdShowing()=>_adShowing;

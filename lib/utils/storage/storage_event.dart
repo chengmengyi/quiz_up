@@ -18,6 +18,7 @@ StorageEvent<String> appsflyerResult = StorageEvent<String>(key: StorageName.app
 StorageEvent<int> lastMoneyLevel = StorageEvent<int>(key: StorageName.lastMoneyLevel, defaultValue: 0);
 StorageEvent<int> watchAdNum = StorageEvent<int>(key: StorageName.watchAdNum, defaultValue: 0);
 StorageEvent<int> lastAdLevel = StorageEvent<int>(key: StorageName.lastAdLevel, defaultValue: 0);
+StorageEvent<int> selectedCashType = StorageEvent<int>(key: StorageName.selectedCashType, defaultValue: 0);
 
 
 

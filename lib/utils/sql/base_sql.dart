@@ -47,6 +47,6 @@ abstract class BaseSql{
   }
 
   _createVersion3DB(Database db) {
-    db.execute('CREATE TABLE ${TableName.newCashTaskB} (id INTEGER PRIMARY KEY AUTOINCREMENT, cashType INTEGER, cashNum INTEGER, taskType TEXT, currentPro INTEGER, totalPro INTEGER, taskIndex INTEGER,account TEXT, taskStatus INTEGER)');
+    db.execute('CREATE TABLE ${TableName.newCashTaskB} (id INTEGER PRIMARY KEY AUTOINCREMENT, cashType INTEGER, cashNum INTEGER, taskStep TEXT, currentPro INTEGER, totalPro INTEGER, taskIndex INTEGER,account TEXT)');
   }
 }

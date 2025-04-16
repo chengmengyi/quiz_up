@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart' as ma;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:quiz_up/bean/progress_bean.dart';
@@ -12,6 +13,7 @@ import 'package:quiz_up/qp_dialog/dialog_b/new_user/new_user_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/open_notification/open_notification_dialog.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/wheel/wheel_dialog.dart';
 import 'package:quiz_up/qp_dialog/loading_dialog.dart';
+import 'package:quiz_up/qp_page/qp_b/test.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_rou/qp_rou_name.dart';
 import 'package:quiz_up/utils/ad/ad_type.dart';
@@ -419,8 +421,12 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
     if(!kDebugMode){
       return;
     }
-    // BSql.instance.updateUserMoney(100);
+    // BSql.instance.updateUserMoney(799);
     // CashTaskUtils.instance.updateCashTask(TaskType.spin);
     // LocalNotificationsUtils.instance.setLocalNotifications();
+
+    // BSql.instance.updateNewCashQuizOrTask(TaskType.quiz);
+
+    Navigator.push(context!, ma.MaterialPageRoute(builder: (_)=>Test()));
   }
 }

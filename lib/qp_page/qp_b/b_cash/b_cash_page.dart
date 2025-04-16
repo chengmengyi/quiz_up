@@ -6,6 +6,7 @@ import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_wid/qp_img.dart';
 import 'package:quiz_up/qp_wid/qp_text.dart';
 import 'package:quiz_up/utils/cash_task/task_status.dart';
+import 'package:quiz_up/utils/cash_task/task_type.dart';
 import 'package:quiz_up/utils/point/app_point_id.dart';
 import 'package:quiz_up/utils/point/point_utils.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
@@ -197,7 +198,7 @@ class BCashPage extends StatelessWidget{
                         alignment: Alignment.center,
                         children: [
                           QpImg(img: null==bean.cashTaskBean?"btn4":"btn3",width: 107.w,height: 38.h,),
-                          QpText(text: null==bean.cashTaskBean?"Cash out":bean.cashTaskBean?.taskStatus==TaskStatus.completed?"Successful":"Processing", size: 14.sp, color: "#FDFFFC"),
+                          QpText(text: null==bean.cashTaskBean?"Cash out":bean.cashTaskBean?.taskStep==NewTaskStep.complete?"Successful":"Processing", size: 14.sp, color: "#FDFFFC"),
                         ],
                       ),
                     )
@@ -249,7 +250,7 @@ class BCashPage extends StatelessWidget{
                 ):
                 Row(
                   children: [
-                    QpImg(img: bCashCon.getTaskIcon(bean.cashTaskBean?.taskType??""),width: 40.w,height: 40.w,),
+                    QpImg(img: bCashCon.getTaskIcon(""),width: 40.w,height: 40.w,),
                     SizedBox(width: 4.w,),
                     Expanded(
                       child: Container(
@@ -266,9 +267,9 @@ class BCashPage extends StatelessWidget{
                         ),
                         child: Row(
                           children: [
-                            QpText(text: "${bCashCon.getCashTaskProLeftStr(bean.cashTaskBean?.taskType??"")} ", size: 14.sp, color: "#623700"),
+                            QpText(text: "${bCashCon.getCashTaskProLeftStr("")} ", size: 14.sp, color: "#623700"),
                             QpText(text: "${bean.cashTaskBean?.currentPro??0}/${bean.cashTaskBean?.totalPro??0}", size: 14.sp, color: "#FF1A00"),
-                            QpText(text: " ${bCashCon.getCashTaskProRightStr(bean.cashTaskBean?.taskType??"")}", size: 14.sp, color: "#623700"),
+                            QpText(text: " ${bCashCon.getCashTaskProRightStr("")}", size: 14.sp, color: "#623700"),
                           ],
                         ),
                       ),
