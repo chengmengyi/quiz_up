@@ -15,6 +15,7 @@ import 'package:quiz_up/qp_rou/qp_rou_name.dart';
 import 'package:quiz_up/utils/ad/ad_type.dart';
 import 'package:quiz_up/utils/ad/ad_utils.dart';
 import 'package:quiz_up/utils/ad/h5_ad_utils.dart';
+import 'package:quiz_up/utils/app_lifecycle.dart';
 import 'package:quiz_up/utils/cash_task/cash_task_utils.dart';
 import 'package:quiz_up/utils/cash_task/task_type.dart';
 import 'package:quiz_up/utils/check_user/check_user_utils.dart';
@@ -68,6 +69,7 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
     CheckUserUtils.instance.bQuizShow=true;
     receiveEvent=ReceiveEvent(eventListener: this);
     LocalNotificationsUtils.instance.setLocalNotifications();
+    AppLifecycleUtils.instance.addLifecycle();
     if(!kDebugMode){
       H5Utils.instance.pageB1();
     }
@@ -409,10 +411,12 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
   clickH5GameBtn(){
     H5Utils.instance.clickH5(
         h5Call: (url){
-          QpRouters.toNamed(
-            routersName: QpRouName.web,
-            arguments: {"url":url},
-          );
+          if(url.startsWith("http")){
+            QpRouters.toNamed(
+              routersName: QpRouName.web,
+              arguments: {"url":url},
+            );
+          }
         }
     );
   }
@@ -436,6 +440,6 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
 
     // BSql.instance.updateNewCashQuizOrTask(TaskType.quiz);
 
-    QpRouters.toNamed(routersName: QpRouName.bH5Ad);
+    // QpRouters.toNamed(routersName: QpRouName.bH5Ad);
   }
 }

@@ -79,7 +79,7 @@ class ValueUtils{
 
   bool checkShowRewardNextIntAd(){
     if(kDebugMode){
-      return false;
+      return true;
     }
     var list = _valueBean?.intPopAd??[];
     if(list.isEmpty){
@@ -99,7 +99,11 @@ class ValueUtils{
 
   TixianTask getCashTask(int index){
     try{
-      return (_valueBean?.tixianTask??[])[index];
+      var tixianTask = (_valueBean?.tixianTask??[])[index];
+      if(kDebugMode){
+        tixianTask.data=1;
+      }
+      return tixianTask;
     }catch(e){
       return TixianTask(title: TaskType.quiz,data: 10);
     }

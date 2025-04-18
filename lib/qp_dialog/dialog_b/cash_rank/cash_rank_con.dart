@@ -1,10 +1,12 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:quiz_up/bean/new_cash_task_bean.dart';
 import 'package:quiz_up/bean/rank_list_bean.dart';
 import 'package:quiz_up/qp_dialog/dialog_b/cash_guide/cash_guide_dialog.dart';
 import 'package:quiz_up/qp_rou/qp_page_list.dart';
+import 'package:quiz_up/utils/ad/ad_utils.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
 import 'package:quiz_up/utils/utils.dart';
 import 'package:quiz_up/utils/value/value_utils.dart';
@@ -29,14 +31,16 @@ class CashRankCon extends GetxController{
       );
       return;
     }
-    // AdUtils.instance.showTaskAd(
-    //   closeAd: ()async{
-    //     await BSql.instance.updateTaskRank(cashType, cashNum);
-    //     _getCashData();
-    //   },
-    // );
 
-    _closeAd();
+    if(kDebugMode){
+      _closeAd();
+    }else{
+      AdUtils.instance.showTaskAd(
+        closeAd: ()async{
+          _closeAd();
+        },
+      );
+    }
   }
 
   _closeAd(){
@@ -45,6 +49,7 @@ class CashRankCon extends GetxController{
       if(newRankNum<=1){
         newCashTaskBean?.currentPro=newRankNum;
         newCashTaskBean?.totalPro=newRankAllPerson;
+        update(["btn"]);
         _initList(newRankAllPerson);
         return;
       }
@@ -55,6 +60,7 @@ class CashRankCon extends GetxController{
 
   _getCashData()async{
     newCashTaskBean = await BSql.instance.queryCashRankData(cashType, cashNum);
+    update(["btn"]);
     var rankAllPerson = newCashTaskBean?.totalPro??0;
    _initList(rankAllPerson);
   }
@@ -71,7 +77,7 @@ class CashRankCon extends GetxController{
     var myRankNum = newCashTaskBean?.currentPro??0;
     var index = myRankNum<=1?1:myRankNum-1;
     rankList.removeAt(index);
-    rankList.insert(index, RankListBean(id: "${myRankNum+1}", account: account, amount: "$cashNum"));
+    rankList.insert(index, RankListBean(id: "$myRankNum", account: account, amount: "$cashNum"));
     update(["rank"]);
   }
 

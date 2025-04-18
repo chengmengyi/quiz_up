@@ -10,6 +10,7 @@ import 'package:quiz_up/utils/point/ad_point_id.dart';
 import 'package:quiz_up/utils/point/app_point_id.dart';
 import 'package:quiz_up/utils/point/point_utils.dart';
 import 'package:quiz_up/utils/sql/b_sql.dart';
+import 'package:quiz_up/utils/value/value_utils.dart';
 
 class AnswerRightCon extends GetxController{
 
@@ -22,7 +23,7 @@ class AnswerRightCon extends GetxController{
       adType: AdType.reward,
       adPointId: type==AnswerRightTyp.quiz?AdPointId.kwrap_quiz_rv:AdPointId.kwrap_wheel_rv,
       closeAd: (){
-        if(type==AnswerRightTyp.quiz){
+        if(type==AnswerRightTyp.quiz&&ValueUtils.instance.checkShowRewardNextIntAd()){
           AdUtils.instance.showRewardNextIntAd(
             closeAd: (){
               _closeDialog(addNum,dismiss);

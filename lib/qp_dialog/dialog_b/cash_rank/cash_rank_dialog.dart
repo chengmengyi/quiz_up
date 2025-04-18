@@ -170,7 +170,7 @@ class CashRankDialog extends StatelessWidget{
                                 ),
                                 child: Row(
                                   children: [
-                                    _rankItemWidget(bean.id,index),
+                                    _rankItemWidget("${index+1}",index),
                                     _rankItemWidget(cashRankCon.hideAccount(bean.account),index),
                                     _rankItemWidget(bean.amount,index),
                                   ],
@@ -211,25 +211,28 @@ class CashRankDialog extends StatelessWidget{
     );
   }
 
-  _btnWidget()=>InkWell(
-    onTap: (){
-      cashRankCon.clickBtn();
-    },
-    child: Stack(
-      alignment: Alignment.center,
-      children: [
-        QpImg(img: "btn2",width: 228.w,height: 60.h,),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Visibility(
-              visible: (cashRankCon.newCashTaskBean?.currentPro??0)>1,
-              child: QpImg(img: "icon_video",width: 42.w,height: 42.w,),
-            ),
-            QpText(text: (cashRankCon.newCashTaskBean?.currentPro??0)<=1?"Cash Out":"Skip Wait", size: 20.sp, color: "#FFFFFF",fontWeight: FontWeight.bold,)
-          ],
-        )
-      ],
+  _btnWidget()=>GetBuilder<CashRankCon>(
+    id: "btn",
+    builder: (_)=>InkWell(
+      onTap: (){
+        cashRankCon.clickBtn();
+      },
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          QpImg(img: "btn2",width: 228.w,height: 60.h,),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Visibility(
+                visible: (cashRankCon.newCashTaskBean?.currentPro??0)>1,
+                child: QpImg(img: "icon_video",width: 42.w,height: 42.w,),
+              ),
+              QpText(text: (cashRankCon.newCashTaskBean?.currentPro??0)<=1?"Cash Out":"Skip Wait", size: 20.sp, color: "#FFFFFF",fontWeight: FontWeight.bold,)
+            ],
+          )
+        ],
+      ),
     ),
   );
 }

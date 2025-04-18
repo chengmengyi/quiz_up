@@ -20,7 +20,7 @@ StorageEvent<int> watchAdNum = StorageEvent<int>(key: StorageName.watchAdNum, de
 StorageEvent<int> lastAdLevel = StorageEvent<int>(key: StorageName.lastAdLevel, defaultValue: 0);
 StorageEvent<int> selectedCashType = StorageEvent<int>(key: StorageName.selectedCashType, defaultValue: 0);
 
-StorageEvent<List<double>> h5Ecpm = StorageEvent<List<double>>(key: StorageName.h5Ecpm, defaultValue: []);
+StorageEvent<String> h5Ecpm = StorageEvent<String>(key: StorageName.h5Ecpm, defaultValue: "");
 
 
 
