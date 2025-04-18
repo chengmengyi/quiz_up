@@ -5,6 +5,7 @@ import 'package:quiz_up/qp_page/qp_a/a_home/a_home_pa.dart';
 import 'package:quiz_up/qp_page/qp_a/a_question/a_question_page.dart';
 import 'package:quiz_up/qp_page/qp_a/a_wheel/a_wheel_page.dart';
 import 'package:quiz_up/qp_page/qp_b/b_cash/b_cash_page.dart';
+import 'package:quiz_up/qp_page/qp_b/b_h5_ad/h5_ad_page.dart';
 import 'package:quiz_up/qp_page/qp_b/b_quiz/b_quiz_page.dart';
 import 'package:quiz_up/qp_page/qp_wwwwbbbb/privacy_page.dart';
 import 'package:quiz_up/qp_page/setting/setting_page.dart';
@@ -49,6 +50,11 @@ final pageList=[
   GetPage(
       name: QpRouName.bCash,
       page: ()=> BCashPage(),
+      transition: Transition.fadeIn
+  ),
+  GetPage(
+      name: QpRouName.bH5Ad,
+      page: ()=> H5AdPage(),
       transition: Transition.fadeIn
   ),
 ];

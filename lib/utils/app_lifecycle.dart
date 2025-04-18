@@ -38,11 +38,10 @@ class AppLifecycleUtils{
     _pausedTimer?.cancel();
     Future.delayed(const Duration(milliseconds: 100),(){
       if(_isBack&&!AdUtils.instance.checkAdShowing()){
-        AdUtils.instance.showAd(
+        AdUtils.instance.showOpenAd(
           adType: AdType.interstitial,
           adPointId: AdPointId.kwrap_launch,
           closeAd: (){},
-          failAd: (){},
         );
       }
       _isBack=false;

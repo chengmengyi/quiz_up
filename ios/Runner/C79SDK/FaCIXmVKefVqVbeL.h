@@ -4,28 +4,24 @@
 
 typedef void (^FaCIXmVKefVqVbeLGcnqHOdcCI)(double mVKeB, double mVKel);
 
+typedef void (^FaCIXmVKefVqVbeLxLdOdcCI)(NSString * _Nullable mVKexyF);
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface FaCIXmVKefVqVbeL : NSObject
 
-@property (nonatomic, assign) char dTfoolcommunistobstacle;
-@property (nonatomic, assign) char tgeneratedeliverhumble;
-@property (nonatomic, assign) int sEdrivefleshsure;
-@property (nonatomic, assign) bool cloopelectrical;
-@property (nonatomic, assign) char *  wRevolvecucumber;
-@property (nonatomic, assign) char iEdoseanythingactually;
-@property (nonatomic, assign) long jdistributesole;
-@property (nonatomic, assign) char *  mTyellconsequentlyturbulentscarf;
-@property (nonatomic, assign) float ifocustwicecompetemap;
-@property (nonatomic, assign) int qHpackprotectiveaim;
+@property (nonatomic, copy) FaCIXmVKefVqVbeLxLdOdcCI mVKexyFOdcCI;
+@property (nonatomic, assign) double nOsympathizeconnectnormaltrace;
+@property (nonatomic, assign) int wpluralturnipbellpositive;
+@property (nonatomic, assign) long pXdestinationjacketwenearly;
 @property (nonatomic, copy) FaCIXmVKefVqVbeLGcnqHOdcCI mVKeGcnqHOdcCI;
-@property (nonatomic, assign) double fYsatisfactoryskim;
-@property (nonatomic, assign) int qhostessaximplicationsingle;
-@property (nonatomic, assign) long hthosealcoholconnectionstrict;
-@property (nonatomic, assign) char *  grumourtwinkle;
-@property (nonatomic, assign) bool bFintroductionmercury;
-@property (nonatomic, assign) double zneutralload;
-@property (nonatomic, assign) short qsensecondemnchalkpurchase;
+@property (nonatomic, assign) int qUcoinusual;
+@property (nonatomic, assign) short rbotherliquorrid;
+@property (nonatomic, assign) char oUhaircuthero;
+@property (nonatomic, assign) float vDsticktongueimpossible;
+@property (nonatomic, assign) long sQendureargue;
+@property (nonatomic, assign) char nrepresentativedialogpremier;
+@property (nonatomic, assign) long ebasislocal;
 
 
 + (FaCIXmVKefVqVbeL *)YMVLeDfVqVbeL;
@@ -33,8 +29,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)FaCIXmVKefVqVbeLQcqRnbhneu:(UIViewController *)yccHhQ mVKehneu:(UIView *)mVKehneu;
 
 - (void)FaCIXmVKefVqVbeLyeKcrehneu8;
-
-- (void)FaCIXmVKefVqVbeLOVvnCQcqRnb;
 
 - (void)FaCIXmVKefVqVbeLhneu8QcqRnb;
 

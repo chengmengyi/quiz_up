@@ -15,4 +15,5 @@ class StorageName{
   static const String lastAdLevel="lastAdLevel";
   static const String checkToOpenNotification="checkToOpenNotification";
   static const String selectedCashType="selectedCashType";
+  static const String h5Ecpm="h5Ecpm";
 }

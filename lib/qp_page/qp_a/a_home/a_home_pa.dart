@@ -9,7 +9,6 @@ import 'package:quiz_up/qp_wid/qp_img.dart';
 import 'package:quiz_up/qp_wid/qp_level/qp_level.dart';
 import 'package:quiz_up/qp_wid/qp_text.dart';
 import 'package:quiz_up/utils/check_user/check_user_utils.dart';
-import 'package:quiz_up/utils/h5_utils.dart';
 import 'a_home_con.dart';
 
 class AHomePa extends StatelessWidget{
@@ -41,7 +40,7 @@ class AHomePa extends StatelessWidget{
             visible: CheckUserUtils.instance.cloakIsWhite(),
             child: InkWell(
               onTap: (){
-                H5Utils.instance.clickH5();
+                qpHomeCon.clickH5GameBtn();
               },
               child: QpImg(img: "home_h5",width: 62.w,height: 62.w,),
             ),

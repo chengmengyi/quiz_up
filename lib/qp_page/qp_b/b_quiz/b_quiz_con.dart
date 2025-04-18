@@ -14,6 +14,7 @@ import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_rou/qp_rou_name.dart';
 import 'package:quiz_up/utils/ad/ad_type.dart';
 import 'package:quiz_up/utils/ad/ad_utils.dart';
+import 'package:quiz_up/utils/ad/h5_ad_utils.dart';
 import 'package:quiz_up/utils/cash_task/cash_task_utils.dart';
 import 'package:quiz_up/utils/cash_task/task_type.dart';
 import 'package:quiz_up/utils/check_user/check_user_utils.dart';
@@ -26,6 +27,7 @@ import 'package:quiz_up/utils/guide/box_guide_overlay.dart';
 import 'package:quiz_up/utils/guide/guide_step.dart';
 import 'package:quiz_up/utils/guide/guide_utils.dart';
 import 'package:quiz_up/utils/guide/wheel_guide_overlay.dart';
+import 'package:quiz_up/utils/h5_utils.dart';
 import 'package:quiz_up/utils/local_notifications/local_notifications_utils.dart';
 import 'package:quiz_up/utils/point/ad_point_id.dart';
 import 'package:quiz_up/utils/point/app_point_id.dart';
@@ -66,8 +68,9 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
     CheckUserUtils.instance.bQuizShow=true;
     receiveEvent=ReceiveEvent(eventListener: this);
     LocalNotificationsUtils.instance.setLocalNotifications();
-    // H5Utils.instance.pageB1();
-    // H5Utils.instance.pageB2();
+    if(!kDebugMode){
+      H5Utils.instance.pageB1();
+    }
   }
 
   @override
@@ -403,6 +406,17 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
     return currentQuestionBean?.qpResult=="qp_second";
   }
 
+  clickH5GameBtn(){
+    H5Utils.instance.clickH5(
+        h5Call: (url){
+          QpRouters.toNamed(
+            routersName: QpRouName.web,
+            arguments: {"url":url},
+          );
+        }
+    );
+  }
+
   @override
   void onClose() {
     _endTimer();
@@ -420,7 +434,8 @@ class BQuizCon extends GetxController with GetTickerProviderStateMixin implement
     // CashTaskUtils.instance.updateCashTask(TaskType.spin);
     // LocalNotificationsUtils.instance.setLocalNotifications();
 
-    BSql.instance.updateNewCashQuizOrTask(TaskType.quiz);
+    // BSql.instance.updateNewCashQuizOrTask(TaskType.quiz);
 
+    QpRouters.toNamed(routersName: QpRouName.bH5Ad);
   }
 }

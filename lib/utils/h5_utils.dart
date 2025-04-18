@@ -7,6 +7,8 @@ class H5Utils{
   static final H5Utils _utils=H5Utils();
   static H5Utils get instance=>_utils;
 
+  Function(String url)? _h5Call;
+
   static const MethodChannel _quizChannel = MethodChannel('com.quizup.find.rightanswer.h5');
   initChannel(BuildContext context){
     _quizChannel.setMethodCallHandler((MethodCall call) async {
@@ -31,6 +33,10 @@ class H5Utils{
             }
           }
         }
+      }else if (call.method == 'quiz_h5_ad') {
+        var data = call.arguments;
+        var url=data['mVKexyF']??"";
+        _h5Call?.call(url);
       }
     });
   }
@@ -43,12 +49,13 @@ class H5Utils{
   Future<void> pageB1() async {
     _quizChannel.invokeMethod('pageB1');
   }
-  /// 4.进入B面时就调用（只调用一次）
-  Future<void> pageB2() async {
-    _quizChannel.invokeMethod('pageB2');
-  }
+  // /// 4.进入B面时就调用（只调用一次）
+  // Future<void> pageB2() async {
+  //   _quizChannel.invokeMethod('pageB2');
+  // }
   /// 5.点击项目右上角打开web游戏调用（只调用一次）
-  Future<void> clickH5() async {
+  Future<void> clickH5({required Function(String url) h5Call}) async {
+    _h5Call=h5Call;
     _quizChannel.invokeMethod('clickH5');
   }
 }

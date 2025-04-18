@@ -11,4 +11,5 @@ class QpRouName{
   //b
   static const String bQuiz="/bQuiz";
   static const String bCash="/bCash";
+  static const String bH5Ad="/bH5Ad";
 }

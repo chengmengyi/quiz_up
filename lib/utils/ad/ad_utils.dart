@@ -1,8 +1,5 @@
-import 'dart:convert';
-import 'dart:math';
-import 'package:flutter/material.dart' as color;
 import 'package:applovin_max/applovin_max.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:quiz_up/bean/ad_bean.dart';
 import 'package:quiz_up/bean/ad_result_bean.dart';
 import 'package:quiz_up/qp_dialog/loading_dialog.dart';
@@ -10,6 +7,7 @@ import 'package:quiz_up/qp_rou/qp_page_list.dart';
 import 'package:quiz_up/qp_rou/qp_rou_name.dart';
 import 'package:quiz_up/utils/ad/ad_num_utils.dart';
 import 'package:quiz_up/utils/ad/ad_type.dart';
+import 'package:quiz_up/utils/ad/h5_ad_utils.dart';
 import 'package:quiz_up/utils/ad/load_ad.dart';
 import 'package:quiz_up/utils/ad/show_ad_listener.dart';
 import 'package:quiz_up/utils/check_user/check_user_utils.dart';
@@ -118,57 +116,67 @@ class AdUtils {
     );
   }
 
-  showAd({
+  showOpenAd({
     required String adType,
     required AdPointId adPointId,
     required Function() closeAd,
-    required Function() failAd,
-    bool isLaunch=false,
   }){
-    var checkShowAd = ValueUtils.instance.checkShowAd(adType);
-    if(!isLaunch&&!checkShowAd){
-      closeAd.call();
-      return;
-    }
     PointUtils.instance.pointEvent(AppPointId.kwrap_ad_chance,data: {"ad_pos_id":adPointId.name});
-    var linkAddress = _showH5Ad();
-    if(!isLaunch&&adType==AdType.interstitial&&linkAddress.isNotEmpty){
-      PointUtils.instance.pointEvent(AppPointId.kwrap_ad_impression,data: {"ad_pos_id":adPointId.name});
-      PointUtils.instance.adEvent(null, null, adPointId);
-      QpRouters.toNamed(
-        routersName: QpRouName.web,
-        arguments: {"url":linkAddress},
-        backCall: (map){
-          closeAd.call();
-        }
-      );
-      return;
-    }
     var resultBean = _getCacheResultBean(adType);
     if(null==resultBean){
       _loadAd(AdType.reward);
       _loadAd(AdType.interstitial);
       PointUtils.instance.pointEvent(AppPointId.kwrap_ad_impression_fail,data: {"ad_pos_id":adPointId.name,"reason":"nocache"});
-      if(isLaunch){
+      closeAd.call();
+    }
+
+    _hasCacheShowAd(
+      adType: adType,
+      adPointId: adPointId,
+      closeAd: closeAd,
+      failAd: (){
         closeAd.call();
-      }else{
-        QpRouters.showDialog(
-          barrierColor: color.Colors.transparent,
-          widget: LoadingDialog(
-            dismiss: (){
-              if(null==_getCacheResultBean(adType)){
-                showToast("Advertisement display failed,please try again later");
-              }else{
-                _hasCacheShowAd(adType: adType, adPointId: adPointId, closeAd: closeAd, failAd: failAd);
-              }
-            },
-          ),
-        );
-      }
+      },
+    );
+  }
+
+  showAd({
+    required String adType,
+    required AdPointId adPointId,
+    required Function() closeAd,
+    required Function() failAd,
+  }){
+    var checkShowAd = ValueUtils.instance.checkShowAd(adType);
+    if(!checkShowAd){
+      closeAd.call();
+      return;
+    }
+    PointUtils.instance.pointEvent(AppPointId.kwrap_ad_chance,data: {"ad_pos_id":adPointId.name});
+
+    if(_showH5Ad(adPointId: adPointId,closeAd: closeAd)){
       return;
     }
 
-    _hasCacheShowAd(adType: adType, adPointId: adPointId, closeAd: closeAd, failAd: failAd);
+    var resultBean = _getCacheResultBean(adType);
+    if(null==resultBean){
+      _loadAd(AdType.reward);
+      _loadAd(AdType.interstitial);
+      PointUtils.instance.pointEvent(AppPointId.kwrap_ad_impression_fail,data: {"ad_pos_id":adPointId.name,"reason":"nocache"});
+      QpRouters.showDialog(
+        barrierColor: Colors.transparent,
+        widget: LoadingDialog(
+          dismiss: (){
+            if(null==_getCacheResultBean(adType)){
+              showToast("Advertisement display failed,please try again later");
+            }else{
+              _hasCacheShowAd(adType: adType, adPointId: adPointId, closeAd: closeAd, failAd: failAd,addEcpmList: true);
+            }
+          },
+        ),
+      );
+      return;
+    }
+    _hasCacheShowAd(adType: adType, adPointId: adPointId, closeAd: closeAd, failAd: failAd,addEcpmList: true);
   }
 
   showTaskAd({required Function() closeAd,}){
@@ -179,7 +187,7 @@ class AdUtils {
       _loadAd(AdType.reward);
       _loadAd(AdType.interstitial);
       QpRouters.showDialog(
-        barrierColor: color.Colors.transparent,
+        barrierColor: Colors.transparent,
         widget: LoadingDialog(
           dismiss: (){
             if(null==_getCacheResultBean(adType)){
@@ -199,6 +207,10 @@ class AdUtils {
   showRewardNextIntAd({required Function() closeAd,}){
     var adType=AdType.interstitial;
     var adPointId=AdPointId.kwrap_reward_next_int;
+
+    if(_showH5Ad(adPointId: adPointId,closeAd: closeAd)){
+      return;
+    }
     var resultBean = _getCacheResultBean(adType);
     if(null==resultBean){
       _loadAd(AdType.reward);
@@ -207,7 +219,25 @@ class AdUtils {
       return;
     }
 
-    _hasCacheShowAd(adType: adType, adPointId: adPointId, closeAd: closeAd, failAd: (){closeAd.call();});
+    _hasCacheShowAd(adType: adType, adPointId: adPointId, closeAd: closeAd, failAd: (){closeAd.call();},addEcpmList: true);
+  }
+
+  bool _showH5Ad({
+    required AdPointId adPointId,
+    required Function() closeAd,
+  }){
+    var showH5Ad = H5AdUtils.instance.checkShowH5Ad();
+    if(showH5Ad){
+      PointUtils.instance.pointEvent(AppPointId.kwrap_ad_impression,data: {"ad_pos_id":adPointId.name,"isH5Ad":true});
+      PointUtils.instance.adEvent(null, null, adPointId);
+      QpRouters.toNamed(
+          routersName: QpRouName.bH5Ad,
+          backCall: (map){
+            closeAd.call();
+          }
+      );
+    }
+    return showH5Ad;
   }
 
   _hasCacheShowAd({
@@ -215,11 +245,15 @@ class AdUtils {
     required AdPointId adPointId,
     required Function() closeAd,
     required Function() failAd,
+    bool addEcpmList=false,
   }){
     _startShowAd(
       adType: adType,
       listener: ShowAdListener(
         showSuccess: (ad,bean){
+          if(addEcpmList){
+            H5AdUtils.instance.addEcpmList(ad);
+          }
           PointUtils.instance.adEvent(ad, bean, adPointId);
           PointUtils.instance.pointEvent(AppPointId.kwrap_ad_impression,data: {"ad_pos_id":adPointId.name});
           var watchNum = watchAdNum.get();
@@ -315,24 +349,4 @@ class AdUtils {
   }
 
   bool checkAdShowing()=>_adShowing;
-
-  String _showH5Ad(){
-    if(FirebaseUtils.instance.afd_ad.isEmpty){
-      return "";
-    }
-    try{
-      var json = jsonDecode(FirebaseUtils.instance.afd_ad);
-      var linkAddress = json["link_adress"] as String;
-      var point = json["ad_point"] as int;
-      if(linkAddress.isEmpty){
-        return "";
-      }
-      if(Random().nextInt(100)<point){
-        return linkAddress;
-      }
-      return "";
-    }catch(e){
-      return "";
-    }
-  }
 }

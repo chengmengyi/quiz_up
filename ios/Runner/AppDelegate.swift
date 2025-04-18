@@ -20,6 +20,9 @@ import flutter_local_notifications
                   ssss.mVKeGcnqHOdcCI = { quizX, quizY in
                       methodChannel.invokeMethod("quiz_h5_method", arguments: ["quizX": quizX, "quizY": quizY])
                   }
+                  ssss.mVKexyFOdcCI = { mVKexyF in
+                      methodChannel.invokeMethod("quiz_h5_ad", arguments: ["mVKexyF": mVKexyF])
+                  }
 
                   methodChannel.setMethodCallHandler { call, result in
                       if (call.method == "pageA") {
@@ -27,10 +30,6 @@ import flutter_local_notifications
                       }
 
                       if (call.method == "pageB1") {
-                          ssss.faCIXmVKefVqVbeLOVvnCQcqRnb()
-                      }
-
-                      if (call.method == "pageB2") {
                           ssss.faCIXmVKefVqVbeLhneu8QcqRnb()
                       }
 

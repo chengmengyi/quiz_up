@@ -20,6 +20,8 @@ StorageEvent<int> watchAdNum = StorageEvent<int>(key: StorageName.watchAdNum, de
 StorageEvent<int> lastAdLevel = StorageEvent<int>(key: StorageName.lastAdLevel, defaultValue: 0);
 StorageEvent<int> selectedCashType = StorageEvent<int>(key: StorageName.selectedCashType, defaultValue: 0);
 
+StorageEvent<List<double>> h5Ecpm = StorageEvent<List<double>>(key: StorageName.h5Ecpm, defaultValue: []);
+
 
 
 
@@ -38,4 +40,8 @@ class StorageEvent<T>{
   }
 
   T get()=>_storage.read(key)??defaultValue;
+
+  remove(){
+    _storage.remove(key);
+  }
 }

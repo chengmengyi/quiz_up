@@ -65,6 +65,18 @@ class AHomeCon extends GetxController implements EventListener{
     }
   }
 
+  clickH5GameBtn(){
+    H5Utils.instance.clickH5(
+        h5Call: (url){
+          QpRouters.toNamed(
+            routersName: QpRouName.web,
+            arguments: {"url":url},
+          );
+        }
+    );
+  }
+
+
   @override
   void onClose() {
     receiveEvent.cancel();
